@@ -1,0 +1,2 @@
+# openflexo-xlsx
+TechnologyAdapter Excel
