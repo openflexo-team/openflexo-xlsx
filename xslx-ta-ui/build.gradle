@@ -1,0 +1,16 @@
+dependencies {
+  implementation project(":xlsx-ta")
+
+  // openflexo dep
+  implementation flexoUi()
+  implementation fmlTechnologyAdapterUi()
+  implementation fmlRtTechnologyAdapterUi()
+
+  // Test resource center
+  testRuntimeOnly project(':xlsx-ta-test-rc')
+
+  // external dep
+  // testing dep
+  testImplementation flexoUiTest()
+  testImplementation flexoFoundationTest()
+}
