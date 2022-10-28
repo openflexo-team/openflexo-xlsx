@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(':xslx-ta')
+    implementation project(':xlsx-ta')
     implementation flexoFoundation()
 
     implementation testUtils()
