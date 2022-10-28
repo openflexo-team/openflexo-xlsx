@@ -1,2 +1,2 @@
 # openflexo-xlsx
-TechnologyAdapter Excel
+TechnologyAdapter for Excel xls/xlsx technology
