@@ -223,7 +223,7 @@ public class FIBCellRangeSelector extends FIBFlexoObjectSelector<ExcelCellRange>
 		private RangeSelectorDetailsPanel panel;
 
 		public LoadEditor(ExcelCellRange fragment) {
-			super(FlexoLocalization.getMainLocalizer().localizedForKey("opening_document_editor"));
+			super("CellRangeSelector", FlexoLocalization.getMainLocalizer().localizedForKey("opening_document_editor"));
 			this.fragment = fragment;
 		}
 
