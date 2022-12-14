@@ -69,7 +69,7 @@ public class ExcelModelFactory extends PamelaModelFactory implements PamelaResou
 	private RelativePathResourceConverter relativePathResourceConverter;
 
 	public ExcelModelFactory(ExcelWorkbookResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(PamelaMetaModelLibrary.getCompoundModelContext(ExcelWorkbook.class));
+		super(PamelaMetaModelLibrary.retrieveMetaModel(ExcelWorkbook.class));
 		this.resource = resource;
 		setEditingContext(editingContext);
 		addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));
