@@ -45,7 +45,7 @@ import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.fml.FMLModelFactory;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.pamela.model.StringConverterLibrary.Converter;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
@@ -66,7 +66,7 @@ public class ExcelCellRangeConverter extends Converter<ExcelCellRange> {
 	}
 
 	@Override
-	public ExcelCellRange convertFromString(String value, ModelFactory factory) {
+	public ExcelCellRange convertFromString(String value, PamelaModelFactory factory) {
 
 		System.out.println("Lookup ExcelCellRange for " + value);
 

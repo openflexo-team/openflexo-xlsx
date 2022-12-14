@@ -43,11 +43,11 @@ import java.util.logging.Logger;
 import org.openflexo.foundation.PamelaResourceModelFactory;
 import org.openflexo.foundation.action.FlexoUndoManager;
 import org.openflexo.foundation.resource.PamelaResourceImpl.IgnoreLoadingEdits;
-import org.openflexo.pamela.ModelContextLibrary;
+import org.openflexo.pamela.PamelaMetaModelLibrary;
 import org.openflexo.pamela.converter.RelativePathResourceConverter;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
 /**
@@ -57,7 +57,7 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
  * @author sylvain
  * 
  */
-public class ExcelModelFactory extends ModelFactory implements PamelaResourceModelFactory<ExcelWorkbookResource> {
+public class ExcelModelFactory extends PamelaModelFactory implements PamelaResourceModelFactory<ExcelWorkbookResource> {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ExcelModelFactory.class.getPackage().getName());
@@ -69,7 +69,7 @@ public class ExcelModelFactory extends ModelFactory implements PamelaResourceMod
 	private RelativePathResourceConverter relativePathResourceConverter;
 
 	public ExcelModelFactory(ExcelWorkbookResource resource, EditingContext editingContext) throws ModelDefinitionException {
-		super(ModelContextLibrary.getCompoundModelContext(ExcelWorkbook.class));
+		super(PamelaMetaModelLibrary.getCompoundModelContext(ExcelWorkbook.class));
 		this.resource = resource;
 		setEditingContext(editingContext);
 		addConverter(relativePathResourceConverter = new RelativePathResourceConverter(null));

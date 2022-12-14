@@ -48,7 +48,7 @@ import org.openflexo.foundation.resource.ResourceRepositoryImpl;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
 
@@ -64,9 +64,9 @@ public interface SEVirtualModelInstanceRepository<I> extends ResourceRepository<
 
 	public static <I> SEVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,
 			FlexoResourceCenter<I> resourceCenter) {
-		ModelFactory factory;
+		PamelaModelFactory factory;
 		try {
-			factory = new ModelFactory(SEVirtualModelInstanceRepository.class);
+			factory = new PamelaModelFactory(SEVirtualModelInstanceRepository.class);
 			SEVirtualModelInstanceRepository<I> newRepository = factory.newInstance(SEVirtualModelInstanceRepository.class);
 			newRepository.setResourceCenter(resourceCenter);
 			newRepository.setBaseArtefact(resourceCenter.getBaseArtefact());

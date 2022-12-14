@@ -45,11 +45,11 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
-import org.openflexo.pamela.factory.ModelFactory;
+import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResource;
 
 /**
- * {@link ModelFactory} used to handle {@link SEVirtualModelInstance} models<br>
+ * {@link PamelaModelFactory} used to handle {@link SEVirtualModelInstance} models<br>
  * 
  * @author sylvain
  * 
