@@ -51,6 +51,7 @@ import org.openflexo.foundation.fml.annotations.DeclareActorReferences;
 import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
 import org.openflexo.foundation.fml.annotations.DeclareFetchRequests;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
+import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
@@ -100,6 +101,7 @@ import org.openflexo.toolbox.StringUtils;
 @ModelEntity
 @ImplementationClass(BasicExcelModelSlot.BasicExcelModelSlotImpl.class)
 @XMLElement
+@FML("BasicExcelModelSlot")
 public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 
 	@PropertyIdentifier(type = FlexoResource.class)
