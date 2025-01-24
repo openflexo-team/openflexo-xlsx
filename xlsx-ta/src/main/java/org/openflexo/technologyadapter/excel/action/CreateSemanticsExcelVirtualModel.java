@@ -187,7 +187,8 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 			throw new FlexoException(e);
 		}
 
-		AddUseDeclaration useDeclarationAction = AddUseDeclaration.actionType.makeNewEmbeddedAction(newVirtualModel, null, this);
+		AddUseDeclaration useDeclarationAction = AddUseDeclaration.actionType.makeNewEmbeddedAction(newVirtualModel.getCompilationUnit(),
+				null, this);
 		useDeclarationAction.setModelSlotClass(SemanticsExcelModelSlot.class);
 		useDeclarationAction.doAction();
 
@@ -211,7 +212,7 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 				switch (propertySpec.getMappingType()) {
 					case Primitive:
 						propertyEntry.setPropertyType(PropertyType.TECHNOLOGY_ROLE);
-						propertyEntry.setFlexoRoleClass((Class) SEColumnRole.class);
+						propertyEntry.setFlexoRoleClass(SEColumnRole.class);
 						propertyEntry.setType(propertySpec.getPrimitiveType().getType());
 						System.out.println("Property " + propertyEntry + " type=" + propertyEntry.getType());
 						break;
