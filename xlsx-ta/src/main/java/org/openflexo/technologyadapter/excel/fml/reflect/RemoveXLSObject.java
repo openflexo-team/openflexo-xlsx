@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
@@ -57,11 +57,11 @@ import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.semantics.model.SEDataArea;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSDataArea;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
 
 /**
- * Used (typically in the {@link DeletionScheme} of a {@link SEFlexoConcept}) to remove instance from {@link SEDataArea} (will remove the
+ * Used (typically in the {@link DeletionScheme} of a {@link XLSFlexoConcept}) to remove instance from {@link XLSDataArea} (will remove the
  * row from excel workbook)
  * 
  * @author sylvain
@@ -69,9 +69,9 @@ import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInsta
  * @param <T>
  */
 @ModelEntity
-@ImplementationClass(RemoveSEObject.RemoveSEObjectImpl.class)
+@ImplementationClass(RemoveXLSObject.RemoveXLSObjectImpl.class)
 @XMLElement
-public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance> {
+public interface RemoveXLSObject extends AssignableAction<XLSFlexoConceptInstance> {
 
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String OBJECT_KEY = "object";
@@ -80,30 +80,30 @@ public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance>
 
 	@Getter(value = OBJECT_KEY)
 	@XMLAttribute
-	public DataBinding<SEFlexoConceptInstance> getObjectToRemove();
+	public DataBinding<XLSFlexoConceptInstance> getObjectToRemove();
 
 	@Setter(OBJECT_KEY)
-	public void setObjectToRemove(DataBinding<SEFlexoConceptInstance> object);
+	public void setObjectToRemove(DataBinding<XLSFlexoConceptInstance> object);
 
 	@Getter(value = DATA_AREA_KEY)
 	@XMLAttribute
-	public DataBinding<SEDataArea<?>> getDataArea();
+	public DataBinding<XLSDataArea<?>> getDataArea();
 
 	@Setter(DATA_AREA_KEY)
-	public void setDataArea(DataBinding<SEDataArea<?>> dataArea);
+	public void setDataArea(DataBinding<XLSDataArea<?>> dataArea);
 
-	public static abstract class RemoveSEObjectImpl extends AssignableActionImpl<SEFlexoConceptInstance> implements RemoveSEObject {
+	public static abstract class RemoveXLSObjectImpl extends AssignableActionImpl<XLSFlexoConceptInstance> implements RemoveXLSObject {
 
-		private static final Logger logger = Logger.getLogger(RemoveSEObject.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(RemoveXLSObject.class.getPackage().getName());
 
-		private DataBinding<SEFlexoConceptInstance> objectToRemove;
+		private DataBinding<XLSFlexoConceptInstance> objectToRemove;
 
-		private DataBinding<SEDataArea<?>> dataArea;
+		private DataBinding<XLSDataArea<?>> dataArea;
 
 		@Override
-		public DataBinding<SEDataArea<?>> getDataArea() {
+		public DataBinding<XLSDataArea<?>> getDataArea() {
 			if (dataArea == null) {
-				dataArea = new DataBinding<>(this, SEDataArea.class, BindingDefinitionType.GET);
+				dataArea = new DataBinding<>(this, XLSDataArea.class, BindingDefinitionType.GET);
 				dataArea.setBindingName("dataArea");
 				dataArea.setMandatory(true);
 			}
@@ -111,11 +111,11 @@ public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance>
 		}
 
 		@Override
-		public void setDataArea(DataBinding<SEDataArea<?>> dataArea) {
+		public void setDataArea(DataBinding<XLSDataArea<?>> dataArea) {
 			if (dataArea != null) {
 				dataArea.setOwner(this);
 				dataArea.setBindingName("dataArea");
-				dataArea.setDeclaredType(SEDataArea.class);
+				dataArea.setDeclaredType(XLSDataArea.class);
 				dataArea.setBindingDefinitionType(BindingDefinitionType.GET);
 				dataArea.setMandatory(true);
 			}
@@ -123,20 +123,20 @@ public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance>
 		}
 
 		@Override
-		public DataBinding<SEFlexoConceptInstance> getObjectToRemove() {
+		public DataBinding<XLSFlexoConceptInstance> getObjectToRemove() {
 			if (objectToRemove == null) {
-				objectToRemove = new DataBinding<>(this, SEFlexoConceptInstance.class, BindingDefinitionType.GET);
+				objectToRemove = new DataBinding<>(this, XLSFlexoConceptInstance.class, BindingDefinitionType.GET);
 				objectToRemove.setBindingName("objectToRemove");
 			}
 			return objectToRemove;
 		}
 
 		@Override
-		public void setObjectToRemove(DataBinding<SEFlexoConceptInstance> objectToRemove) {
+		public void setObjectToRemove(DataBinding<XLSFlexoConceptInstance> objectToRemove) {
 			if (objectToRemove != null) {
 				objectToRemove.setOwner(this);
 				objectToRemove.setBindingName("objectToRemove");
-				objectToRemove.setDeclaredType(SEFlexoConceptInstance.class);
+				objectToRemove.setDeclaredType(XLSFlexoConceptInstance.class);
 				objectToRemove.setBindingDefinitionType(BindingDefinitionType.GET);
 			}
 			this.objectToRemove = objectToRemove;
@@ -145,13 +145,13 @@ public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance>
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public SEFlexoConceptInstance execute(RunTimeEvaluationContext evaluationContext) {
+		public XLSFlexoConceptInstance execute(RunTimeEvaluationContext evaluationContext) {
 
-			SEFlexoConceptInstance objectToDelete = null;
-			SEDataArea<SEFlexoConceptInstance> dataArea = null;
+			XLSFlexoConceptInstance objectToDelete = null;
+			XLSDataArea<XLSFlexoConceptInstance> dataArea = null;
 			try {
 				objectToDelete = getObjectToRemove().getBindingValue(evaluationContext);
-				dataArea = (SEDataArea<SEFlexoConceptInstance>) getDataArea().getBindingValue(evaluationContext);
+				dataArea = (XLSDataArea<XLSFlexoConceptInstance>) getDataArea().getBindingValue(evaluationContext);
 			} catch (TypeMismatchException e1) {
 				e1.printStackTrace();
 			} catch (NullReferenceException e1) {
@@ -177,30 +177,30 @@ public interface RemoveSEObject extends AssignableAction<SEFlexoConceptInstance>
 
 		@Override
 		public Type getAssignableType() {
-			return SEFlexoConceptInstance.class;
+			return XLSFlexoConceptInstance.class;
 		}
 	}
 
 	@DefineValidationRule
-	public static class ObjectToRemoveBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveSEObject> {
+	public static class ObjectToRemoveBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveXLSObject> {
 		public ObjectToRemoveBindingIsRequiredAndMustBeValid() {
-			super("'object_to_delete'_binding_is_not_valid", RemoveSEObject.class);
+			super("'object_to_delete'_binding_is_not_valid", RemoveXLSObject.class);
 		}
 
 		@Override
-		public DataBinding<?> getBinding(RemoveSEObject object) {
+		public DataBinding<?> getBinding(RemoveXLSObject object) {
 			return object.getObjectToRemove();
 		}
 	}
 
 	@DefineValidationRule
-	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveSEObject> {
+	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveXLSObject> {
 		public DataAreaBindingIsRequiredAndMustBeValid() {
-			super("'data_area'_binding_is_not_valid", RemoveSEObject.class);
+			super("'data_area'_binding_is_not_valid", RemoveXLSObject.class);
 		}
 
 		@Override
-		public DataBinding<?> getBinding(RemoveSEObject object) {
+		public DataBinding<?> getBinding(RemoveXLSObject object) {
 			return object.getDataArea();
 		}
 	}

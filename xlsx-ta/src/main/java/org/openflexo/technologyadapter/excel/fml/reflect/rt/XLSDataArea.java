@@ -33,7 +33,7 @@
  *
  */
 
-package org.openflexo.technologyadapter.excel.semantics.model;
+package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,29 +42,29 @@ import org.apache.poi.ss.usermodel.Row;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelCellRange;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEDataAreaRole;
 import org.openflexo.toolbox.StringUtils;
 
 /**
- * Run-time concept referencing all {@link SEFlexoConceptInstance} encoded in a data area in an excel workbook<br>
- * Model concept is {@link SEDataAreaRole}
+ * Run-time concept referencing all {@link XLSFlexoConceptInstance} encoded in a data area in an excel workbook<br>
+ * Model concept is {@link XLSDataAreaRole}
  * 
  */
-public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FCI> {
+public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<FCI> {
 
-	private final SEDataAreaRole dataAreaRole;
-	private final SEVirtualModelInstance virtualModelInstance;
+	private final XLSDataAreaRole dataAreaRole;
+	private final XLSVirtualModelInstance virtualModelInstance;
 	private final FlexoConceptInstance container;
 	private ExcelCellRange cellRange;
 
 	// All FCI are stored according to the index of their row
 	// private final List<FCI> instances = new ArrayList<>();
 
-	public SEDataArea(SEDataAreaRole dataAreaRole, SEVirtualModelInstance virtualModelInstance, FlexoConceptInstance container) {
+	public XLSDataArea(XLSDataAreaRole dataAreaRole, XLSVirtualModelInstance virtualModelInstance, FlexoConceptInstance container) {
 		super();
 		this.dataAreaRole = dataAreaRole;
 		this.virtualModelInstance = virtualModelInstance;
@@ -75,7 +75,7 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 		return cellRange;
 	}
 
-	public SEDataAreaRole getDataAreaRole() {
+	public XLSDataAreaRole getDataAreaRole() {
 		return dataAreaRole;
 	}
 
@@ -141,7 +141,7 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 
 		try {
 			cellRange = buildCellRange();
-		} catch (ExcelMappingException e) {
+		} catch (XLSMappingException e) {
 			e.printStackTrace();
 		}
 
@@ -201,7 +201,7 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 
 		while (low <= high) {
 			int mid = (low + high) >>> 1;
-			SEFlexoConceptInstance midVal = get(mid);
+			XLSFlexoConceptInstance midVal = get(mid);
 			// int cmp = midVal.compareTo(key);
 			int cmp = midVal.getRowSupportObject().getRowNum() - row.getRowNum();
 
@@ -221,7 +221,7 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 
 		while (low <= high) {
 			int mid = (low + high) >>> 1;
-			SEFlexoConceptInstance midVal = get(mid);
+			XLSFlexoConceptInstance midVal = get(mid);
 			// int cmp = midVal.compareTo(key);
 			int cmp = midVal.getRowSupportObject().getRowNum() - row.getRowNum();
 
@@ -235,13 +235,13 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 		return high + 1; // this is the insertion point
 	}
 
-	private ExcelCellRange buildCellRange() throws ExcelMappingException {
+	private ExcelCellRange buildCellRange() throws XLSMappingException {
 		// System.out.println("Computing cell range for " + dataAreaRole.getCellRange());
 		// System.out.println("Template: " + dataAreaRole.getCellRange().getExcelWorkbook().getResource());
 		// System.out.println("Working on: " + getExcelWorkbookResource());
 
 		if (virtualModelInstance.getExcelWorkbookResource() == null) {
-			throw new ExcelMappingException("Could not find workbook resource");
+			throw new XLSMappingException("Could not find workbook resource");
 		}
 
 		ExcelCellRange templateRange = dataAreaRole.getCellRange();
@@ -253,7 +253,7 @@ public class SEDataArea<FCI extends SEFlexoConceptInstance> extends ArrayList<FC
 		ExcelSheet sheet = virtualModelInstance.getExcelWorkbookResource().getExcelWorkbook()
 				.getExcelSheetByName(templateRange.getExcelSheet().getName());
 		if (sheet == null) {
-			throw new ExcelMappingException("Could not find sheet: " + templateRange.getExcelSheet().getName());
+			throw new XLSMappingException("Could not find sheet: " + templateRange.getExcelSheet().getName());
 		}
 
 		int startIndex = templateRange.getTopLeftCell().getRowIndex();

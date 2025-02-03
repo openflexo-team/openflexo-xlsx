@@ -64,22 +64,22 @@ import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoBehaviours;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
-import org.openflexo.foundation.fml.rt.InferedFMLRTModelSlot;
+import org.openflexo.foundation.fml.rt.ReflectedFMLRTModelSlot;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.semantics.fml.CreateSEResource;
-import org.openflexo.technologyadapter.excel.semantics.fml.InsertSEObject;
-import org.openflexo.technologyadapter.excel.semantics.fml.RemoveSEObject;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEColumnRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEDataAreaRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEInitializer;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEReferenceRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEVirtualModelInstanceType;
-import org.openflexo.technologyadapter.excel.semantics.model.SEObjectActorReference;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.InsertXLSObject;
+import org.openflexo.technologyadapter.excel.fml.reflect.RemoveXLSObject;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializer;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSObjectActorReference;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
  * An implementation of a {@link ModelSlot} providing basic access to a set of data stored in an excel workbook, and reflected as FML
@@ -95,17 +95,17 @@ import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInsta
  */
 @ModelEntity
 @XMLElement
-@ImplementationClass(SemanticsExcelModelSlot.SemanticsExcelModelSlotImpl.class)
-@DeclareFlexoRoles({ SEColumnRole.class, SEDataAreaRole.class, SEReferenceRole.class })
-@DeclareEditionActions({ CreateSEResource.class, InsertSEObject.class, RemoveSEObject.class })
-@DeclareFlexoBehaviours({ SEInitializer.class })
-@DeclareActorReferences({ SEObjectActorReference.class })
-public interface SemanticsExcelModelSlot extends InferedFMLRTModelSlot<SEVirtualModelInstance, ExcelTechnologyAdapter> {
+@ImplementationClass(FMLExcelModelSlot.FMLExcelModelSlotImpl.class)
+@DeclareFlexoRoles({ XLSColumnRole.class, XLSDataAreaRole.class, XLSReferenceRole.class })
+@DeclareEditionActions({ CreateXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
+@DeclareFlexoBehaviours({ XLSInitializer.class })
+@DeclareActorReferences({ XLSObjectActorReference.class })
+public interface FMLExcelModelSlot extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
 
-	abstract class SemanticsExcelModelSlotImpl extends InferedFMLRTModelSlotImpl<SEVirtualModelInstance, ExcelTechnologyAdapter>
-			implements SemanticsExcelModelSlot {
+	abstract class FMLExcelModelSlotImpl extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
+			implements FMLExcelModelSlot {
 
-		private SEVirtualModelInstanceType type;
+		private XLSVirtualModelInstanceType type;
 
 		@Override
 		public Class<ExcelTechnologyAdapter> getTechnologyAdapterClass() {
@@ -125,7 +125,7 @@ public interface SemanticsExcelModelSlot extends InferedFMLRTModelSlot<SEVirtual
 		@Override
 		public Type getType() {
 			if (type == null || type.getVirtualModel() != getAccessedVirtualModel()) {
-				type = SEVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
+				type = XLSVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
 			}
 			return type;
 		}
@@ -134,7 +134,7 @@ public interface SemanticsExcelModelSlot extends InferedFMLRTModelSlot<SEVirtual
 		public void setAccessedVirtualModel(VirtualModel aVirtualModel) {
 			if (aVirtualModel != getAccessedVirtualModel()) {
 				super.setAccessedVirtualModel(aVirtualModel);
-				type = SEVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
+				type = XLSVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
 			}
 		}
 

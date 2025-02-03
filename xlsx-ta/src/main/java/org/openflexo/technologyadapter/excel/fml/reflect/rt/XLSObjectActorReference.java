@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.model;
+package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.logging.Logger;
 
@@ -51,19 +51,19 @@ import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResource;
 
 /**
- * Implements {@link ActorReference} for {@link SEFlexoConceptInstance}<br>
+ * Implements {@link ActorReference} for {@link XLSFlexoConceptInstance}<br>
  * 
  * @author sylvain
  * 
  * @param <T>
  */
 @ModelEntity
-@ImplementationClass(SEObjectActorReference.SEObjectActorReferenceImpl.class)
+@ImplementationClass(XLSObjectActorReference.SEObjectActorReferenceImpl.class)
 @XMLElement
-public interface SEObjectActorReference extends ActorReference<SEFlexoConceptInstance> {
+public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptInstance> {
 
 	@PropertyIdentifier(type = String.class)
 	String RESOURCE_URI_KEY = "resourceURI";
@@ -93,16 +93,16 @@ public interface SEObjectActorReference extends ActorReference<SEFlexoConceptIns
 	@Setter(KEY_KEY)
 	void setKey(String key);
 
-	abstract class SEObjectActorReferenceImpl extends ActorReferenceImpl<SEFlexoConceptInstance> implements SEObjectActorReference {
+	abstract class SEObjectActorReferenceImpl extends ActorReferenceImpl<XLSFlexoConceptInstance> implements XLSObjectActorReference {
 
-		private static final Logger logger = FlexoLogger.getLogger(SEObjectActorReference.class.getPackage().toString());
+		private static final Logger logger = FlexoLogger.getLogger(XLSObjectActorReference.class.getPackage().toString());
 
 		// private boolean isLoading = false;
 
-		private SEFlexoConceptInstance modellingElement;
+		private XLSFlexoConceptInstance modellingElement;
 
 		@Override
-		public void setModellingElement(SEFlexoConceptInstance object) {
+		public void setModellingElement(XLSFlexoConceptInstance object) {
 			this.modellingElement = object;
 			if (object != null) {
 				setResourceURI(object.getVirtualModelInstance().getURI());
@@ -116,7 +116,7 @@ public interface SEObjectActorReference extends ActorReference<SEFlexoConceptIns
 		}
 
 		@Override
-		public SEFlexoConceptInstance getModellingElement(boolean forceLoading) {
+		public XLSFlexoConceptInstance getModellingElement(boolean forceLoading) {
 			// TODO: instantiate cache when retrieving fails and return null value
 			// Otherwise, this will continuously loop
 			if (modellingElement == null && forceLoading) {
@@ -125,10 +125,10 @@ public interface SEObjectActorReference extends ActorReference<SEFlexoConceptIns
 			return modellingElement;
 		}
 
-		protected SEFlexoConceptInstance retrieveModellingElement() {
-			SEVirtualModelInstanceResource httpVMIResource = (SEVirtualModelInstanceResource) getServiceManager().getResourceManager()
+		protected XLSFlexoConceptInstance retrieveModellingElement() {
+			XLSVirtualModelInstanceResource httpVMIResource = (XLSVirtualModelInstanceResource) getServiceManager().getResourceManager()
 					.getResource(getResourceURI());
-			// Unused SEVirtualModelInstance hbnVMI = httpVMIResource.getVirtualModelInstance();
+			// Unused XLSVirtualModelInstance hbnVMI = httpVMIResource.getVirtualModelInstance();
 			VirtualModel vm = httpVMIResource.getVirtualModel();
 			FlexoConcept concept = vm.getFlexoConcept(getFlexoConceptURI());
 			// TODO: find the container !!!

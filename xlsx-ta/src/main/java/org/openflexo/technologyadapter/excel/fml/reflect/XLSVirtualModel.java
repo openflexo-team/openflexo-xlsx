@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.util.logging.Logger;
 
@@ -61,10 +61,12 @@ import org.openflexo.toolbox.StringUtils;
  *
  */
 @ModelEntity
-@ImplementationClass(SEVirtualModel.SEVirtualModelImpl.class)
+@ImplementationClass(XLSVirtualModel.XLSVirtualModelImpl.class)
 @XMLElement
-@Imports({ @Import(SEFlexoConcept.class) })
-public interface SEVirtualModel extends VirtualModel {
+@Imports({ @Import(XLSFlexoConcept.class) })
+//TODO : refactor !
+@Deprecated // We should use "classical" FlexoConcept with specific annotations
+public interface XLSVirtualModel extends VirtualModel {
 
 	@PropertyIdentifier(type = ExcelWorkbookResource.class)
 	String TEMPLATE_EXCEL_WORKBOOK_RESOURCE = "templateExcelWorkbookResource";
@@ -84,14 +86,14 @@ public interface SEVirtualModel extends VirtualModel {
 	@Setter(TEMPLATE_EXCEL_WORKBOOK_URI)
 	public void setTemplateExcelWorkbookURI(String excelWorkbook);
 
-	public static abstract class SEVirtualModelImpl extends VirtualModelImpl implements SEVirtualModel {
+	public static abstract class XLSVirtualModelImpl extends VirtualModelImpl implements XLSVirtualModel {
 
-		private static final Logger logger = Logger.getLogger(SEVirtualModelImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(XLSVirtualModelImpl.class.getPackage().getName());
 
 		private ExcelWorkbookResource templateWBResource;
 		private String templateWBURI;
 
-		private SEVirtualModelInstanceType vmInstanceType = new SEVirtualModelInstanceType(this);
+		private XLSVirtualModelInstanceType vmInstanceType = new XLSVirtualModelInstanceType(this);
 
 		@Override
 		public ExcelWorkbookResource getTemplateExcelWorkbookResource() {
@@ -123,7 +125,7 @@ public interface SEVirtualModel extends VirtualModel {
 		}
 
 		@Override
-		public SEVirtualModelInstanceType getInstanceType() {
+		public XLSVirtualModelInstanceType getInstanceType() {
 			return vmInstanceType;
 		}
 

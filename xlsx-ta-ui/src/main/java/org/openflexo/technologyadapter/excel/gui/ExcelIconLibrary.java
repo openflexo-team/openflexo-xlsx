@@ -49,12 +49,12 @@ import org.openflexo.icon.IconFactory;
 import org.openflexo.icon.IconMarker;
 import org.openflexo.icon.ImageIconResource;
 import org.openflexo.rm.ResourceLocator;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelColumn;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
 
 public class ExcelIconLibrary {
 
@@ -100,7 +100,7 @@ public class ExcelIconLibrary {
 		else if (ExcelColumn.class.isAssignableFrom(objectClass)) {
 			return EXCEL_COLUMN_ICON;
 		}
-		else if (SEVirtualModelInstance.class.isAssignableFrom(objectClass)) {
+		else if (XLSVirtualModelInstance.class.isAssignableFrom(objectClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, ExcelIconLibrary.EXCEL_MARKER);
 		}
 		logger.warning("No icon for " + objectClass);

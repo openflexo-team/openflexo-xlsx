@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -46,18 +46,18 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.action.FlexoAction;
 import org.openflexo.foundation.fml.rt.VirtualModelInstanceObject;
 import org.openflexo.foundation.fml.rt.action.AbstractActionSchemeAction;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
- * Provides execution environment of a {@link SEInitializer} on a given {@link HbnVirtualModelInstance} as a {@link FlexoAction}
+ * Provides execution environment of a {@link XLSInitializer} on a given {@link XLSVirtualModelInstance} as a {@link FlexoAction}
  * 
  * @author sylvain
  *
  */
-public class SEInitializerAction extends AbstractActionSchemeAction<SEInitializerAction, SEInitializer, SEVirtualModelInstance> {
+public class XLSInitializerAction extends AbstractActionSchemeAction<XLSInitializerAction, XLSInitializer, XLSVirtualModelInstance> {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger.getLogger(SEInitializerAction.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XLSInitializerAction.class.getPackage().getName());
 
 	/**
 	 * Constructor to be used for creating a new action without factory
@@ -67,7 +67,7 @@ public class SEInitializerAction extends AbstractActionSchemeAction<SEInitialize
 	 * @param globalSelection
 	 * @param editor
 	 */
-	public SEInitializerAction(SEInitializer behaviour, SEVirtualModelInstance focusedObject,
+	public XLSInitializerAction(XLSInitializer behaviour, XLSVirtualModelInstance focusedObject,
 			List<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(behaviour, focusedObject, globalSelection, editor);
 	}
@@ -81,14 +81,14 @@ public class SEInitializerAction extends AbstractActionSchemeAction<SEInitialize
 	 * @param ownerAction
 	 *            Action in which action to be created will be embedded
 	 */
-	public SEInitializerAction(SEInitializer behaviour, SEVirtualModelInstance focusedObject,
+	public XLSInitializerAction(XLSInitializer behaviour, XLSVirtualModelInstance focusedObject,
 			List<VirtualModelInstanceObject> globalSelection, FlexoAction<?, ?, ?> ownerAction) {
 		super(behaviour, focusedObject, globalSelection, ownerAction);
 	}
 
 	@Override
 	protected void doAction(Object context) throws FlexoException {
-		SEInitializer applicableActionScheme = getApplicableFlexoBehaviour();
+		XLSInitializer applicableActionScheme = getApplicableFlexoBehaviour();
 		if (applicableActionScheme != null && applicableActionScheme.evaluateCondition(getFlexoConceptInstance())) {
 			executeControlGraph();
 		}

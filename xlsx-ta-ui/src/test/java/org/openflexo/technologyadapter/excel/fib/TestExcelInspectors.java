@@ -87,17 +87,17 @@ public class TestExcelInspectors extends GenericFIBInspectorTestCase {
 
 	@Test
 	public void testCreateSEResourceInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/CreateSEResource.inspector");
+		validateFIB("Inspectors/Excel/EditionAction/CreateXLSResource.inspector");
 	}
 
 	@Test
 	public void testInsertSEObjectInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/InsertSEObject.inspector");
+		validateFIB("Inspectors/Excel/EditionAction/InsertXLSObject.inspector");
 	}
 
 	@Test
 	public void testRemoveSEObjectInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/RemoveSEObject.inspector");
+		validateFIB("Inspectors/Excel/EditionAction/RemoveXLSObject.inspector");
 	}
 
 	@Test
@@ -132,17 +132,17 @@ public class TestExcelInspectors extends GenericFIBInspectorTestCase {
 
 	@Test
 	public void testSEColumnRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/SEColumnRole.inspector");
+		validateFIB("Inspectors/Excel/FlexoRole/XLSColumnRole.inspector");
 	}
 
 	@Test
 	public void testSEDataAreaRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/SEDataAreaRole.inspector");
+		validateFIB("Inspectors/Excel/FlexoRole/XLSDataAreaRole.inspector");
 	}
 
 	@Test
 	public void testSEReferenceRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/SEReferenceRole.inspector");
+		validateFIB("Inspectors/Excel/FlexoRole/XLSReferenceRole.inspector");
 	}
 
 }

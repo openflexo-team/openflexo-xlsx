@@ -65,19 +65,19 @@ import org.openflexo.technologyadapter.excel.fml.editionaction.CellStyleAction;
 import org.openflexo.technologyadapter.excel.fml.editionaction.CreateExcelResource;
 import org.openflexo.technologyadapter.excel.fml.editionaction.GenerateExcelResource;
 import org.openflexo.technologyadapter.excel.fml.editionaction.MergeCells;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.InsertXLSObject;
+import org.openflexo.technologyadapter.excel.fml.reflect.RemoveXLSObject;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.gui.ExcelIconLibrary;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelColumn;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.technologyadapter.excel.semantics.fml.CreateSEResource;
-import org.openflexo.technologyadapter.excel.semantics.fml.InsertSEObject;
-import org.openflexo.technologyadapter.excel.semantics.fml.RemoveSEObject;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEColumnRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEDataAreaRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEReferenceRole;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.view.ExcelWorkbookView;
 import org.openflexo.view.EmptyPanel;
 import org.openflexo.view.ModuleView;
@@ -159,13 +159,13 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 		if (ExcelRowRole.class.isAssignableFrom(flexoRoleClass)) {
 			return getIconForTechnologyObject(ExcelRow.class);
 		}
-		if (SEColumnRole.class.isAssignableFrom(flexoRoleClass)) {
+		if (XLSColumnRole.class.isAssignableFrom(flexoRoleClass)) {
 			return getIconForTechnologyObject(ExcelColumn.class);
 		}
-		if (SEReferenceRole.class.isAssignableFrom(flexoRoleClass)) {
+		if (XLSReferenceRole.class.isAssignableFrom(flexoRoleClass)) {
 			return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_CONCEPT_ICON, ExcelIconLibrary.EXCEL_MARKER);
 		}
-		if (SEDataAreaRole.class.isAssignableFrom(flexoRoleClass)) {
+		if (XLSDataAreaRole.class.isAssignableFrom(flexoRoleClass)) {
 			return IconFactory.getImageIcon(FMLIconLibrary.FLEXO_CONCEPT_ICON, ExcelIconLibrary.EXCEL_MARKER);
 		}
 		return null;
@@ -209,13 +209,13 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 		else if (AbstractSelectExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(ExcelCell.class), IconLibrary.IMPORT);
 		}
-		else if (CreateSEResource.class.isAssignableFrom(editionActionClass)) {
+		else if (CreateXLSResource.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, ExcelIconLibrary.EXCEL_MARKER);
 		}
-		else if (InsertSEObject.class.isAssignableFrom(editionActionClass)) {
+		else if (InsertXLSObject.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.NEW_MARKER);
 		}
-		else if (RemoveSEObject.class.isAssignableFrom(editionActionClass)) {
+		else if (RemoveXLSObject.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.FLEXO_CONCEPT_INSTANCE_ICON, IconLibrary.DELETE);
 		}
 		return super.getIconForEditionAction(editionActionClass);
@@ -223,7 +223,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 
 	@Override
 	public boolean isRepresentableInModuleView(TechnologyObject<ExcelTechnologyAdapter> object) {
-		if (object instanceof SEVirtualModelInstance) {
+		if (object instanceof XLSVirtualModelInstance) {
 			return true;
 		}
 		if (object instanceof ExcelWorkbook) {
@@ -234,7 +234,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 	
 	@Override
 	public FlexoObject getRepresentableMasterObject(TechnologyObject<ExcelTechnologyAdapter> object) {
-		if (object instanceof SEVirtualModelInstance) {
+		if (object instanceof XLSVirtualModelInstance) {
 			return object;
 		}
 		if (object instanceof ExcelWorkbook) {
@@ -254,8 +254,8 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 	@Override
 	public ModuleView<?> createModuleViewForMasterObject(TechnologyObject<ExcelTechnologyAdapter> object, FlexoController controller,
 			FlexoPerspective perspective) {
-		if (object instanceof SEVirtualModelInstance) {
-			return new VirtualModelInstanceView((SEVirtualModelInstance) object, controller, perspective);
+		if (object instanceof XLSVirtualModelInstance) {
+			return new VirtualModelInstanceView((XLSVirtualModelInstance) object, controller, perspective);
 		}
 		if (object instanceof ExcelWorkbook) {
 			return new ExcelWorkbookView((ExcelWorkbook) object, controller, perspective);

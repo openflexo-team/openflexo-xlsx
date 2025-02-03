@@ -60,18 +60,18 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.FlexoResourceType;
 import org.openflexo.technologyadapter.excel.AbstractTestExcel;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
+import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
 import org.openflexo.technologyadapter.excel.action.CreateSemanticsExcelVirtualModel;
 import org.openflexo.technologyadapter.excel.action.CreateSemanticsExcelVirtualModel.SEFlexoConceptSpecification;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSFlexoConcept;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
-import org.openflexo.technologyadapter.excel.semantics.fml.CreateSEResource;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEColumnRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEFlexoConcept;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
 import org.openflexo.test.OrderedRunner;
 import org.openflexo.test.TestOrder;
 
@@ -94,12 +94,12 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 	private static VirtualModel rootVirtualModel;
 	private static VirtualModel mappingVirtualModel;
 
-	private static SemanticsExcelModelSlot modelSlot;
+	private static FMLExcelModelSlot modelSlot;
 	private static CreationScheme mappingCreationScheme;
 	private static CreationScheme creationScheme;
 
 	private static FMLRTVirtualModelInstance vmi;
-	private static SEVirtualModelInstance seVMI;
+	private static XLSVirtualModelInstance seVMI;
 
 	private static ExcelWorkbookResource personListingResource;
 	private static ExcelWorkbookResource personListing2Resource;
@@ -159,26 +159,26 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 		assertNotNull(mappingVirtualModel);
 
 		assertEquals(1, mappingVirtualModel.getFlexoConcepts().size());
-		SEFlexoConcept personConcept = (SEFlexoConcept) mappingVirtualModel.getFlexoConcept("Person");
+		XLSFlexoConcept personConcept = (XLSFlexoConcept) mappingVirtualModel.getFlexoConcept("Person");
 		assertNotNull(personConcept);
 
-		SEColumnRole<String> sexe = (SEColumnRole<String>) personConcept.getAccessibleProperty("sexe");
+		XLSColumnRole<String> sexe = (XLSColumnRole<String>) personConcept.getAccessibleProperty("sexe");
 		assertNotNull(sexe);
 		assertEquals(PrimitiveType.String, sexe.getPrimitiveType());
 
-		SEColumnRole<String> name = (SEColumnRole<String>) personConcept.getAccessibleProperty("name");
+		XLSColumnRole<String> name = (XLSColumnRole<String>) personConcept.getAccessibleProperty("name");
 		assertNotNull(name);
 		assertEquals(PrimitiveType.String, name.getPrimitiveType());
 
-		SEColumnRole<String> activity = (SEColumnRole<String>) personConcept.getAccessibleProperty("activity");
+		XLSColumnRole<String> activity = (XLSColumnRole<String>) personConcept.getAccessibleProperty("activity");
 		assertNotNull(activity);
 		assertEquals(PrimitiveType.String, activity.getPrimitiveType());
 
-		SEColumnRole<Integer> age = (SEColumnRole<Integer>) personConcept.getAccessibleProperty("age");
+		XLSColumnRole<Integer> age = (XLSColumnRole<Integer>) personConcept.getAccessibleProperty("age");
 		assertNotNull(age);
 		assertEquals(PrimitiveType.Integer, age.getPrimitiveType());
 
-		SEColumnRole<String> city = (SEColumnRole<String>) personConcept.getAccessibleProperty("city");
+		XLSColumnRole<String> city = (XLSColumnRole<String>) personConcept.getAccessibleProperty("city");
 		assertNotNull(city);
 		assertEquals(PrimitiveType.String, city.getPrimitiveType());
 
@@ -199,13 +199,13 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 		// Now we create the personListing model slot
 		CreateModelSlot createMS1 = CreateModelSlot.actionType.makeNewAction(rootVirtualModel, null, _editor);
 		createMS1.setTechnologyAdapter(getTA(ExcelTechnologyAdapter.class));
-		createMS1.setModelSlotClass(SemanticsExcelModelSlot.class);
+		createMS1.setModelSlotClass(FMLExcelModelSlot.class);
 		createMS1.setModelSlotName("personListing");
 		createMS1.setVmRes((CompilationUnitResource) mappingVirtualModel.getResource());
 		createMS1.doAction();
 		assertTrue(createMS1.hasActionExecutionSucceeded());
 
-		assertNotNull(modelSlot = (SemanticsExcelModelSlot) createMS1.getNewModelSlot());
+		assertNotNull(modelSlot = (FMLExcelModelSlot) createMS1.getNewModelSlot());
 		System.out.println("Created " + modelSlot);
 
 		// And the creation scheme of the rootVirtualModel
@@ -226,12 +226,12 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 
 		CreateEditionAction createEditionAction1 = CreateEditionAction.actionType.makeNewAction(creationScheme.getControlGraph(), null,
 				_editor);
-		createEditionAction1.setEditionActionClass(CreateSEResource.class);
+		createEditionAction1.setEditionActionClass(CreateXLSResource.class);
 		createEditionAction1.setAssignation(new DataBinding<>("personListing"));
 		createEditionAction1.doAction();
 		AssignationAction<?> action1 = (AssignationAction<?>) createEditionAction1.getNewEditionAction();
 
-		CreateSEResource createSEResourceAction = (CreateSEResource) action1.getAssignableAction();
+		CreateXLSResource createSEResourceAction = (CreateXLSResource) action1.getAssignableAction();
 		createSEResourceAction.setExcelWorkbook(new DataBinding<>("parameters.excelResource.getResourceData()"));
 		createSEResourceAction.setResourceName(new DataBinding<String>("(this.name + \"_xls\")"));
 		createSEResourceAction.setResourceCenter(new DataBinding<FlexoResourceCenter<?>>("this.resourceCenter"));
@@ -265,12 +265,12 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 		assertNotNull(seVMI);
 
 		assertEquals(4, seVMI.getFlexoConceptInstances().size());
-		SEFlexoConceptInstance jeanDupont = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(0);
-		SEFlexoConceptInstance bernadetteDupont = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(1);
-		SEFlexoConceptInstance julesDupont = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(2);
-		SEFlexoConceptInstance ninaDupont = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(3);
-		// SEFlexoConceptInstance gerardMenvusat = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(4);
-		// SEFlexoConceptInstance alainTerrieur = (SEFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(5);
+		XLSFlexoConceptInstance jeanDupont = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(0);
+		XLSFlexoConceptInstance bernadetteDupont = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(1);
+		XLSFlexoConceptInstance julesDupont = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(2);
+		XLSFlexoConceptInstance ninaDupont = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(3);
+		// XLSFlexoConceptInstance gerardMenvusat = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(4);
+		// XLSFlexoConceptInstance alainTerrieur = (XLSFlexoConceptInstance) seVMI.getFlexoConceptInstances().get(5);
 
 		assertEquals("MR", jeanDupont.execute("sexe"));
 		assertEquals("Jean Dupont", jeanDupont.execute("name"));
@@ -284,7 +284,7 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 		assertEquals(45, (long) bernadetteDupont.execute("age"));
 		assertEquals("BREST", bernadetteDupont.execute("city"));
 
-		List<SEFlexoConceptInstance> allPersons = seVMI.execute("persons");
+		List<XLSFlexoConceptInstance> allPersons = seVMI.execute("persons");
 		assertEquals(4, allPersons.size());
 		assertSameList(allPersons, jeanDupont, bernadetteDupont, julesDupont, ninaDupont);
 

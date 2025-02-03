@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.lang.reflect.Type;
 
@@ -57,10 +57,10 @@ import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 
 @ModelEntity
-@ImplementationClass(SEColumnRole.SEColumnRoleImpl.class)
+@ImplementationClass(XLSColumnRole.XLSColumnRoleImpl.class)
 @XMLElement
-@FML("HbnColumnRole")
-public interface SEColumnRole<T> extends FlexoRole<T> {
+@FML("XLSColumnRole")
+public interface XLSColumnRole<T> extends FlexoRole<T> {
 
 	@PropertyIdentifier(type = Integer.class)
 	String COLUMN_INDEX_KEY = "columnIndex";
@@ -81,7 +81,7 @@ public interface SEColumnRole<T> extends FlexoRole<T> {
 	@Setter(PRIMITIVE_TYPE_KEY)
 	public void setPrimitiveType(PrimitiveType primitiveType);
 
-	public abstract static class SEColumnRoleImpl<T> extends FlexoRoleImpl<T> implements SEColumnRole<T> {
+	public abstract static class XLSColumnRoleImpl<T> extends FlexoRoleImpl<T> implements XLSColumnRole<T> {
 
 		@Override
 		public PropertyCardinality getCardinality() {

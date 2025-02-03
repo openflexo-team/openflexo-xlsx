@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.rm;
+package org.openflexo.technologyadapter.excel.fml.reflect.rm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,24 +50,24 @@ import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.PamelaModelFactory;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
- * A repository storing {@link SEVirtualModelInstanceResource} for a resource center
+ * A repository storing {@link XLSVirtualModelInstanceResource} for a resource center
  * 
  * @author sylvain
  * 
  */
 @ModelEntity
-@ImplementationClass(SEVirtualModelInstanceRepository.HbnVirtualModelInstanceRepositoryImpl.class)
-public interface SEVirtualModelInstanceRepository<I> extends ResourceRepository<SEVirtualModelInstanceResource, I> {
+@ImplementationClass(XLSVirtualModelInstanceRepository.XLSVirtualModelInstanceRepositoryImpl.class)
+public interface XLSVirtualModelInstanceRepository<I> extends ResourceRepository<XLSVirtualModelInstanceResource, I> {
 
-	public static <I> SEVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,
+	public static <I> XLSVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,
 			FlexoResourceCenter<I> resourceCenter) {
 		PamelaModelFactory factory;
 		try {
-			factory = new PamelaModelFactory(SEVirtualModelInstanceRepository.class);
-			SEVirtualModelInstanceRepository<I> newRepository = factory.newInstance(SEVirtualModelInstanceRepository.class);
+			factory = new PamelaModelFactory(XLSVirtualModelInstanceRepository.class);
+			XLSVirtualModelInstanceRepository<I> newRepository = factory.newInstance(XLSVirtualModelInstanceRepository.class);
 			newRepository.setResourceCenter(resourceCenter);
 			newRepository.setBaseArtefact(resourceCenter.getBaseArtefact());
 			newRepository.getRootFolder().setRepositoryContext(null);
@@ -78,8 +78,8 @@ public interface SEVirtualModelInstanceRepository<I> extends ResourceRepository<
 		return null;
 	}
 
-	public static abstract class HbnVirtualModelInstanceRepositoryImpl<I> extends ResourceRepositoryImpl<SEVirtualModelInstanceResource, I>
-			implements SEVirtualModelInstanceRepository<I> {
+	public static abstract class XLSVirtualModelInstanceRepositoryImpl<I> extends ResourceRepositoryImpl<XLSVirtualModelInstanceResource, I>
+			implements XLSVirtualModelInstanceRepository<I> {
 
 		@Override
 		public FlexoServiceManager getServiceManager() {
@@ -89,9 +89,9 @@ public interface SEVirtualModelInstanceRepository<I> extends ResourceRepository<
 			return null;
 		}
 
-		public List<SEVirtualModelInstance> getVirtualModelInstancesConformToVirtualModel(String virtualModelURI) {
-			List<SEVirtualModelInstance> views = new ArrayList<>();
-			for (SEVirtualModelInstanceResource vmiRes : getAllResources()) {
+		public List<XLSVirtualModelInstance> getVirtualModelInstancesConformToVirtualModel(String virtualModelURI) {
+			List<XLSVirtualModelInstance> views = new ArrayList<>();
+			for (XLSVirtualModelInstanceResource vmiRes : getAllResources()) {
 				if (vmiRes.getVirtualModelResource() != null && vmiRes.getVirtualModelResource().getURI().equals(virtualModelURI)) {
 					views.add(vmiRes.getVirtualModelInstance());
 				}
@@ -106,14 +106,14 @@ public interface SEVirtualModelInstanceRepository<I> extends ResourceRepository<
 			return getRootFolder().isValidResourceName(value);
 		}
 
-		public SEVirtualModelInstanceResource getVirtualModelInstanceResourceNamed(String value) {
+		public XLSVirtualModelInstanceResource getVirtualModelInstanceResourceNamed(String value) {
 			if (value == null) {
 				return null;
 			}
 			return getRootFolder().getResourceWithName(value);
 		}
 
-		public SEVirtualModelInstanceResource getVirtualModelInstance(String virtualModelInstanceURI) {
+		public XLSVirtualModelInstanceResource getVirtualModelInstance(String virtualModelInstanceURI) {
 			if (virtualModelInstanceURI == null) {
 				return null;
 			}

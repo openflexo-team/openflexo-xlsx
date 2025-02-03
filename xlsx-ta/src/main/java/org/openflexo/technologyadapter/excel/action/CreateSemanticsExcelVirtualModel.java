@@ -71,18 +71,18 @@ import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.task.Progress;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
+import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
 import org.openflexo.technologyadapter.excel.action.CreateSemanticsExcelVirtualModel.SEFlexoConceptSpecification.SEFlexoPropertySpecification;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSFlexoConcept;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializer;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModel;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelCellRange;
 import org.openflexo.technologyadapter.excel.model.ExcelColumn;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEColumnRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEDataAreaRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEFlexoConcept;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEInitializer;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEReferenceRole;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEVirtualModel;
 import org.openflexo.toolbox.JavaUtils;
 import org.openflexo.toolbox.StringUtils;
 
@@ -129,7 +129,7 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 		FlexoObjectImpl.addActionForClass(CreateSemanticsExcelVirtualModel.actionType, RepositoryFolder.class);
 	}
 
-	private SEVirtualModel newVirtualModel;
+	private XLSVirtualModel newVirtualModel;
 
 	/*private JDBCDbType dbType;
 	private String address;
@@ -161,9 +161,9 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 
 		CreateFlexoBehaviour createHbnInitializer = CreateFlexoBehaviour.actionType.makeNewEmbeddedAction(getNewFlexoConcept(), null, this);
 		createHbnInitializer.setFlexoBehaviourName("initialize");
-		createHbnInitializer.setFlexoBehaviourClass(SEInitializer.class);
+		createHbnInitializer.setFlexoBehaviourClass(XLSInitializer.class);
 		createHbnInitializer.doAction();
-		// Unused SEInitializer initializer = (SEInitializer) createHbnInitializer.getNewFlexoBehaviour();
+		// Unused XLSInitializer initializer = (XLSInitializer) createHbnInitializer.getNewFlexoBehaviour();
 
 	}
 
@@ -173,13 +173,13 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 		Progress.progress(getLocales().localizedForKey("create_virtual_model"));
 
 		try {
-			setSpecializedVirtualModelClass(SEVirtualModel.class);
+			setSpecializedVirtualModelClass(XLSVirtualModel.class);
 			System.out.println("On cree une resource pour " + getSpecializedVirtualModelClass());
 			CompilationUnitResource vmResource = makeVirtualModelResource();
-			newVirtualModel = (SEVirtualModel) vmResource.getLoadedResourceData();
+			newVirtualModel = (XLSVirtualModel) vmResource.getLoadedResourceData();
 			newVirtualModel.setDescription(getNewVirtualModelDescription());
 			newVirtualModel.setAbstract(true);
-			newVirtualModel.setModelSlotNatureClass(SemanticsExcelModelSlot.class);
+			newVirtualModel.setModelSlotNatureClass(FMLExcelModelSlot.class);
 			newVirtualModel.setTemplateExcelWorkbookResource(getExcelWorkbookResource());
 		} catch (SaveResourceException e) {
 			throw new SaveResourceException(null);
@@ -189,7 +189,7 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 
 		AddUseDeclaration useDeclarationAction = AddUseDeclaration.actionType.makeNewEmbeddedAction(newVirtualModel.getCompilationUnit(),
 				null, this);
-		useDeclarationAction.setModelSlotClass(SemanticsExcelModelSlot.class);
+		useDeclarationAction.setModelSlotClass(FMLExcelModelSlot.class);
 		useDeclarationAction.doAction();
 
 		performSetParentConcepts();
@@ -202,7 +202,7 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 		for (SEFlexoConceptSpecification conceptSpecification : getSEConcepts()) {
 			CreateFlexoConcept createConceptAction = CreateFlexoConcept.actionType.makeNewEmbeddedAction(newVirtualModel, null, this);
 			createConceptAction.setNewFlexoConceptName(conceptSpecification.getConceptName());
-			createConceptAction.setSpecializedFlexoConceptClass(SEFlexoConcept.class);
+			createConceptAction.setSpecializedFlexoConceptClass(XLSFlexoConcept.class);
 			if (StringUtils.isNotEmpty(conceptSpecification.getConceptDescription())) {
 				createConceptAction.setNewFlexoConceptDescription(conceptSpecification.getConceptDescription());
 			}
@@ -212,13 +212,13 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 				switch (propertySpec.getMappingType()) {
 					case Primitive:
 						propertyEntry.setPropertyType(PropertyType.TECHNOLOGY_ROLE);
-						propertyEntry.setFlexoRoleClass(SEColumnRole.class);
+						propertyEntry.setFlexoRoleClass(XLSColumnRole.class);
 						propertyEntry.setType(propertySpec.getPrimitiveType().getType());
 						System.out.println("Property " + propertyEntry + " type=" + propertyEntry.getType());
 						break;
 					case Reference:
 						propertyEntry.setPropertyType(PropertyType.TECHNOLOGY_ROLE);
-						propertyEntry.setFlexoRoleClass(SEReferenceRole.class);
+						propertyEntry.setFlexoRoleClass(XLSReferenceRole.class);
 						propertyEntry.setType(FlexoConceptInstanceType.UNDEFINED_FLEXO_CONCEPT_INSTANCE_TYPE);
 						if (propertySpec.getOppositeConcept() != null && propertySpec.getOppositeConcept().getConcept() != null) {
 							propertyEntry.setType(propertySpec.getOppositeConcept().getConcept().getInstanceType());
@@ -242,12 +242,12 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 				propertySpec.property = conceptSpecification.concept.getDeclaredProperty(propertySpec.getPropertyName());
 				switch (propertySpec.getMappingType()) {
 					case Primitive:
-						SEColumnRole<?> columnRole = (SEColumnRole<?>) propertySpec.property;
+						XLSColumnRole<?> columnRole = (XLSColumnRole<?>) propertySpec.property;
 						columnRole.setColumnIndex(propertySpec.getCell().getColumnIndex());
 						columnRole.setPrimitiveType(propertySpec.getPrimitiveType());
 						break;
 					case Reference:
-						SEReferenceRole referenceRole = (SEReferenceRole) propertySpec.property;
+						XLSReferenceRole referenceRole = (XLSReferenceRole) propertySpec.property;
 						referenceRole.setColumnIndex(propertySpec.getCell().getColumnIndex());
 						break;
 					default:
@@ -275,11 +275,11 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 			CreateTechnologyRole createTechnologyRole = CreateTechnologyRole.actionType.makeNewEmbeddedAction(newVirtualModel, null, this);
 			String dataAreaRoleName = JavaUtils.getVariableName(conceptSpecification.getConceptName() + "s");
 			createTechnologyRole.setRoleName(dataAreaRoleName);
-			createTechnologyRole.setFlexoRoleClass(SEDataAreaRole.class);
+			createTechnologyRole.setFlexoRoleClass(XLSDataAreaRole.class);
 			createTechnologyRole.setIsRequired(true);
 			createTechnologyRole.setContainer(new DataBinding<>("this"));
 			createTechnologyRole.doAction();
-			SEDataAreaRole dataAreaRole = (SEDataAreaRole) createTechnologyRole.getNewFlexoProperty();
+			XLSDataAreaRole dataAreaRole = (XLSDataAreaRole) createTechnologyRole.getNewFlexoProperty();
 			dataAreaRole.setCellRange(conceptSpecification.getCellRange());
 			dataAreaRole.setFlexoConceptType(conceptSpecification.getConcept());
 		}
@@ -287,11 +287,11 @@ public class CreateSemanticsExcelVirtualModel extends AbstractCreateNatureSpecif
 		for (SEFlexoConceptSpecification conceptSpecification : getSEConcepts()) {
 			for (SEFlexoPropertySpecification propertySpec : conceptSpecification.getProperties()) {
 				FlexoProperty<?> property = conceptSpecification.concept.getDeclaredProperty(propertySpec.getPropertyName());
-				if (property instanceof SEReferenceRole) {
-					// ((SEReferenceRole) property).setForeignKeyAttributeName(propertySpec.getPropertyName());
-					((SEReferenceRole) property).setVirtualModelInstance(new DataBinding<>("container"));
+				if (property instanceof XLSReferenceRole) {
+					// ((XLSReferenceRole) property).setForeignKeyAttributeName(propertySpec.getPropertyName());
+					((XLSReferenceRole) property).setVirtualModelInstance(new DataBinding<>("container"));
 					if (propertySpec.getOppositeConcept() != null) {
-						((SEReferenceRole) property).setFlexoConceptType(propertySpec.getOppositeConcept().getConcept());
+						((XLSReferenceRole) property).setFlexoConceptType(propertySpec.getOppositeConcept().getConcept());
 					}
 				}
 

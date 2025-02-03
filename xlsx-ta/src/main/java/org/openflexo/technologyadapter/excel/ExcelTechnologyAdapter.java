@@ -47,12 +47,12 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.technologyadapter.excel.fml.binding.ExcelBindingFactory;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType.SEVirtualModelInstanceTypeFactory;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceRepository;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResourceFactory;
 import org.openflexo.technologyadapter.excel.model.ExcelCellRangeConverter;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEVirtualModelInstanceType.SEVirtualModelInstanceTypeFactory;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceRepository;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResourceFactory;
 
 /**
  * This class defines and implements the Excel technology adapter
@@ -60,8 +60,8 @@ import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstance
  * @author sylvain, vincent, Christophe
  * 
  */
-@DeclareModelSlots({ BasicExcelModelSlot.class, SemanticsExcelModelSlot.class })
-@DeclareResourceFactories({ ExcelWorkbookResourceFactory.class, SEVirtualModelInstanceResourceFactory.class })
+@DeclareModelSlots({ BasicExcelModelSlot.class, FMLExcelModelSlot.class })
+@DeclareResourceFactories({ ExcelWorkbookResourceFactory.class, XLSVirtualModelInstanceResourceFactory.class })
 public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAdapter> {
 
 	protected static final Logger logger = Logger.getLogger(ExcelTechnologyAdapter.class.getPackage().getName());
@@ -113,11 +113,11 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAda
 		return getResourceFactory(ExcelWorkbookResourceFactory.class);
 	}
 
-	public <I> SEVirtualModelInstanceRepository<I> getSEVirtualModelInstanceRepository(FlexoResourceCenter<I> resourceCenter) {
-		SEVirtualModelInstanceRepository<I> returned = resourceCenter.retrieveRepository(SEVirtualModelInstanceRepository.class, this);
+	public <I> XLSVirtualModelInstanceRepository<I> getSEVirtualModelInstanceRepository(FlexoResourceCenter<I> resourceCenter) {
+		XLSVirtualModelInstanceRepository<I> returned = resourceCenter.retrieveRepository(XLSVirtualModelInstanceRepository.class, this);
 		if (returned == null) {
-			returned = SEVirtualModelInstanceRepository.instanciateNewRepository(this, resourceCenter);
-			resourceCenter.registerRepository(returned, SEVirtualModelInstanceRepository.class, this);
+			returned = XLSVirtualModelInstanceRepository.instanciateNewRepository(this, resourceCenter);
+			resourceCenter.registerRepository(returned, XLSVirtualModelInstanceRepository.class, this);
 		}
 		return returned;
 	}

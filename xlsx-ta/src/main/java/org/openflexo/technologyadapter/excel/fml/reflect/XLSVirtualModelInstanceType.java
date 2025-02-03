@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -48,39 +48,41 @@ import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.VirtualModelInstanceType;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
- * Represent the type of an instance of a {@link VirtualModel} in the context of {@link SemanticsExcelModelSlot}
+ * Represent the type of an instance of a {@link VirtualModel} in the context of {@link FMLExcelModelSlot}
  * 
  * @author sylvain
  * 
  */
-public class SEVirtualModelInstanceType extends VirtualModelInstanceType {
+// TODO : refactor !
+@Deprecated // We should use "classical" FlexoConcept with specific annotations
+public class XLSVirtualModelInstanceType extends VirtualModelInstanceType {
 
-	public static SEVirtualModelInstanceType UNDEFINED_VIRTUAL_MODEL_INSTANCE_TYPE = new SEVirtualModelInstanceType((VirtualModel) null);
+	public static XLSVirtualModelInstanceType UNDEFINED_VIRTUAL_MODEL_INSTANCE_TYPE = new XLSVirtualModelInstanceType((VirtualModel) null);
 
-	protected SEVirtualModelInstanceType(VirtualModel aVirtualModel) {
+	protected XLSVirtualModelInstanceType(VirtualModel aVirtualModel) {
 		super(aVirtualModel);
 	}
 
-	public SEVirtualModelInstanceType(String virtualModelURI, CustomTypeFactory<?> factory) {
+	public XLSVirtualModelInstanceType(String virtualModelURI, CustomTypeFactory<?> factory) {
 		super(virtualModelURI, factory);
 	}
 
 	@Override
 	public Class<?> getBaseClass() {
-		return SEVirtualModelInstance.class;
+		return XLSVirtualModelInstance.class;
 	}
 
-	private static Map<VirtualModel, SEVirtualModelInstanceType> types = new HashMap<>();
+	private static Map<VirtualModel, XLSVirtualModelInstanceType> types = new HashMap<>();
 
-	public static SEVirtualModelInstanceType getVirtualModelInstanceType(VirtualModel aVirtualModel) {
+	public static XLSVirtualModelInstanceType getVirtualModelInstanceType(VirtualModel aVirtualModel) {
 		if (aVirtualModel != null) {
-			SEVirtualModelInstanceType returned = types.get(aVirtualModel);
+			XLSVirtualModelInstanceType returned = types.get(aVirtualModel);
 			if (returned == null) {
-				returned = new SEVirtualModelInstanceType(aVirtualModel);
+				returned = new XLSVirtualModelInstanceType(aVirtualModel);
 				types.put(aVirtualModel, returned);
 			}
 			return returned;
@@ -98,29 +100,29 @@ public class SEVirtualModelInstanceType extends VirtualModelInstanceType {
 	 * 
 	 */
 	public static class SEVirtualModelInstanceTypeFactory
-			extends AbstractVirtualModelInstanceTypeFactory<SEVirtualModelInstanceType, ExcelTechnologyAdapter> {
+			extends AbstractVirtualModelInstanceTypeFactory<XLSVirtualModelInstanceType, ExcelTechnologyAdapter> {
 
 		public SEVirtualModelInstanceTypeFactory(ExcelTechnologyAdapter technologyAdapter) {
 			super(technologyAdapter);
 		}
 
 		@Override
-		public Class<SEVirtualModelInstanceType> getCustomType() {
-			return SEVirtualModelInstanceType.class;
+		public Class<XLSVirtualModelInstanceType> getCustomType() {
+			return XLSVirtualModelInstanceType.class;
 		}
 
 		@Override
-		public SEVirtualModelInstanceType getType(String configuration, CustomTypeFactory<?> factory) {
-			return new SEVirtualModelInstanceType(configuration, this);
+		public XLSVirtualModelInstanceType getType(String configuration, CustomTypeFactory<?> factory) {
+			return new XLSVirtualModelInstanceType(configuration, this);
 		}
 
 		@Override
-		public SEVirtualModelInstanceType getType(VirtualModel virtualModel) {
+		public XLSVirtualModelInstanceType getType(VirtualModel virtualModel) {
 			return getVirtualModelInstanceType(virtualModel);
 		}
 
 		@Override
-		public VirtualModel resolveVirtualModel(SEVirtualModelInstanceType typeToResolve) {
+		public VirtualModel resolveVirtualModel(XLSVirtualModelInstanceType typeToResolve) {
 			try {
 				return getTechnologyAdapter().getTechnologyAdapterService().getServiceManager().getVirtualModelLibrary()
 						.getVirtualModel(typeToResolve.getConceptURI());

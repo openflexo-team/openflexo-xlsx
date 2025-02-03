@@ -33,7 +33,7 @@
  *
  */
 
-package org.openflexo.technologyadapter.excel.semantics.model;
+package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -51,20 +51,20 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.Initializer;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEColumnRole;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
 
 /**
  * A Excel-specific {@link FlexoConceptInstance} reflecting a distant object (represented by a row in a workbook) accessible in an
- * {@link SEVirtualModelInstance} through a {@link HbnModelSlot}<br>
+ * {@link XLSVirtualModelInstance} through a {@link HbnModelSlot}<br>
  * 
  */
 @ModelEntity
-@ImplementationClass(SEFlexoConceptInstance.SEFlexoConceptInstanceImpl.class)
+@ImplementationClass(XLSFlexoConceptInstance.SEFlexoConceptInstanceImpl.class)
 @XMLElement
-public interface SEFlexoConceptInstance extends FlexoConceptInstance {
+public interface XLSFlexoConceptInstance extends FlexoConceptInstance {
 
 	/**
-	 * Initialize this {@link SEFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
+	 * Initialize this {@link XLSFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
 	 * 
 	 * @param hbnMap
 	 * @param concept
@@ -87,20 +87,20 @@ public interface SEFlexoConceptInstance extends FlexoConceptInstance {
 	public void setRowSupportObject(Row row);
 
 	/**
-	 * Default implementation for {@link SEFlexoConceptInstance}
+	 * Default implementation for {@link XLSFlexoConceptInstance}
 	 * 
 	 * @author sylvain
 	 *
 	 */
-	abstract class SEFlexoConceptInstanceImpl extends FlexoConceptInstanceImpl implements SEFlexoConceptInstance {
+	abstract class SEFlexoConceptInstanceImpl extends FlexoConceptInstanceImpl implements XLSFlexoConceptInstance {
 
-		private static final Logger logger = FlexoLogger.getLogger(SEFlexoConceptInstance.class.getPackage().toString());
+		private static final Logger logger = FlexoLogger.getLogger(XLSFlexoConceptInstance.class.getPackage().toString());
 
 		// Row support object
 		private Row row;
 
 		/**
-		 * Initialize this {@link SEFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
+		 * Initialize this {@link XLSFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
 		 * 
 		 * @param hbnMap
 		 * @param concept
@@ -111,8 +111,8 @@ public interface SEFlexoConceptInstance extends FlexoConceptInstance {
 		}
 
 		@Override
-		public SEVirtualModelInstance getVirtualModelInstance() {
-			return (SEVirtualModelInstance) super.getVirtualModelInstance();
+		public XLSVirtualModelInstance getVirtualModelInstance() {
+			return (XLSVirtualModelInstance) super.getVirtualModelInstance();
 		}
 
 		@Override
@@ -132,8 +132,8 @@ public interface SEFlexoConceptInstance extends FlexoConceptInstance {
 
 		@Override
 		public <T> T getFlexoActor(FlexoRole<T> flexoRole) {
-			if (flexoRole instanceof SEColumnRole) {
-				SEColumnRole<T> columnRole = (SEColumnRole<T>) flexoRole;
+			if (flexoRole instanceof XLSColumnRole) {
+				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
 				Cell cell = row.getCell(columnRole.getColumnIndex());
 				// System.out.println("cell: " + cell);
 				switch (columnRole.getPrimitiveType()) {
@@ -171,8 +171,8 @@ public interface SEFlexoConceptInstance extends FlexoConceptInstance {
 
 		@Override
 		public <T> void setFlexoActor(T object, FlexoRole<T> flexoRole) {
-			if (flexoRole instanceof SEColumnRole) {
-				SEColumnRole<T> columnRole = (SEColumnRole<T>) flexoRole;
+			if (flexoRole instanceof XLSColumnRole) {
+				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
 				Cell cell = row.getCell(columnRole.getColumnIndex());
 				// System.out.println("cell: " + cell);
 				switch (columnRole.getPrimitiveType()) {
@@ -208,9 +208,9 @@ public interface SEFlexoConceptInstance extends FlexoConceptInstance {
 		}
 
 		@Override
-		public SEObjectActorReference makeActorReference(FlexoConceptInstanceRole role, FlexoConceptInstance fci) {
+		public XLSObjectActorReference makeActorReference(FlexoConceptInstanceRole role, FlexoConceptInstance fci) {
 			AbstractVirtualModelInstanceModelFactory<?> factory = getFactory();
-			SEObjectActorReference returned = factory.newInstance(SEObjectActorReference.class);
+			XLSObjectActorReference returned = factory.newInstance(XLSObjectActorReference.class);
 			returned.setFlexoRole(role);
 			returned.setFlexoConceptInstance(fci);
 			returned.setModellingElement(this);

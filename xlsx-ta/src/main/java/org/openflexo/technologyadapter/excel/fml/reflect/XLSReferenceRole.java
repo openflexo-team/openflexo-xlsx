@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.util.logging.Logger;
 
@@ -50,19 +50,21 @@ import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
 
 /**
  * A role specific to Semantics/Excel technology (SEModelSlot) allowing to access a referenced object somewhere in an excel workbook, and
- * reflected as a {@link SEFlexoConceptInstance}
+ * reflected as a {@link XLSFlexoConceptInstance}
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(SEReferenceRole.HbnToOneReferenceRoleImpl.class)
+@ImplementationClass(XLSReferenceRole.XLSReferenceRoleImpl.class)
 @XMLElement
-public interface SEReferenceRole extends FlexoConceptInstanceRole {
+// TODO : refactor !
+@Deprecated // We should use "classical" FlexoConcept with specific annotations
+public interface XLSReferenceRole extends FlexoConceptInstanceRole {
 
 	@PropertyIdentifier(type = Integer.class)
 	String COLUMN_INDEX_KEY = "columnIndex";
@@ -93,9 +95,9 @@ public interface SEReferenceRole extends FlexoConceptInstanceRole {
 	@Setter(FOREIGN_KEY_ATTRIBUTE_NAME_KEY)
 	void setForeignKeyAttributeName(String foreignKeyAttributeName);*/
 
-	public static abstract class HbnToOneReferenceRoleImpl extends FlexoConceptInstanceRoleImpl implements SEReferenceRole {
+	public static abstract class XLSReferenceRoleImpl extends FlexoConceptInstanceRoleImpl implements XLSReferenceRole {
 
-		private static final Logger logger = Logger.getLogger(HbnToOneReferenceRoleImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(XLSReferenceRoleImpl.class.getPackage().getName());
 
 		@Override
 		public Class<? extends TechnologyAdapter> getRoleTechnologyAdapterClass() {

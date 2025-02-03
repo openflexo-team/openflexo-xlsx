@@ -18,7 +18,7 @@
  *
  */
 
-package org.openflexo.technologyadapter.excel.semantics.rm;
+package org.openflexo.technologyadapter.excel.fml.reflect.rm;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -35,29 +35,29 @@ import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstanceModelFactory;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceModelFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xml.XMLRootElementInfo;
 
 /**
- * The resource factory for {@link SEVirtualModelInstanceResource}
+ * The resource factory for {@link XLSVirtualModelInstanceResource}
  * 
  * @author sylvain
  *
  */
-public class SEVirtualModelInstanceResourceFactory extends
-		AbstractVirtualModelInstanceResourceFactory<SEVirtualModelInstance, ExcelTechnologyAdapter, SEVirtualModelInstanceResource> {
+public class XLSVirtualModelInstanceResourceFactory extends
+		AbstractVirtualModelInstanceResourceFactory<XLSVirtualModelInstance, ExcelTechnologyAdapter, XLSVirtualModelInstanceResource> {
 
-	private static final Logger logger = Logger.getLogger(SEVirtualModelInstanceResourceFactory.class.getPackage().getName());
+	private static final Logger logger = Logger.getLogger(XLSVirtualModelInstanceResourceFactory.class.getPackage().getName());
 
 	public static final FlexoVersion CURRENT_EXCEL_SE_RT_VERSION = new FlexoVersion("1.0");
 	public static final String EXCEL_SE_SUFFIX = ".excel.se";
 	public static final String EXCEL_SE_XML_SUFFIX = ".excel.se.xml";
 
-	public SEVirtualModelInstanceResourceFactory() throws ModelDefinitionException {
-		super(SEVirtualModelInstanceResource.class);
+	public XLSVirtualModelInstanceResourceFactory() throws ModelDefinitionException {
+		super(XLSVirtualModelInstanceResource.class);
 	}
 
 	public String getExpectedDirectorySuffix() {
@@ -69,7 +69,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	/**
-	 * Build a new {@link SEVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
+	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
 	 * and located in supplied folder
 	 * 
 	 * @param baseName
@@ -82,8 +82,8 @@ public class SEVirtualModelInstanceResourceFactory extends
 	 * @throws SaveResourceException
 	 * @throws ModelDefinitionException
 	 */
-	public <I> SEVirtualModelInstanceResource makeTopLevelFMLRTVirtualModelInstanceResource(String baseName, String uri,
-			CompilationUnitResource virtualModelResource, RepositoryFolder<SEVirtualModelInstanceResource, I> folder,
+	public <I> XLSVirtualModelInstanceResource makeTopLevelFMLRTVirtualModelInstanceResource(String baseName, String uri,
+			CompilationUnitResource virtualModelResource, RepositoryFolder<XLSVirtualModelInstanceResource, I> folder,
 			boolean createEmptyContents) throws SaveResourceException, ModelDefinitionException {
 
 		FlexoResourceCenter<I> resourceCenter = folder.getResourceRepository().getResourceCenter();
@@ -91,12 +91,12 @@ public class SEVirtualModelInstanceResourceFactory extends
 				(baseName.endsWith(getExpectedDirectorySuffix()) ? baseName : baseName + getExpectedDirectorySuffix()),
 				folder.getSerializationArtefact());
 
-		SEVirtualModelInstanceResource returned = initResourceForCreation(serializationArtefact, resourceCenter, baseName, uri);
+		XLSVirtualModelInstanceResource returned = initResourceForCreation(serializationArtefact, resourceCenter, baseName, uri);
 		returned.setVirtualModelResource(virtualModelResource);
 		registerResource(returned, resourceCenter);
 
 		if (createEmptyContents) {
-			SEVirtualModelInstance resourceData = createEmptyContents(returned);
+			XLSVirtualModelInstance resourceData = createEmptyContents(returned);
 			resourceData.setVirtualModel(virtualModelResource.getCompilationUnit().getVirtualModel());
 			returned.save();
 			if (resourceData.getFMLRunTimeEngine() != null) {
@@ -111,7 +111,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	/**
-	 * Build a new {@link SEVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
+	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
 	 * and located in supplied container {@link AbstractVirtualModelInstanceResource}
 	 * 
 	 * @param baseName
@@ -123,7 +123,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 	 * @throws SaveResourceException
 	 * @throws ModelDefinitionException
 	 */
-	public <I> SEVirtualModelInstanceResource makeContainedFMLRTVirtualModelInstanceResource(String baseName,
+	public <I> XLSVirtualModelInstanceResource makeContainedFMLRTVirtualModelInstanceResource(String baseName,
 			CompilationUnitResource virtualModelResource, AbstractVirtualModelInstanceResource<?, ?> containerResource,
 			TechnologyContextManager<ExcelTechnologyAdapter> technologyContextManager, boolean createEmptyContents)
 			throws SaveResourceException, ModelDefinitionException {
@@ -136,12 +136,12 @@ public class SEVirtualModelInstanceResourceFactory extends
 		String viewURI = containerResource.getURI() + "/"
 				+ (baseName.endsWith(getExpectedDirectorySuffix()) ? baseName : (baseName + getExpectedDirectorySuffix()));
 
-		SEVirtualModelInstanceResource returned = initResourceForCreation(serializationArtefact, resourceCenter, baseName, viewURI);
+		XLSVirtualModelInstanceResource returned = initResourceForCreation(serializationArtefact, resourceCenter, baseName, viewURI);
 		returned.setVirtualModelResource(virtualModelResource);
 		registerResource(returned, resourceCenter);
 
 		if (createEmptyContents) {
-			SEVirtualModelInstance resourceData = createEmptyContents(returned);
+			XLSVirtualModelInstance resourceData = createEmptyContents(returned);
 			resourceData.setVirtualModel(virtualModelResource.getCompilationUnit().getVirtualModel());
 			returned.save();
 			if (resourceData.getFMLRunTimeEngine() != null) {
@@ -158,7 +158,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	/**
-	 * Used to retrieve from serialization artefact a top-level {@link SEVirtualModelInstanceResource}
+	 * Used to retrieve from serialization artefact a top-level {@link XLSVirtualModelInstanceResource}
 	 * 
 	 * @param serializationArtefact
 	 * @param resourceCenter
@@ -167,14 +167,14 @@ public class SEVirtualModelInstanceResourceFactory extends
 	 * @throws ModelDefinitionException
 	 * @throws IOException
 	 */
-	public <I> SEVirtualModelInstanceResource retrieveFMLRTVirtualModelInstanceResource(I serializationArtefact,
+	public <I> XLSVirtualModelInstanceResource retrieveFMLRTVirtualModelInstanceResource(I serializationArtefact,
 			FlexoResourceCenter<I> resourceCenter) throws ModelDefinitionException, IOException {
-		SEVirtualModelInstanceResource returned = retrieveResource(serializationArtefact, resourceCenter);
+		XLSVirtualModelInstanceResource returned = retrieveResource(serializationArtefact, resourceCenter);
 		return returned;
 	}
 
 	/**
-	 * Used to retrieve from serialization artefact a contained {@link SEVirtualModelInstanceResource} in supplied
+	 * Used to retrieve from serialization artefact a contained {@link XLSVirtualModelInstanceResource} in supplied
 	 * containerVirtualModelResource
 	 * 
 	 * @param serializationArtefact
@@ -185,10 +185,10 @@ public class SEVirtualModelInstanceResourceFactory extends
 	 * @throws ModelDefinitionException
 	 * @throws IOException
 	 */
-	public <I> SEVirtualModelInstanceResource retrieveFMLRTVirtualModelInstanceResource(I serializationArtefact,
+	public <I> XLSVirtualModelInstanceResource retrieveFMLRTVirtualModelInstanceResource(I serializationArtefact,
 			FlexoResourceCenter<I> resourceCenter, AbstractVirtualModelInstanceResource<?, ?> containerResource)
 			throws ModelDefinitionException, IOException {
-		SEVirtualModelInstanceResource returned = retrieveResource(serializationArtefact, resourceCenter);
+		XLSVirtualModelInstanceResource returned = retrieveResource(serializationArtefact, resourceCenter);
 		containerResource.addToContents(returned);
 		containerResource.notifyContentsAdded(returned);
 		return returned;
@@ -220,13 +220,13 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	@Override
-	public <I> SEVirtualModelInstanceResource registerResource(SEVirtualModelInstanceResource resource,
+	public <I> XLSVirtualModelInstanceResource registerResource(XLSVirtualModelInstanceResource resource,
 			FlexoResourceCenter<I> resourceCenter) {
 		super.registerResource(resource, resourceCenter);
 
 		// Register the resource in the VirtualModelInstanceRepository of supplied resource center
 		registerResourceInResourceRepository(resource,
-				(SEVirtualModelInstanceRepository) getTechnologyAdapter(resourceCenter.getServiceManager())
+				(XLSVirtualModelInstanceRepository) getTechnologyAdapter(resourceCenter.getServiceManager())
 						.getSEVirtualModelInstanceRepository(resourceCenter));
 
 		// Now look for virtual model instances and sub-views
@@ -237,19 +237,19 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	@Override
-	protected <I> SEVirtualModelInstanceResource initResourceForCreation(I serializationArtefact, FlexoResourceCenter<I> resourceCenter,
+	protected <I> XLSVirtualModelInstanceResource initResourceForCreation(I serializationArtefact, FlexoResourceCenter<I> resourceCenter,
 			String name, String uri) throws ModelDefinitionException {
-		SEVirtualModelInstanceResource returned = super.initResourceForCreation(serializationArtefact, resourceCenter, name, uri);
+		XLSVirtualModelInstanceResource returned = super.initResourceForCreation(serializationArtefact, resourceCenter, name, uri);
 		returned.setVersion(INITIAL_REVISION);
 		returned.setModelVersion(CURRENT_EXCEL_SE_RT_VERSION);
 		return returned;
 	}
 
 	@Override
-	protected <I> SEVirtualModelInstanceResource initResourceForRetrieving(I serializationArtefact, FlexoResourceCenter<I> resourceCenter)
+	protected <I> XLSVirtualModelInstanceResource initResourceForRetrieving(I serializationArtefact, FlexoResourceCenter<I> resourceCenter)
 			throws ModelDefinitionException, IOException {
 
-		SEVirtualModelInstanceResource returned = super.initResourceForRetrieving(serializationArtefact, resourceCenter);
+		XLSVirtualModelInstanceResource returned = super.initResourceForRetrieving(serializationArtefact, resourceCenter);
 
 		String artefactName = resourceCenter.retrieveName(serializationArtefact);
 
@@ -260,7 +260,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 
 		returned.initName(baseName);
 
-		SEVirtualModelInstanceInfo vmiInfo = findSEVirtualModelInstanceInfo(returned, resourceCenter);
+		XLSVirtualModelInstanceInfo vmiInfo = findSEVirtualModelInstanceInfo(returned, resourceCenter);
 		if (vmiInfo != null) {
 			returned.setURI(vmiInfo.uri);
 			if (StringUtils.isNotEmpty(vmiInfo.version)) {
@@ -303,12 +303,12 @@ public class SEVirtualModelInstanceResourceFactory extends
 				getExpectedXMLFileSuffix(), this);
 	}
 
-	private void exploreViewContents(SEVirtualModelInstanceResource viewResource) {
+	private void exploreViewContents(XLSVirtualModelInstanceResource viewResource) {
 
 		exploreResource(viewResource.getIODelegate().getSerializationArtefact(), viewResource);
 	}
 
-	private <I> void exploreResource(I serializationArtefact, SEVirtualModelInstanceResource containerResource) {
+	private <I> void exploreResource(I serializationArtefact, XLSVirtualModelInstanceResource containerResource) {
 		if (serializationArtefact == null) {
 			return;
 		}
@@ -318,7 +318,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 		for (I child : resourceCenter.getContents(resourceCenter.getContainer(serializationArtefact))) {
 			if (isValidArtefact(child, resourceCenter)) {
 				try {
-					// Unused SEVirtualModelInstanceResource virtualModelInstanceResource =
+					// Unused XLSVirtualModelInstanceResource virtualModelInstanceResource =
 					retrieveFMLRTVirtualModelInstanceResource(child, resourceCenter, containerResource);
 				} catch (ModelDefinitionException e) {
 					e.printStackTrace();
@@ -329,7 +329,7 @@ public class SEVirtualModelInstanceResourceFactory extends
 		}
 	}
 
-	private static class SEVirtualModelInstanceInfo {
+	private static class XLSVirtualModelInstanceInfo {
 		public String virtualModelURI;
 		@SuppressWarnings("unused")
 		public String virtualModelVersion;
@@ -339,10 +339,10 @@ public class SEVirtualModelInstanceResourceFactory extends
 		public String modelVersion;
 	}
 
-	private static <I> SEVirtualModelInstanceInfo findSEVirtualModelInstanceInfo(SEVirtualModelInstanceResource resource,
+	private static <I> XLSVirtualModelInstanceInfo findSEVirtualModelInstanceInfo(XLSVirtualModelInstanceResource resource,
 			FlexoResourceCenter<I> resourceCenter) {
 
-		SEVirtualModelInstanceInfo returned = new SEVirtualModelInstanceInfo();
+		XLSVirtualModelInstanceInfo returned = new XLSVirtualModelInstanceInfo();
 		XMLRootElementInfo xmlRootElementInfo = resourceCenter
 				.getXMLRootElementInfo((I) resource.getIODelegate().getSerializationArtefact());
 		if (xmlRootElementInfo == null) {
@@ -362,17 +362,17 @@ public class SEVirtualModelInstanceResourceFactory extends
 	}
 
 	@Override
-	public SEVirtualModelInstance makeEmptyResourceData(SEVirtualModelInstanceResource resource) {
-		return resource.getFactory().newInstance(SEVirtualModelInstance.class/*, resource.getServiceManager()*/);
+	public XLSVirtualModelInstance makeEmptyResourceData(XLSVirtualModelInstanceResource resource) {
+		return resource.getFactory().newInstance(XLSVirtualModelInstance.class/*, resource.getServiceManager()*/);
 	}
 
 	/**
 	 * Build and return model factory to use for resource data managing
 	 */
 	@Override
-	public AbstractVirtualModelInstanceModelFactory<?> makeModelFactory(SEVirtualModelInstanceResource resource,
+	public AbstractVirtualModelInstanceModelFactory<?> makeModelFactory(XLSVirtualModelInstanceResource resource,
 			TechnologyContextManager<ExcelTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
-		return new SEVirtualModelInstanceModelFactory(resource,
+		return new XLSVirtualModelInstanceModelFactory(resource,
 				technologyContextManager.getTechnologyAdapter().getServiceManager().getEditingContext(),
 				technologyContextManager.getTechnologyAdapter().getServiceManager().getTechnologyAdapterService());
 	}

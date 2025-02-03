@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.util.logging.Logger;
 
@@ -49,23 +49,23 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.pamela.validation.ValidationIssue;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResource;
 
 /**
- * A parameter used to instanciate a new {@link SEVirtualModelInstanceResource}
+ * A parameter used to instanciate a new {@link XLSVirtualModelInstanceResource}
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(CreateSEResourceParameter.CreateHbnResourceParameterImpl.class)
+@ImplementationClass(CreateXLSResourceParameter.CreateHbnResourceParameterImpl.class)
 @XMLElement
-public interface CreateSEResourceParameter extends BehaviourCallArgument<CreateSEResource> {
+public interface CreateXLSResourceParameter extends BehaviourCallArgument<CreateXLSResource> {
 
-	public static abstract class CreateHbnResourceParameterImpl extends BehaviourCallArgumentImpl<CreateSEResource>
-			implements CreateSEResourceParameter {
+	public static abstract class CreateHbnResourceParameterImpl extends BehaviourCallArgumentImpl<CreateXLSResource>
+			implements CreateXLSResourceParameter {
 
-		static final Logger logger = Logger.getLogger(CreateSEResourceParameter.class.getPackage().getName());
+		static final Logger logger = Logger.getLogger(CreateXLSResourceParameter.class.getPackage().getName());
 
 		@Override
 		public FlexoBehaviour getAccessedBehaviour() {
@@ -74,19 +74,19 @@ public interface CreateSEResourceParameter extends BehaviourCallArgument<CreateS
 	}
 
 	@DefineValidationRule
-	public static class ValueBindingMustBeValid extends BindingIsRequiredAndMustBeValid<CreateSEResourceParameter> {
+	public static class ValueBindingMustBeValid extends BindingIsRequiredAndMustBeValid<CreateXLSResourceParameter> {
 		public ValueBindingMustBeValid() {
-			super("'value'_binding_is_required_and_must_be_valid", CreateSEResourceParameter.class);
+			super("'value'_binding_is_required_and_must_be_valid", CreateXLSResourceParameter.class);
 		}
 
 		@Override
-		public DataBinding<?> getBinding(CreateSEResourceParameter object) {
+		public DataBinding<?> getBinding(CreateXLSResourceParameter object) {
 			return object.getValue();
 		}
 
 		@Override
-		public ValidationIssue<BindingIsRequiredAndMustBeValid<CreateSEResourceParameter>, CreateSEResourceParameter> applyValidation(
-				CreateSEResourceParameter object) {
+		public ValidationIssue<BindingIsRequiredAndMustBeValid<CreateXLSResourceParameter>, CreateXLSResourceParameter> applyValidation(
+				CreateXLSResourceParameter object) {
 			// Should return an issue only if parameter is required
 			if (object.getParam().getIsRequired()) {
 				return super.applyValidation(object);

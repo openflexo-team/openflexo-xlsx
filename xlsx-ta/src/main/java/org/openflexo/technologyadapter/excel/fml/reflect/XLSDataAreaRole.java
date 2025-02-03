@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
@@ -53,22 +53,22 @@ import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSDataArea;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
 import org.openflexo.technologyadapter.excel.model.ExcelCellRange;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.technologyadapter.excel.semantics.model.SEDataArea;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
 
 /**
  * A role specific to Semantics/Excel technology (SEModelSlot) representing a data area in an excel sheet, which is reflected by a list of
- * {@link SEFlexoConceptInstance}
+ * {@link XLSFlexoConceptInstance}
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(SEDataAreaRole.SEDataAreaRoleImpl.class)
+@ImplementationClass(XLSDataAreaRole.XLSDataAreaRoleImpl.class)
 @XMLElement
-public interface SEDataAreaRole extends FlexoConceptInstanceRole {
+public interface XLSDataAreaRole extends FlexoConceptInstanceRole {
 
 	@PropertyIdentifier(type = ExcelCellRange.class)
 	String CELL_RANGE_KEY = "cellRange";
@@ -82,9 +82,9 @@ public interface SEDataAreaRole extends FlexoConceptInstanceRole {
 
 	public ExcelWorkbook getExcelWorkbook();
 
-	public static abstract class SEDataAreaRoleImpl extends FlexoConceptInstanceRoleImpl implements SEDataAreaRole {
+	public static abstract class XLSDataAreaRoleImpl extends FlexoConceptInstanceRoleImpl implements XLSDataAreaRole {
 
-		private static final Logger logger = Logger.getLogger(SEDataAreaRoleImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(XLSDataAreaRoleImpl.class.getPackage().getName());
 
 		@Override
 		public Class<? extends TechnologyAdapter> getRoleTechnologyAdapterClass() {
@@ -98,20 +98,20 @@ public interface SEDataAreaRole extends FlexoConceptInstanceRole {
 
 		@Override
 		public ExcelWorkbook getExcelWorkbook() {
-			if (getFlexoConcept() instanceof SEVirtualModel
-					&& ((SEVirtualModel) getFlexoConcept()).getTemplateExcelWorkbookResource() != null) {
-				return ((SEVirtualModel) getFlexoConcept()).getTemplateExcelWorkbookResource().getExcelWorkbook();
+			if (getFlexoConcept() instanceof XLSVirtualModel
+					&& ((XLSVirtualModel) getFlexoConcept()).getTemplateExcelWorkbookResource() != null) {
+				return ((XLSVirtualModel) getFlexoConcept()).getTemplateExcelWorkbookResource().getExcelWorkbook();
 			}
-			if (getFlexoConcept() instanceof SEFlexoConcept
-					&& ((SEFlexoConcept) getFlexoConcept()).getTemplateExcelWorkbookResource() != null) {
-				return ((SEFlexoConcept) getFlexoConcept()).getTemplateExcelWorkbookResource().getExcelWorkbook();
+			if (getFlexoConcept() instanceof XLSFlexoConcept
+					&& ((XLSFlexoConcept) getFlexoConcept()).getTemplateExcelWorkbookResource() != null) {
+				return ((XLSFlexoConcept) getFlexoConcept()).getTemplateExcelWorkbookResource().getExcelWorkbook();
 			}
 			return null;
 		}
 
 		@Override
 		protected Type makeResultingType() {
-			return new ParameterizedTypeImpl(SEDataArea.class, getType());
+			return new ParameterizedTypeImpl(XLSDataArea.class, getType());
 		}
 
 	}

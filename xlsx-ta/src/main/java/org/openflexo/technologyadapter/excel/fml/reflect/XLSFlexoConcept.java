@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.util.logging.Logger;
 
@@ -48,34 +48,36 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
 /**
- * Specialization of a {@link FlexoConcept} used in a {@link SEVirtualModel} to define a FML-contractualized access to an
+ * Specialization of a {@link FlexoConcept} used in a {@link XLSVirtualModel} to define a FML-contractualized access to an
  * {@link ExcelWorkbook}
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(SEFlexoConcept.SEFlexoConceptImpl.class)
+@ImplementationClass(XLSFlexoConcept.XLSFlexoConceptImpl.class)
 @XMLElement
-public interface SEFlexoConcept extends FlexoConcept {
+// TODO : refactor !
+@Deprecated // We should use "classical" FlexoConcept with specific annotations
+public interface XLSFlexoConcept extends FlexoConcept {
 
 	@Override
-	public SEVirtualModel getOwningVirtualModel();
+	public XLSVirtualModel getOwningVirtualModel();
 
 	public ExcelWorkbookResource getTemplateExcelWorkbookResource();
 
 	@Override
-	public SEFlexoConceptInstanceType getInstanceType();
+	public XLSFlexoConceptInstanceType getInstanceType();
 
-	public static abstract class SEFlexoConceptImpl extends FlexoConceptImpl implements SEFlexoConcept {
+	public static abstract class XLSFlexoConceptImpl extends FlexoConceptImpl implements XLSFlexoConcept {
 
-		private static final Logger logger = Logger.getLogger(SEFlexoConceptImpl.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(XLSFlexoConceptImpl.class.getPackage().getName());
 
-		private final SEFlexoConceptInstanceType instanceType = new SEFlexoConceptInstanceType(this);
+		private final XLSFlexoConceptInstanceType instanceType = new XLSFlexoConceptInstanceType(this);
 
 		@Override
-		public SEVirtualModel getOwningVirtualModel() {
-			return (SEVirtualModel) super.getOwningVirtualModel();
+		public XLSVirtualModel getOwningVirtualModel() {
+			return (XLSVirtualModel) super.getOwningVirtualModel();
 		}
 
 		@Override
@@ -87,7 +89,7 @@ public interface SEFlexoConcept extends FlexoConcept {
 		}
 
 		@Override
-		public SEFlexoConceptInstanceType getInstanceType() {
+		public XLSFlexoConceptInstanceType getInstanceType() {
 			return instanceType;
 		}
 	}

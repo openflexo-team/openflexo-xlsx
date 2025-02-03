@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.lang.reflect.Type;
 import java.util.logging.Logger;
@@ -63,19 +63,19 @@ import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.semantics.model.SEDataArea;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSDataArea;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
- * Insert a new object as a new row in excel workbook, according to a {@link SEDataAreaRole}
+ * Insert a new object as a new row in excel workbook, according to a {@link XLSDataAreaRole}
  * 
  * @author sylvain
  */
 @ModelEntity
-@ImplementationClass(InsertSEObject.InsertSEObjectImpl.class)
+@ImplementationClass(InsertXLSObject.InsertXLSObjectImpl.class)
 @XMLElement
-public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoConceptInstance, SEVirtualModelInstance> {
+public interface InsertXLSObject extends AbstractAddFlexoConceptInstance<XLSFlexoConceptInstance, XLSVirtualModelInstance> {
 
 	@PropertyIdentifier(type = DataBinding.class)
 	String DATA_AREA_KEY = "dataArea";
@@ -84,10 +84,10 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 
 	@Getter(value = DATA_AREA_KEY)
 	@XMLAttribute
-	public DataBinding<SEDataArea<?>> getDataArea();
+	public DataBinding<XLSDataArea<?>> getDataArea();
 
 	@Setter(DATA_AREA_KEY)
-	public void setDataArea(DataBinding<SEDataArea<?>> dataArea);
+	public void setDataArea(DataBinding<XLSDataArea<?>> dataArea);
 
 	@Getter(value = ROW_INDEX_KEY)
 	@XMLAttribute
@@ -96,18 +96,18 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 	@Setter(ROW_INDEX_KEY)
 	public void setRowIndex(DataBinding<Integer> rowIndex);
 
-	public static abstract class InsertSEObjectImpl
-			extends AbstractAddFlexoConceptInstanceImpl<SEFlexoConceptInstance, SEVirtualModelInstance> implements InsertSEObject {
+	public static abstract class InsertXLSObjectImpl
+			extends AbstractAddFlexoConceptInstanceImpl<XLSFlexoConceptInstance, XLSVirtualModelInstance> implements InsertXLSObject {
 
-		private static final Logger logger = Logger.getLogger(InsertSEObject.class.getPackage().getName());
+		private static final Logger logger = Logger.getLogger(InsertXLSObject.class.getPackage().getName());
 
-		private DataBinding<SEDataArea<?>> dataArea;
+		private DataBinding<XLSDataArea<?>> dataArea;
 		private DataBinding<Integer> rowIndex;
 
 		@Override
-		public DataBinding<SEDataArea<?>> getDataArea() {
+		public DataBinding<XLSDataArea<?>> getDataArea() {
 			if (dataArea == null) {
-				dataArea = new DataBinding<>(this, SEDataArea.class, BindingDefinitionType.GET);
+				dataArea = new DataBinding<>(this, XLSDataArea.class, BindingDefinitionType.GET);
 				dataArea.setBindingName("dataArea");
 				dataArea.setMandatory(true);
 			}
@@ -115,11 +115,11 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 		}
 
 		@Override
-		public void setDataArea(DataBinding<SEDataArea<?>> dataArea) {
+		public void setDataArea(DataBinding<XLSDataArea<?>> dataArea) {
 			if (dataArea != null) {
 				dataArea.setOwner(this);
 				dataArea.setBindingName("dataArea");
-				dataArea.setDeclaredType(SEDataArea.class);
+				dataArea.setDeclaredType(XLSDataArea.class);
 				dataArea.setBindingDefinitionType(BindingDefinitionType.GET);
 				dataArea.setMandatory(true);
 			}
@@ -134,7 +134,7 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 		@Override
 		public FlexoConcept getFlexoConceptType() {
 			if (getDataArea().isValid()) {
-				Type itemType = TypeUtils.getTypeArgument(getDataArea().getAnalyzedType(), SEDataArea.class, 0);
+				Type itemType = TypeUtils.getTypeArgument(getDataArea().getAnalyzedType(), XLSDataArea.class, 0);
 				if (itemType instanceof FlexoConceptInstanceType) {
 					return ((FlexoConceptInstanceType) itemType).getFlexoConcept();
 				}
@@ -171,7 +171,7 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 			this.rowIndex = rowIndex;
 		}
 
-		public SEDataArea<?> getDataArea(BindingEvaluationContext evaluationContext) {
+		public XLSDataArea<?> getDataArea(BindingEvaluationContext evaluationContext) {
 			if (getDataArea().isValid()) {
 				try {
 					return getDataArea().getBindingValue(evaluationContext);
@@ -202,14 +202,14 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 		}
 
 		@Override
-		public SEFlexoConceptInstance execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
-			SEVirtualModelInstance vmi = getVirtualModelInstance(evaluationContext);
+		public XLSFlexoConceptInstance execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			XLSVirtualModelInstance vmi = getVirtualModelInstance(evaluationContext);
 
-			// System.out.println("InsertSEObject for receiver " + getReceiver() + " = " + vmi + " concept=" + getFlexoConceptType());
+			// System.out.println("InsertXLSObject for receiver " + getReceiver() + " = " + vmi + " concept=" + getFlexoConceptType());
 
-			SEFlexoConceptInstance returned = super.execute(evaluationContext);
+			XLSFlexoConceptInstance returned = super.execute(evaluationContext);
 
-			SEDataArea<?> dataArea = getDataArea(evaluationContext);
+			XLSDataArea<?> dataArea = getDataArea(evaluationContext);
 			vmi.getPropertyChangeSupport().firePropertyChange(dataArea.getDataAreaRole().getName(), null, dataArea);
 
 			return returned;
@@ -217,10 +217,10 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 		}
 
 		@Override
-		protected SEFlexoConceptInstance makeNewFlexoConceptInstance(RunTimeEvaluationContext evaluationContext)
+		protected XLSFlexoConceptInstance makeNewFlexoConceptInstance(RunTimeEvaluationContext evaluationContext)
 				throws FMLExecutionException {
 
-			SEDataArea<?> dataArea = getDataArea(evaluationContext);
+			XLSDataArea<?> dataArea = getDataArea(evaluationContext);
 			Integer index = getRowIndex(evaluationContext);
 
 			return dataArea.insertFlexoConceptInstanceAtIndex(index);
@@ -247,7 +247,7 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 			System.out.println("avec " + excelRow.getRow());
 			
 			FlexoConceptInstance container = null;
-			SEVirtualModelInstance vmi = getVirtualModelInstance(evaluationContext);
+			XLSVirtualModelInstance vmi = getVirtualModelInstance(evaluationContext);
 			
 			if (getFlexoConceptType().getContainerFlexoConcept() != null) {
 				container = getContainer(evaluationContext);
@@ -257,8 +257,8 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 				}
 			}
 			
-			System.out.println("Hop, on vient construire le SEFlexoConceptInstance");
-			SEFlexoConceptInstance returned = vmi.getFlexoConceptInstance(excelRow.getRow(), container, dataArea.getDataAreaRole());
+			System.out.println("Hop, on vient construire le XLSFlexoConceptInstance");
+			XLSFlexoConceptInstance returned = vmi.getFlexoConceptInstance(excelRow.getRow(), container, dataArea.getDataAreaRole());
 			
 			return returned;*/
 		}
@@ -272,19 +272,19 @@ public interface InsertSEObject extends AbstractAddFlexoConceptInstance<SEFlexoC
 		}
 
 		@Override
-		public Class<SEVirtualModelInstance> getVirtualModelInstanceClass() {
-			return SEVirtualModelInstance.class;
+		public Class<XLSVirtualModelInstance> getVirtualModelInstanceClass() {
+			return XLSVirtualModelInstance.class;
 		}
 	}
 
 	@DefineValidationRule
-	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InsertSEObject> {
+	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InsertXLSObject> {
 		public DataAreaBindingIsRequiredAndMustBeValid() {
-			super("'data_area'_binding_is_not_valid", InsertSEObject.class);
+			super("'data_area'_binding_is_not_valid", InsertXLSObject.class);
 		}
 
 		@Override
-		public DataBinding<?> getBinding(InsertSEObject object) {
+		public DataBinding<?> getBinding(InsertXLSObject object) {
 			return object.getDataArea();
 		}
 

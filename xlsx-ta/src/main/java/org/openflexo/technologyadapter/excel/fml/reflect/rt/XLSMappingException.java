@@ -37,25 +37,25 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.model;
+package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import org.openflexo.foundation.FlexoException;
 
 /**
- * Exception thrown while trying to map {@link SEFlexoConceptInstance} from excel workbook
+ * Exception thrown while trying to map {@link XLSFlexoConceptInstance} from excel workbook
  * 
  * @author sylvain
  *
  */
 @SuppressWarnings("serial")
-public class ExcelMappingException extends FlexoException {
+public class XLSMappingException extends FlexoException {
 
 	/**
 	 * Build new exception with supplied message
 	 * 
 	 * @param message
 	 */
-	public ExcelMappingException(String message) {
+	public XLSMappingException(String message) {
 		super(message, message);
 	}
 
@@ -64,7 +64,7 @@ public class ExcelMappingException extends FlexoException {
 	 * 
 	 * @param exception
 	 */
-	public ExcelMappingException(Exception exception) {
+	public XLSMappingException(Exception exception) {
 		super(exception);
 	}
 

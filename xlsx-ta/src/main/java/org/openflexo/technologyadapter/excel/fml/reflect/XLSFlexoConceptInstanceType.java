@@ -36,50 +36,52 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import org.openflexo.connie.type.CustomTypeFactory;
 import org.openflexo.foundation.fml.FMLTechnologyAdapter;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoConceptInstanceType;
 import org.openflexo.foundation.fml.TechnologyAdapterTypeFactory;
-import org.openflexo.technologyadapter.excel.semantics.model.SEFlexoConceptInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
 
 /**
- * Represent the type of an instance of a {@link SEFlexoConcept}
+ * Represent the type of an instance of a {@link XLSFlexoConcept}
  * 
  * @author sylvain
  * 
  */
-public class SEFlexoConceptInstanceType extends FlexoConceptInstanceType {
+//TODO : refactor !
+@Deprecated // We should use "classical" FlexoConcept with specific annotations
+public class XLSFlexoConceptInstanceType extends FlexoConceptInstanceType {
 
-	public static SEFlexoConceptInstanceType UNDEFINED_SE_FLEXO_CONCEPT_INSTANCE_TYPE = new SEFlexoConceptInstanceType(
-			(SEFlexoConcept) null);
+	public static XLSFlexoConceptInstanceType UNDEFINED_XLS_FLEXO_CONCEPT_INSTANCE_TYPE = new XLSFlexoConceptInstanceType(
+			(XLSFlexoConcept) null);
 
-	public SEFlexoConceptInstanceType(SEFlexoConcept aFlexoConcept) {
+	public XLSFlexoConceptInstanceType(XLSFlexoConcept aFlexoConcept) {
 		super(aFlexoConcept);
 	}
 
-	public SEFlexoConceptInstanceType(String conceptURI, CustomTypeFactory<?> factory) {
+	public XLSFlexoConceptInstanceType(String conceptURI, CustomTypeFactory<?> factory) {
 		super(conceptURI, factory);
 	}
 
 	@Override
 	public Class<?> getBaseClass() {
-		return SEFlexoConceptInstance.class;
+		return XLSFlexoConceptInstance.class;
 	}
 
 	@Override
-	public SEFlexoConcept getFlexoConcept() {
-		return (SEFlexoConcept) super.getFlexoConcept();
+	public XLSFlexoConcept getFlexoConcept() {
+		return (XLSFlexoConcept) super.getFlexoConcept();
 	}
 
-	public static SEFlexoConceptInstanceType getFlexoConceptInstanceType(SEFlexoConcept aSEFlexoConcept) {
+	public static XLSFlexoConceptInstanceType getFlexoConceptInstanceType(XLSFlexoConcept aSEFlexoConcept) {
 		if (aSEFlexoConcept != null) {
 			return aSEFlexoConcept.getInstanceType();
 		}
 		else {
-			return UNDEFINED_SE_FLEXO_CONCEPT_INSTANCE_TYPE;
+			return UNDEFINED_XLS_FLEXO_CONCEPT_INSTANCE_TYPE;
 		}
 	}
 
@@ -99,11 +101,11 @@ public class SEFlexoConceptInstanceType extends FlexoConceptInstanceType {
 	}
 
 	public static class SEFlexoConceptInstanceTypeFactory
-			extends TechnologyAdapterTypeFactory<SEFlexoConceptInstanceType, FMLTechnologyAdapter> {
+			extends TechnologyAdapterTypeFactory<XLSFlexoConceptInstanceType, FMLTechnologyAdapter> {
 
 		@Override
-		public Class<SEFlexoConceptInstanceType> getCustomType() {
-			return SEFlexoConceptInstanceType.class;
+		public Class<XLSFlexoConceptInstanceType> getCustomType() {
+			return XLSFlexoConceptInstanceType.class;
 		}
 
 		public SEFlexoConceptInstanceTypeFactory(FMLTechnologyAdapter technologyAdapter) {
@@ -111,12 +113,12 @@ public class SEFlexoConceptInstanceType extends FlexoConceptInstanceType {
 		}
 
 		@Override
-		public SEFlexoConceptInstanceType makeCustomType(String configuration) {
+		public XLSFlexoConceptInstanceType makeCustomType(String configuration) {
 
-			SEFlexoConcept concept = null;
+			XLSFlexoConcept concept = null;
 
 			if (configuration != null) {
-				concept = (SEFlexoConcept) getTechnologyAdapter().getTechnologyAdapterService().getServiceManager().getVirtualModelLibrary()
+				concept = (XLSFlexoConcept) getTechnologyAdapter().getTechnologyAdapterService().getServiceManager().getVirtualModelLibrary()
 						.getFlexoConcept(configuration, false);
 				// Do not load virtual models for that reason, resolving will be performed later
 
@@ -131,17 +133,17 @@ public class SEFlexoConceptInstanceType extends FlexoConceptInstanceType {
 			else {
 				// We don't return UNDEFINED_FLEXO_CONCEPT_INSTANCE_TYPE because we want here a mutable type
 				// if FlexoConcept might be resolved later
-				return new SEFlexoConceptInstanceType(configuration, this);
+				return new XLSFlexoConceptInstanceType(configuration, this);
 			}
 		}
 
-		private SEFlexoConcept flexoConceptType;
+		private XLSFlexoConcept flexoConceptType;
 
-		public SEFlexoConcept getFlexoConceptType() {
+		public XLSFlexoConcept getFlexoConceptType() {
 			return flexoConceptType;
 		}
 
-		public void setFlexoConceptType(SEFlexoConcept flexoConceptType) {
+		public void setFlexoConceptType(XLSFlexoConcept flexoConceptType) {
 			if (flexoConceptType != this.flexoConceptType) {
 				FlexoConcept oldFlexoConceptType = this.flexoConceptType;
 				this.flexoConceptType = flexoConceptType;
@@ -151,11 +153,11 @@ public class SEFlexoConceptInstanceType extends FlexoConceptInstanceType {
 
 		@Override
 		public String toString() {
-			return "Instance of SEFlexoConcept";
+			return "Instance of XLSFlexoConcept";
 		}
 
 		@Override
-		public void configureFactory(SEFlexoConceptInstanceType type) {
+		public void configureFactory(XLSFlexoConceptInstanceType type) {
 			if (type != null) {
 				setFlexoConceptType(type.getFlexoConcept());
 			}

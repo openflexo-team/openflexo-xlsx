@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.model;
+package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.openflexo.foundation.fml.FlexoConcept;
@@ -46,25 +46,25 @@ import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
 import org.openflexo.pamela.factory.PamelaModelFactory;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResource;
 
 /**
- * {@link PamelaModelFactory} used to handle {@link SEVirtualModelInstance} models<br>
+ * {@link PamelaModelFactory} used to handle {@link XLSVirtualModelInstance} models<br>
  * 
  * @author sylvain
  * 
  */
-public class SEVirtualModelInstanceModelFactory extends AbstractVirtualModelInstanceModelFactory<SEVirtualModelInstanceResource> {
+public class XLSVirtualModelInstanceModelFactory extends AbstractVirtualModelInstanceModelFactory<XLSVirtualModelInstanceResource> {
 
-	public SEVirtualModelInstanceModelFactory(SEVirtualModelInstanceResource virtualModelInstanceResource, EditingContext editingContext,
+	public XLSVirtualModelInstanceModelFactory(XLSVirtualModelInstanceResource virtualModelInstanceResource, EditingContext editingContext,
 			TechnologyAdapterService taService) throws ModelDefinitionException {
-		super(virtualModelInstanceResource, SEVirtualModelInstance.class, editingContext, taService);
+		super(virtualModelInstanceResource, XLSVirtualModelInstance.class, editingContext, taService);
 	}
 
-	public SEFlexoConceptInstance newFlexoConceptInstance(SEVirtualModelInstance owner, FlexoConceptInstance container, Row row,
+	public XLSFlexoConceptInstance newFlexoConceptInstance(XLSVirtualModelInstance owner, FlexoConceptInstance container, Row row,
 			FlexoConcept concept) {
-		System.out.println("On construit un nouveau SEFlexoConceptInstance pour " + row.getRowNum());
-		SEFlexoConceptInstance returned = newInstance(SEFlexoConceptInstance.class, concept);
+		System.out.println("On construit un nouveau XLSFlexoConceptInstance pour " + row.getRowNum());
+		XLSFlexoConceptInstance returned = newInstance(XLSFlexoConceptInstance.class, concept);
 		returned.setRowSupportObject(row);
 		owner.addToFlexoConceptInstances(returned);
 		if (container != null && container != owner) {

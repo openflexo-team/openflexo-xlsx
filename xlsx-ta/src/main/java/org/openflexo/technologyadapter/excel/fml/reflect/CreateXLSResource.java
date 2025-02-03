@@ -33,7 +33,7 @@
  *
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Type;
@@ -82,24 +82,24 @@ import org.openflexo.pamela.validation.ValidationError;
 import org.openflexo.pamela.validation.ValidationIssue;
 import org.openflexo.pamela.validation.ValidationRule;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.SemanticsExcelModelSlot;
+import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResourceFactory;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSMappingException;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
-import org.openflexo.technologyadapter.excel.semantics.model.ExcelMappingException;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResource;
-import org.openflexo.technologyadapter.excel.semantics.rm.SEVirtualModelInstanceResourceFactory;
 
 /**
- * {@link EditionAction} used to create an empty {@link SEVirtualModelInstance} resource
+ * {@link EditionAction} used to create an empty {@link XLSVirtualModelInstance} resource
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(CreateSEResource.CreateSEResourceImpl.class)
+@ImplementationClass(CreateXLSResource.CreateXLSResourceImpl.class)
 @XMLElement
-@FML("CreateSEResource")
-public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelModelSlot, SEVirtualModelInstance, ExcelTechnologyAdapter> {
+@FML("CreateXLSResource")
+public interface CreateXLSResource extends AbstractCreateResource<FMLExcelModelSlot, XLSVirtualModelInstance, ExcelTechnologyAdapter> {
 
 	@PropertyIdentifier(type = String.class)
 	public static final String CREATION_SCHEME_URI_KEY = "creationSchemeURI";
@@ -107,7 +107,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 	public static final String CREATION_SCHEME_KEY = "creationScheme";
 	@PropertyIdentifier(type = VirtualModel.class)
 	public static final String VIRTUAL_MODEL_KEY = "virtualModel";
-	@PropertyIdentifier(type = CreateSEResourceParameter.class, cardinality = Cardinality.LIST)
+	@PropertyIdentifier(type = CreateXLSResourceParameter.class, cardinality = Cardinality.LIST)
 	public static final String PARAMETERS_KEY = "parameters";
 
 	@PropertyIdentifier(type = DataBinding.class)
@@ -141,28 +141,28 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 
 	public List<CreationScheme> getAvailableCreationSchemes();
 
-	@Getter(value = PARAMETERS_KEY, cardinality = Cardinality.LIST, inverse = CreateSEResourceParameter.OWNER_KEY)
+	@Getter(value = PARAMETERS_KEY, cardinality = Cardinality.LIST, inverse = CreateXLSResourceParameter.OWNER_KEY)
 	@XMLElement
 	@Embedded
 	@CloningStrategy(StrategyType.CLONE)
-	public List<CreateSEResourceParameter> getParameters();
+	public List<CreateXLSResourceParameter> getParameters();
 
 	@Setter(PARAMETERS_KEY)
-	public void setParameters(List<CreateSEResourceParameter> parameters);
+	public void setParameters(List<CreateXLSResourceParameter> parameters);
 
 	@Adder(PARAMETERS_KEY)
-	public void addToParameters(CreateSEResourceParameter aParameter);
+	public void addToParameters(CreateXLSResourceParameter aParameter);
 
 	@Remover(PARAMETERS_KEY)
-	public void removeFromParameters(CreateSEResourceParameter aParameter);
+	public void removeFromParameters(CreateXLSResourceParameter aParameter);
 
-	public abstract Class<SEVirtualModelInstanceResourceFactory> getResourceFactoryClass();
+	public abstract Class<XLSVirtualModelInstanceResourceFactory> getResourceFactoryClass();
 
 	public abstract String getSuffix();
 
-	abstract class CreateSEResourceImpl
-			extends AbstractCreateResourceImpl<SemanticsExcelModelSlot, SEVirtualModelInstance, ExcelTechnologyAdapter>
-			implements CreateSEResource {
+	abstract class CreateXLSResourceImpl
+			extends AbstractCreateResourceImpl<FMLExcelModelSlot, XLSVirtualModelInstance, ExcelTechnologyAdapter>
+			implements CreateXLSResource {
 
 		private DataBinding<ExcelWorkbook> excelWorkbook;
 
@@ -171,14 +171,14 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 
 		private CreationScheme creationScheme;
 		private String _creationSchemeURI;
-		private List<CreateSEResourceParameter> parameters = null;
+		private List<CreateXLSResourceParameter> parameters = null;
 
 		@Override
 		public Type getAssignableType() {
 			if (getVirtualModel() != null) {
 				return getVirtualModel().getInstanceType();
 			}
-			return SEVirtualModelInstance.class;
+			return XLSVirtualModelInstance.class;
 		}
 
 		@Override
@@ -208,8 +208,8 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 			if (getCreationScheme() != null) {
 				return (VirtualModel) getCreationScheme().getFlexoConcept();
 			}
-			if (getAssignedFlexoProperty() instanceof SemanticsExcelModelSlot) {
-				return ((SemanticsExcelModelSlot) getAssignedFlexoProperty()).getAccessedVirtualModel();
+			if (getAssignedFlexoProperty() instanceof FMLExcelModelSlot) {
+				return ((FMLExcelModelSlot) getAssignedFlexoProperty()).getAccessedVirtualModel();
 			}
 			if (virtualModelResource != null) {
 				return virtualModelResource.getCompilationUnit().getVirtualModel();
@@ -234,7 +234,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 						setCreationScheme(null);
 					}
 				}
-				getPropertyChangeSupport().firePropertyChange(CreateSEResource.VIRTUAL_MODEL_KEY, oldValue, aVirtualModel);
+				getPropertyChangeSupport().firePropertyChange(CreateXLSResource.VIRTUAL_MODEL_KEY, oldValue, aVirtualModel);
 				getPropertyChangeSupport().firePropertyChange("availableCreationSchemes", null, getAvailableCreationSchemes());
 			}
 		}
@@ -295,7 +295,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 		}
 
 		@Override
-		public List<CreateSEResourceParameter> getParameters() {
+		public List<CreateXLSResourceParameter> getParameters() {
 			// Comment this because of an infinite loop with updateParameters() method
 			if (parameters == null) {
 				parameters = new ArrayList<>();
@@ -305,12 +305,12 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 		}
 
 		@Override
-		public void setParameters(List<CreateSEResourceParameter> parameters) {
+		public void setParameters(List<CreateXLSResourceParameter> parameters) {
 			this.parameters = parameters;
 		}
 
 		@Override
-		public void addToParameters(CreateSEResourceParameter parameter) {
+		public void addToParameters(CreateXLSResourceParameter parameter) {
 			parameter.setOwner(this);
 			if (parameters == null) {
 				parameters = new ArrayList<>();
@@ -319,7 +319,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 		}
 
 		@Override
-		public void removeFromParameters(CreateSEResourceParameter parameter) {
+		public void removeFromParameters(CreateXLSResourceParameter parameter) {
 			parameter.setOwner(null);
 			if (parameters == null) {
 				parameters = new ArrayList<>();
@@ -327,8 +327,8 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 			parameters.remove(parameter);
 		}
 
-		public CreateSEResourceParameter getParameter(FlexoBehaviourParameter p) {
-			for (CreateSEResourceParameter addEPParam : getParameters()) {
+		public CreateXLSResourceParameter getParameter(FlexoBehaviourParameter p) {
+			for (CreateXLSResourceParameter addEPParam : getParameters()) {
 				if (addEPParam.getParam() == p) {
 					return addEPParam;
 				}
@@ -340,31 +340,31 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 			if (parameters == null) {
 				parameters = new ArrayList<>();
 			}
-			List<CreateSEResourceParameter> oldValue = new ArrayList<>(parameters);
-			List<CreateSEResourceParameter> parametersToRemove = new ArrayList<>(parameters);
+			List<CreateXLSResourceParameter> oldValue = new ArrayList<>(parameters);
+			List<CreateXLSResourceParameter> parametersToRemove = new ArrayList<>(parameters);
 			if (creationScheme != null) {
 				for (FlexoBehaviourParameter p : creationScheme.getParameters()) {
-					CreateSEResourceParameter existingParam = getParameter(p);
+					CreateXLSResourceParameter existingParam = getParameter(p);
 					if (existingParam != null) {
 						parametersToRemove.remove(existingParam);
 					}
 					else {
 						if (getFMLModelFactory() != null) {
-							CreateSEResourceParameter newParam = getFMLModelFactory().newInstance(CreateSEResourceParameter.class);
+							CreateXLSResourceParameter newParam = getFMLModelFactory().newInstance(CreateXLSResourceParameter.class);
 							newParam.setParam(p);
 							addToParameters(newParam);
 						}
 					}
 				}
 			}
-			for (CreateSEResourceParameter removeThis : parametersToRemove) {
+			for (CreateXLSResourceParameter removeThis : parametersToRemove) {
 				removeFromParameters(removeThis);
 			}
 			getPropertyChangeSupport().firePropertyChange(PARAMETERS_KEY, oldValue, parameters);
 		}
 
 		@Override
-		public SEVirtualModelInstance execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+		public XLSVirtualModelInstance execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			if (getCreationScheme() == null) {
 				throw new FMLExecutionException("No creation scheme defined");
@@ -375,17 +375,17 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 				String resourceURI = getResourceURI(evaluationContext);
 				FlexoResourceCenter<?> rc = getResourceCenter(evaluationContext);
 
-				System.out.println("Creating SEVirtualModelInstanceResource");
+				System.out.println("Creating XLSVirtualModelInstanceResource");
 
-				SEVirtualModelInstanceResource newResource = createResource(
+				XLSVirtualModelInstanceResource newResource = createResource(
 						getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(ExcelTechnologyAdapter.class),
 						getResourceFactoryClass(), evaluationContext, getSuffix(), true);
-				SEVirtualModelInstance data = newResource.getResourceData();
+				XLSVirtualModelInstance data = newResource.getResourceData();
 				data.setVirtualModel(getVirtualModel());
 
-				FlexoProperty<SEVirtualModelInstance> flexoProperty = getAssignedFlexoProperty();
-				if (flexoProperty instanceof SemanticsExcelModelSlot) {
-					// Unused SemanticsExcelModelSlot seModelSlot = (SemanticsExcelModelSlot) flexoProperty;
+				FlexoProperty<XLSVirtualModelInstance> flexoProperty = getAssignedFlexoProperty();
+				if (flexoProperty instanceof FMLExcelModelSlot) {
+					// Unused FMLExcelModelSlot seModelSlot = (FMLExcelModelSlot) flexoProperty;
 					try {
 						if (getExcelWorkbook().isValid()) {
 							ExcelWorkbook excelWorkbook = getExcelWorkbook().getBindingValue(evaluationContext);
@@ -405,7 +405,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 					CreationSchemeAction creationSchemeAction = new CreationSchemeAction(getCreationScheme(), null, null,
 							(FlexoBehaviourAction<?, ?, ?>) evaluationContext);
 					creationSchemeAction.initWithFlexoConceptInstance(data);
-					for (CreateSEResourceParameter p : getParameters()) {
+					for (CreateXLSResourceParameter p : getParameters()) {
 						// Unused FlexoBehaviourParameter param = p.getParam();
 						Object value = p.evaluateParameterValue((FlexoBehaviourAction<?, ?, ?>) evaluationContext);
 						// System.out.println("For parameter " + param + " value is " + value);
@@ -419,9 +419,9 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 
 					data.updateData();
 
-					if (data.getVirtualModel().getFlexoBehaviours(SEInitializer.class).size() > 0) {
-						SEInitializer initializer = data.getVirtualModel().getFlexoBehaviours(SEInitializer.class).get(0);
-						SEInitializerAction action = new SEInitializerAction(initializer, data, null,
+					if (data.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).size() > 0) {
+						XLSInitializer initializer = data.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).get(0);
+						XLSInitializerAction action = new XLSInitializerAction(initializer, data, null,
 								(FlexoBehaviourAction<?, ?, ?>) evaluationContext);
 						action.doAction();
 					}
@@ -442,7 +442,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 				throw new FMLExecutionException(e);
 			} catch (SaveResourceException e) {
 				throw new FMLExecutionException(e);
-			} catch (ExcelMappingException e) {
+			} catch (XLSMappingException e) {
 				throw new FMLExecutionException(e);
 			} catch (FlexoException e) {
 				throw new FMLExecutionException(e);
@@ -471,25 +471,25 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 		}
 
 		@Override
-		public Class<SEVirtualModelInstanceResourceFactory> getResourceFactoryClass() {
-			return SEVirtualModelInstanceResourceFactory.class;
+		public Class<XLSVirtualModelInstanceResourceFactory> getResourceFactoryClass() {
+			return XLSVirtualModelInstanceResourceFactory.class;
 		}
 
 		@Override
 		public String getSuffix() {
-			return SEVirtualModelInstanceResourceFactory.EXCEL_SE_SUFFIX;
+			return XLSVirtualModelInstanceResourceFactory.EXCEL_SE_SUFFIX;
 		}
 
 	}
 
 	@DefineValidationRule
-	public static class ExcelWorkbookIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<CreateSEResource> {
+	public static class ExcelWorkbookIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<CreateXLSResource> {
 		public ExcelWorkbookIsRequiredAndMustBeValid() {
-			super("'excel_workbook'_binding_is_required_and_must_be_valid", CreateSEResource.class);
+			super("'excel_workbook'_binding_is_required_and_must_be_valid", CreateXLSResource.class);
 		}
 
 		@Override
-		public DataBinding<ExcelWorkbook> getBinding(CreateSEResource object) {
+		public DataBinding<ExcelWorkbook> getBinding(CreateXLSResource object) {
 			return object.getExcelWorkbook();
 		}
 
@@ -497,15 +497,15 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 
 	@DefineValidationRule
 	public static class CreateSEResourceMustAddressAValidCreationScheme
-			extends ValidationRule<CreateSEResourceMustAddressAValidCreationScheme, CreateSEResource> {
+			extends ValidationRule<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource> {
 		public CreateSEResourceMustAddressAValidCreationScheme() {
-			super(CreateSEResource.class, "create_semantics_excel_resource_must_address_a_valid_creation_scheme");
+			super(CreateXLSResource.class, "create_semantics_excel_resource_must_address_a_valid_creation_scheme");
 		}
 
 		@Override
-		public ValidationIssue<CreateSEResourceMustAddressAValidCreationScheme, CreateSEResource> applyValidation(CreateSEResource action) {
+		public ValidationIssue<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource> applyValidation(CreateXLSResource action) {
 			if (action.getCreationScheme() == null) {
-				Vector<FixProposal<CreateSEResourceMustAddressAValidCreationScheme, CreateSEResource>> v = new Vector<>();
+				Vector<FixProposal<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource>> v = new Vector<>();
 				if (action.getVirtualModel() != null) {
 					for (CreationScheme cs : action.getVirtualModel().getCreationSchemes()) {
 						v.add(new SetsCreationScheme(cs));
@@ -516,7 +516,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 			return null;
 		}
 
-		protected static class SetsCreationScheme extends FixProposal<CreateSEResourceMustAddressAValidCreationScheme, CreateSEResource> {
+		protected static class SetsCreationScheme extends FixProposal<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource> {
 
 			private final CreationScheme creationScheme;
 
@@ -531,7 +531,7 @@ public interface CreateSEResource extends AbstractCreateResource<SemanticsExcelM
 
 			@Override
 			protected void fixAction() {
-				CreateSEResource action = getValidable();
+				CreateXLSResource action = getValidable();
 				action.setCreationScheme(getCreationScheme());
 			}
 

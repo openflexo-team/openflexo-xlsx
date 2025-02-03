@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.rm;
+package org.openflexo.technologyadapter.excel.fml.reflect.rm;
 
 import java.util.logging.Logger;
 
@@ -59,10 +59,10 @@ import org.openflexo.rm.FileSystemResourceLocatorImpl;
 import org.openflexo.rm.Resource;
 import org.openflexo.rm.ResourceLocator;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEInitializer;
-import org.openflexo.technologyadapter.excel.semantics.fml.SEInitializerAction;
-import org.openflexo.technologyadapter.excel.semantics.model.ExcelMappingException;
-import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializer;
+import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializerAction;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSMappingException;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
  * This is the {@link FlexoResource} encoding a {@link FMLRTVirtualModelInstance}
@@ -71,23 +71,23 @@ import org.openflexo.technologyadapter.excel.semantics.model.SEVirtualModelInsta
  * 
  */
 @ModelEntity
-@ImplementationClass(SEVirtualModelInstanceResource.SEVirtualModelInstanceResourceImpl.class)
+@ImplementationClass(XLSVirtualModelInstanceResource.XLSVirtualModelInstanceResourceImpl.class)
 @XMLElement
-public interface SEVirtualModelInstanceResource
-		extends AbstractVirtualModelInstanceResource<SEVirtualModelInstance, ExcelTechnologyAdapter> {
+public interface XLSVirtualModelInstanceResource
+		extends AbstractVirtualModelInstanceResource<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
 
 	/**
-	 * Default implementation for {@link SEVirtualModelInstanceResource}
+	 * Default implementation for {@link XLSVirtualModelInstanceResource}
 	 * 
 	 * 
 	 * @author Sylvain
 	 * 
 	 */
-	public abstract class SEVirtualModelInstanceResourceImpl
-			extends AbstractVirtualModelInstanceResourceImpl<SEVirtualModelInstance, ExcelTechnologyAdapter>
-			implements SEVirtualModelInstanceResource {
+	public abstract class XLSVirtualModelInstanceResourceImpl
+			extends AbstractVirtualModelInstanceResourceImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
+			implements XLSVirtualModelInstanceResource {
 
-		static final Logger logger = Logger.getLogger(SEVirtualModelInstanceResourceImpl.class.getPackage().getName());
+		static final Logger logger = Logger.getLogger(XLSVirtualModelInstanceResourceImpl.class.getPackage().getName());
 
 		@Override
 		public ExcelTechnologyAdapter getTechnologyAdapter() {
@@ -149,27 +149,27 @@ public interface SEVirtualModelInstanceResource
 		}
 
 		public String getSuffix() {
-			return SEVirtualModelInstanceResourceFactory.EXCEL_SE_SUFFIX;
+			return XLSVirtualModelInstanceResourceFactory.EXCEL_SE_SUFFIX;
 		}
 
 		@Override
-		public Class<SEVirtualModelInstance> getResourceDataClass() {
-			return SEVirtualModelInstance.class;
+		public Class<XLSVirtualModelInstance> getResourceDataClass() {
+			return XLSVirtualModelInstance.class;
 		}
 
 		@Override
-		public SEVirtualModelInstance loadResourceData() throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
+		public XLSVirtualModelInstance loadResourceData() throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
 				InconsistentDataException, InvalidModelDefinitionException {
-			SEVirtualModelInstance returned = super.loadResourceData();
+			XLSVirtualModelInstance returned = super.loadResourceData();
 
 			try {
 				returned.updateData();
-			} catch (ExcelMappingException e) {
+			} catch (XLSMappingException e) {
 				e.printStackTrace();
 			}
 
-			if (returned.getVirtualModel().getFlexoBehaviours(SEInitializer.class).size() > 0) {
-				SEInitializer initializer = returned.getVirtualModel().getFlexoBehaviours(SEInitializer.class).get(0);
+			if (returned.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).size() > 0) {
+				XLSInitializer initializer = returned.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).get(0);
 				FlexoEditor editor = null;
 				if (getResourceCenter() instanceof FlexoProject) {
 					editor = getServiceManager().getProjectLoaderService().getEditorForProject((FlexoProject<?>) getResourceCenter());
@@ -178,7 +178,7 @@ public interface SEVirtualModelInstanceResource
 					editor = getServiceManager().getProjectLoaderService()
 							.getEditorForProject(getResourceCenter().getDelegatingProjectResource().getFlexoProject());
 				}
-				SEInitializerAction action = new SEInitializerAction(initializer, returned, null, editor);
+				XLSInitializerAction action = new XLSInitializerAction(initializer, returned, null, editor);
 				action.doAction();
 			}
 			return returned;

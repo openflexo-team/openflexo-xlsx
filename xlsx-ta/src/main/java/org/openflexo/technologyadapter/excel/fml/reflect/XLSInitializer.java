@@ -36,7 +36,7 @@
  * 
  */
 
-package org.openflexo.technologyadapter.excel.semantics.fml;
+package org.openflexo.technologyadapter.excel.fml.reflect;
 
 import org.openflexo.foundation.fml.AbstractActionScheme;
 import org.openflexo.foundation.fml.TechnologySpecificFlexoBehaviour;
@@ -55,18 +55,18 @@ import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
  * Behaviour beeing called when loading an existing {@link HbnVirtualModelInstance} (which has been serialized)<br>
  * 
  * This is a hook to perform required computation on a {@link HbnVirtualModelInstance} at reload.<br>
- * Note that related {@link VirtualModel} should not define more than one {@link SEInitializer}
+ * Note that related {@link VirtualModel} should not define more than one {@link XLSInitializer}
  * 
  * @author sylvain
  *
  */
 @ModelEntity
-@ImplementationClass(SEInitializer.SEInitializerImpl.class)
+@ImplementationClass(XLSInitializer.SEInitializerImpl.class)
 @XMLElement
-@FML("HbnInitializer")
-public interface SEInitializer extends AbstractActionScheme, TechnologySpecificFlexoBehaviour<ExcelTechnologyAdapter> {
+@FML("XLSInitializer")
+public interface XLSInitializer extends AbstractActionScheme, TechnologySpecificFlexoBehaviour<ExcelTechnologyAdapter> {
 
-	public static abstract class SEInitializerImpl extends AbstractActionSchemeImpl implements SEInitializer {
+	public static abstract class SEInitializerImpl extends AbstractActionSchemeImpl implements XLSInitializer {
 
 		@Override
 		public ExcelTechnologyAdapter getSpecificTechnologyAdapter() {
@@ -79,16 +79,16 @@ public interface SEInitializer extends AbstractActionScheme, TechnologySpecificF
 	}
 
 	@DefineValidationRule
-	public static class OnlyOneHbnInitializer extends ValidationRule<OnlyOneHbnInitializer, SEInitializer> {
+	public static class OnlyOneHbnInitializer extends ValidationRule<OnlyOneHbnInitializer, XLSInitializer> {
 		public OnlyOneHbnInitializer() {
-			super(SEInitializer.class, "only_one_initializer_should_be_defined_for_one_virtual_model");
+			super(XLSInitializer.class, "only_one_initializer_should_be_defined_for_one_virtual_model");
 		}
 
 		@Override
-		public ValidationIssue<OnlyOneHbnInitializer, SEInitializer> applyValidation(SEInitializer initializer) {
+		public ValidationIssue<OnlyOneHbnInitializer, XLSInitializer> applyValidation(XLSInitializer initializer) {
 
 			if (initializer.getFlexoConcept() instanceof VirtualModel
-					&& ((VirtualModel) initializer.getFlexoConcept()).getFlexoBehaviours(SEInitializer.class).size() > 1) {
+					&& ((VirtualModel) initializer.getFlexoConcept()).getFlexoBehaviours(XLSInitializer.class).size() > 1) {
 				return new ValidationError<>(this, initializer, "more_than_one_initializer_defined");
 			}
 			return null;
