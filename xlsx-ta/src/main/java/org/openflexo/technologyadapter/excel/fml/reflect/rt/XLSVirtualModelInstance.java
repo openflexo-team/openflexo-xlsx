@@ -44,6 +44,7 @@ import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.ReflectedVirtualModelInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.pamela.annotations.Getter;
@@ -71,7 +72,8 @@ import org.openflexo.toolbox.StringUtils;
 @ImplementationClass(XLSVirtualModelInstance.SEVirtualModelInstanceImpl.class)
 @Imports(@Import(XLSFlexoConceptInstance.class))
 @XMLElement
-public interface XLSVirtualModelInstance extends VirtualModelInstance<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
+public interface XLSVirtualModelInstance
+		extends ReflectedVirtualModelInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter> {
 
 	@PropertyIdentifier(type = ExcelWorkbookResource.class)
 	String EXCEL_WORKBOOK_RESOURCE = "excelWorkbookResource";

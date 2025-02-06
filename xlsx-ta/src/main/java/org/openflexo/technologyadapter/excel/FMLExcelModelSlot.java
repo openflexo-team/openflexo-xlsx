@@ -80,6 +80,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSObjectActorReference;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
 /**
  * An implementation of a {@link ModelSlot} providing basic access to a set of data stored in an excel workbook, and reflected as FML
@@ -100,9 +101,10 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
 @DeclareEditionActions({ CreateXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
 @DeclareFlexoBehaviours({ XLSInitializer.class })
 @DeclareActorReferences({ XLSObjectActorReference.class })
-public interface FMLExcelModelSlot extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
+public interface FMLExcelModelSlot extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter> {
 
-	abstract class FMLExcelModelSlotImpl extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
+	abstract class FMLExcelModelSlotImpl
+			extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter>
 			implements FMLExcelModelSlot {
 
 		private XLSVirtualModelInstanceType type;
