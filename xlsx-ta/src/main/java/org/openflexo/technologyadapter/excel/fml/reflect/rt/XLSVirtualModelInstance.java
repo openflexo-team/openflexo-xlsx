@@ -69,11 +69,11 @@ import org.openflexo.toolbox.StringUtils;
  * 
  */
 @ModelEntity
-@ImplementationClass(XLSVirtualModelInstance.SEVirtualModelInstanceImpl.class)
+@ImplementationClass(XLSVirtualModelInstance.XLSVirtualModelInstanceImpl.class)
 @Imports(@Import(XLSFlexoConceptInstance.class))
 @XMLElement
 public interface XLSVirtualModelInstance
-		extends ReflectedVirtualModelInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter> {
+		extends ReflectedVirtualModelInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> {
 
 	@PropertyIdentifier(type = ExcelWorkbookResource.class)
 	String EXCEL_WORKBOOK_RESOURCE = "excelWorkbookResource";
@@ -134,7 +134,7 @@ public interface XLSVirtualModelInstance
 	 */
 	public void updateData() throws XLSMappingException;
 
-	abstract class SEVirtualModelInstanceImpl extends VirtualModelInstanceImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
+	abstract class XLSVirtualModelInstanceImpl extends VirtualModelInstanceImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
 			implements XLSVirtualModelInstance {
 
 		private static final Logger logger = FlexoLogger.getLogger(XLSVirtualModelInstance.class.getPackage().toString());

@@ -80,6 +80,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSObjectActorReference;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
 /**
@@ -101,10 +102,11 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 @DeclareEditionActions({ CreateXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
 @DeclareFlexoBehaviours({ XLSInitializer.class })
 @DeclareActorReferences({ XLSObjectActorReference.class })
-public interface FMLExcelModelSlot extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter> {
+public interface FMLExcelModelSlot
+		extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> {
 
 	abstract class FMLExcelModelSlotImpl
-			extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelTechnologyAdapter>
+			extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter>
 			implements FMLExcelModelSlot {
 
 		private XLSVirtualModelInstanceType type;
