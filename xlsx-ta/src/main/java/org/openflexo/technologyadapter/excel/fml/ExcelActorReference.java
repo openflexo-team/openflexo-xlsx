@@ -113,7 +113,7 @@ public interface ExcelActorReference<T extends ExcelObject> extends ActorReferen
 		}
 
 		public ExcelWorkbookResource getExcelWorkbookResource() {
-			FreeModelSlotInstance<?, ?> msInstance = (FreeModelSlotInstance<?, ?>) getModelSlotInstance();
+			FreeModelSlotInstance<?, ?, ?> msInstance = (FreeModelSlotInstance<?, ?, ?>) getModelSlotInstance();
 			if (msInstance != null && msInstance.getResource() instanceof ExcelWorkbookResource) {
 				return (ExcelWorkbookResource) msInstance.getResource();
 			}

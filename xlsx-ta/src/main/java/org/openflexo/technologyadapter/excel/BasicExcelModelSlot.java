@@ -102,7 +102,7 @@ import org.openflexo.toolbox.StringUtils;
 @ImplementationClass(BasicExcelModelSlot.BasicExcelModelSlotImpl.class)
 @XMLElement
 @FML("BasicExcelModelSlot")
-public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
+public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook, ExcelWorkbookResource> {
 
 	@PropertyIdentifier(type = FlexoResource.class)
 	public static final String TEMPLATE_RESOURCE_KEY = "templateResource";
@@ -123,7 +123,8 @@ public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook> {
 	@Setter(TEMPLATE_RESOURCE_KEY)
 	public void setTemplateResource(ExcelWorkbookResource templateResource);
 
-	public static abstract class BasicExcelModelSlotImpl extends FreeModelSlotImpl<ExcelWorkbook> implements BasicExcelModelSlot {
+	public static abstract class BasicExcelModelSlotImpl extends FreeModelSlotImpl<ExcelWorkbook, ExcelWorkbookResource>
+			implements BasicExcelModelSlot {
 
 		private static final Logger logger = Logger.getLogger(BasicExcelModelSlot.class.getPackage().getName());
 
