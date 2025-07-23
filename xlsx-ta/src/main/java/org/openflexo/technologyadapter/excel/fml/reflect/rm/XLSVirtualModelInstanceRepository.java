@@ -60,6 +60,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
  */
 @ModelEntity
 @ImplementationClass(XLSVirtualModelInstanceRepository.XLSVirtualModelInstanceRepositoryImpl.class)
+@Deprecated
 public interface XLSVirtualModelInstanceRepository<I> extends ResourceRepository<XLSVirtualModelInstanceResource, I> {
 
 	public static <I> XLSVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,

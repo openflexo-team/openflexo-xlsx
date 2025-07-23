@@ -46,45 +46,27 @@ import org.openflexo.foundation.fml.FlexoConceptInstanceRole;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.rt.AbstractVirtualModelInstanceModelFactory;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.reflect.ReflectedFlexoConceptInstance;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.Initializer;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
+import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
 
 /**
  * A Excel-specific {@link FlexoConceptInstance} reflecting a distant object (represented by a row in a workbook) accessible in an
- * {@link XLSVirtualModelInstance} through a {@link HbnModelSlot}<br>
+ * {@link XLSVirtualModelInstance} through a {@link FMLExcelModelSlot}<br>
  * 
  */
 @ModelEntity
-@ImplementationClass(XLSFlexoConceptInstance.SEFlexoConceptInstanceImpl.class)
+@ImplementationClass(XLSFlexoConceptInstance.XLSFlexoConceptInstanceImpl.class)
 @XMLElement
-public interface XLSFlexoConceptInstance extends FlexoConceptInstance {
+public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<Row> {
 
-	/**
-	 * Initialize this {@link XLSFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
-	 * 
-	 * @param hbnMap
-	 * @param concept
-	 */
 	@Initializer
 	void initialize(FlexoConcept concept);
-
-	/**
-	 * Return {@link Row} support object
-	 * 
-	 * @return
-	 */
-	public Row getRowSupportObject();
-
-	/**
-	 * Sets {@link Row} support object
-	 * 
-	 * @return
-	 */
-	public void setRowSupportObject(Row row);
 
 	/**
 	 * Default implementation for {@link XLSFlexoConceptInstance}
@@ -92,23 +74,9 @@ public interface XLSFlexoConceptInstance extends FlexoConceptInstance {
 	 * @author sylvain
 	 *
 	 */
-	abstract class SEFlexoConceptInstanceImpl extends FlexoConceptInstanceImpl implements XLSFlexoConceptInstance {
+	abstract class XLSFlexoConceptInstanceImpl extends FlexoConceptInstanceImpl implements XLSFlexoConceptInstance {
 
 		private static final Logger logger = FlexoLogger.getLogger(XLSFlexoConceptInstance.class.getPackage().toString());
-
-		// Row support object
-		private Row row;
-
-		/**
-		 * Initialize this {@link XLSFlexoConceptInstance} with supplied Hibernate support object, and explicit concept (type)
-		 * 
-		 * @param hbnMap
-		 * @param concept
-		 */
-		@Override
-		public void initialize(FlexoConcept concept) {
-			setFlexoConcept(concept);
-		}
 
 		@Override
 		public XLSVirtualModelInstance getVirtualModelInstance() {
@@ -116,25 +84,10 @@ public interface XLSFlexoConceptInstance extends FlexoConceptInstance {
 		}
 
 		@Override
-		public Row getRowSupportObject() {
-			return row;
-		}
-
-		@Override
-		public void setRowSupportObject(Row row) {
-
-			if ((row == null && this.row != null) || (row != null && !row.equals(this.row))) {
-				Row oldValue = this.row;
-				this.row = row;
-				getPropertyChangeSupport().firePropertyChange("rowSupportObject", oldValue, row);
-			}
-		}
-
-		@Override
 		public <T> T getFlexoActor(FlexoRole<T> flexoRole) {
 			if (flexoRole instanceof XLSColumnRole) {
 				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
-				Cell cell = row.getCell(columnRole.getColumnIndex());
+				Cell cell = getSupportObject().getCell(columnRole.getColumnIndex());
 				// System.out.println("cell: " + cell);
 				switch (columnRole.getPrimitiveType()) {
 					case String:
@@ -173,7 +126,7 @@ public interface XLSFlexoConceptInstance extends FlexoConceptInstance {
 		public <T> void setFlexoActor(T object, FlexoRole<T> flexoRole) {
 			if (flexoRole instanceof XLSColumnRole) {
 				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
-				Cell cell = row.getCell(columnRole.getColumnIndex());
+				Cell cell = getSupportObject().getCell(columnRole.getColumnIndex());
 				// System.out.println("cell: " + cell);
 				switch (columnRole.getPrimitiveType()) {
 					case String:

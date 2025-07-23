@@ -36,7 +36,6 @@ import org.openflexo.foundation.technologyadapter.TechnologyContextManager;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
-import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceModelFactory;
 import org.openflexo.toolbox.FlexoVersion;
 import org.openflexo.toolbox.StringUtils;
 import org.openflexo.xml.XMLRootElementInfo;
@@ -47,6 +46,7 @@ import org.openflexo.xml.XMLRootElementInfo;
  * @author sylvain
  *
  */
+@Deprecated
 public class XLSVirtualModelInstanceResourceFactory extends
 		AbstractVirtualModelInstanceResourceFactory<XLSVirtualModelInstance, ExcelTechnologyAdapter, XLSVirtualModelInstanceResource> {
 
@@ -69,8 +69,8 @@ public class XLSVirtualModelInstanceResourceFactory extends
 	}
 
 	/**
-	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
-	 * and located in supplied folder
+	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied
+	 * {@link CompilationUnitResource} and located in supplied folder
 	 * 
 	 * @param baseName
 	 * @param uri
@@ -111,8 +111,8 @@ public class XLSVirtualModelInstanceResourceFactory extends
 	}
 
 	/**
-	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied {@link CompilationUnitResource}
-	 * and located in supplied container {@link AbstractVirtualModelInstanceResource}
+	 * Build a new {@link XLSVirtualModelInstanceResource} with supplied baseName and URI, conform to supplied
+	 * {@link CompilationUnitResource} and located in supplied container {@link AbstractVirtualModelInstanceResource}
 	 * 
 	 * @param baseName
 	 * @param virtualModelResource
@@ -366,15 +366,13 @@ public class XLSVirtualModelInstanceResourceFactory extends
 		return resource.getFactory().newInstance(XLSVirtualModelInstance.class/*, resource.getServiceManager()*/);
 	}
 
-	/**
-	 * Build and return model factory to use for resource data managing
-	 */
 	@Override
 	public AbstractVirtualModelInstanceModelFactory<?> makeModelFactory(XLSVirtualModelInstanceResource resource,
 			TechnologyContextManager<ExcelTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
-		return new XLSVirtualModelInstanceModelFactory(resource,
+		return null;
+		/*return new XLSVirtualModelInstanceModelFactory(resource,
 				technologyContextManager.getTechnologyAdapter().getServiceManager().getEditingContext(),
-				technologyContextManager.getTechnologyAdapter().getServiceManager().getTechnologyAdapterService());
+				technologyContextManager.getTechnologyAdapter().getServiceManager().getTechnologyAdapterService());*/
 	}
 
 }

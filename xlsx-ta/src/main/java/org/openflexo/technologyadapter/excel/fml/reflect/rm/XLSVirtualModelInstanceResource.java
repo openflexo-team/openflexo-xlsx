@@ -73,6 +73,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
 @ModelEntity
 @ImplementationClass(XLSVirtualModelInstanceResource.XLSVirtualModelInstanceResourceImpl.class)
 @XMLElement
+@Deprecated
 public interface XLSVirtualModelInstanceResource
 		extends AbstractVirtualModelInstanceResource<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
 

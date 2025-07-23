@@ -42,6 +42,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.reflect.ReflectedVirtualModelInstanceModelFactory;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
@@ -129,7 +130,7 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 
 	public void removeFlexoConceptInstance(FCI fci) {
 
-		Row deletedRow = fci.getRowSupportObject();
+		Row deletedRow = fci.getSupportObject();
 		ExcelSheet sheet = getCellRange().getExcelSheet();
 		sheet.removeRowAt(deletedRow.getRowNum());
 
@@ -181,8 +182,11 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 
 	@SuppressWarnings("unchecked")
 	private FCI makeNewInstance(Row row) throws FMLExecutionException {
-		FCI newFCI = (FCI) virtualModelInstance.makeNewFlexoConceptInstance(getFlexoConceptType(), container, null, null);
-		newFCI.setRowSupportObject(row);
+
+		ReflectedVirtualModelInstanceModelFactory modelFactory = virtualModelInstance.getReflectedModelFactory();
+		FCI newFCI = (FCI) modelFactory.makeNewFlexoConceptInstance(getFlexoConceptType(), row, virtualModelInstance, virtualModelInstance,
+				null);
+
 		int insertionIndex = insertionPoint(row);
 		add(insertionIndex, newFCI);
 		virtualModelInstance.addToFlexoConceptInstances(newFCI);
@@ -208,7 +212,7 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 			int mid = (low + high) >>> 1;
 			XLSFlexoConceptInstance midVal = get(mid);
 			// int cmp = midVal.compareTo(key);
-			int cmp = midVal.getRowSupportObject().getRowNum() - row.getRowNum();
+			int cmp = midVal.getSupportObject().getRowNum() - row.getRowNum();
 
 			if (cmp < 0)
 				low = mid + 1;
@@ -228,7 +232,7 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 			int mid = (low + high) >>> 1;
 			XLSFlexoConceptInstance midVal = get(mid);
 			// int cmp = midVal.compareTo(key);
-			int cmp = midVal.getRowSupportObject().getRowNum() - row.getRowNum();
+			int cmp = midVal.getSupportObject().getRowNum() - row.getRowNum();
 
 			if (cmp < 0)
 				low = mid + 1;

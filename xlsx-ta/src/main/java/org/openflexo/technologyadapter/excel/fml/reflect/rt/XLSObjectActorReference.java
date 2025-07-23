@@ -61,7 +61,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInsta
  * @param <T>
  */
 @ModelEntity
-@ImplementationClass(XLSObjectActorReference.SEObjectActorReferenceImpl.class)
+@ImplementationClass(XLSObjectActorReference.XLSObjectActorReferenceImpl.class)
 @XMLElement
 public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptInstance> {
 
@@ -93,7 +93,7 @@ public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptI
 	@Setter(KEY_KEY)
 	void setKey(String key);
 
-	abstract class SEObjectActorReferenceImpl extends ActorReferenceImpl<XLSFlexoConceptInstance> implements XLSObjectActorReference {
+	abstract class XLSObjectActorReferenceImpl extends ActorReferenceImpl<XLSFlexoConceptInstance> implements XLSObjectActorReference {
 
 		private static final Logger logger = FlexoLogger.getLogger(XLSObjectActorReference.class.getPackage().toString());
 
@@ -107,7 +107,7 @@ public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptI
 			if (object != null) {
 				setResourceURI(object.getVirtualModelInstance().getURI());
 				setFlexoConceptURI(object.getFlexoConcept().getURI());
-				setKey("" + object.getRowSupportObject().getRowNum());
+				setKey("" + object.getSupportObject().getRowNum());
 			}
 			else {
 				setResourceURI(null);
