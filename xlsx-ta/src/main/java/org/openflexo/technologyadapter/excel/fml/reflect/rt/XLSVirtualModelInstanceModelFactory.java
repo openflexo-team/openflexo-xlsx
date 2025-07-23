@@ -39,9 +39,15 @@
 package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import org.apache.poi.ss.usermodel.Row;
+import org.openflexo.foundation.fml.AbstractCreationScheme;
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.FlexoEvent;
 import org.openflexo.foundation.fml.rt.AbstractVirtualModelInstanceModelFactory;
+import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.FlexoEventInstance;
+import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
+import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterService;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.pamela.factory.EditingContext;
@@ -62,16 +68,35 @@ public class XLSVirtualModelInstanceModelFactory extends AbstractVirtualModelIns
 	}
 
 	public XLSFlexoConceptInstance newFlexoConceptInstance(XLSVirtualModelInstance owner, FlexoConceptInstance container, Row row,
-			FlexoConcept concept) {
-		System.out.println("On construit un nouveau XLSFlexoConceptInstance pour " + row.getRowNum());
-		XLSFlexoConceptInstance returned = newInstance(XLSFlexoConceptInstance.class, concept);
+			FlexoConcept concept) throws FMLExecutionException {
+		XLSFlexoConceptInstance returned = makeNewFlexoConceptInstance(concept, container, owner, null);
 		returned.setRowSupportObject(row);
-		owner.addToFlexoConceptInstances(returned);
-		if (container != null && container != owner) {
+		return returned;
+	}
+
+	@Override
+	public XLSFlexoConceptInstance makeNewFlexoConceptInstance(FlexoConcept concept, FlexoConceptInstance container,
+			VirtualModelInstance<?, ?> ownerVirtualModelInstance, AbstractCreationScheme creationScheme,
+			RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+		return makeNewFlexoConceptInstance(concept, container, ownerVirtualModelInstance, evaluationContext);
+	}
+
+	@Override
+	public XLSFlexoConceptInstance makeNewFlexoConceptInstance(FlexoConcept concept, FlexoConceptInstance container,
+			VirtualModelInstance<?, ?> ownerVirtualModelInstance, RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+		XLSFlexoConceptInstance returned = newInstance(XLSFlexoConceptInstance.class, concept);
+		ownerVirtualModelInstance.addToFlexoConceptInstances(returned);
+		if (container != null && container != ownerVirtualModelInstance) {
 			container.addToEmbeddedFlexoConceptInstances(returned);
 		}
 		return returned;
+	}
 
+	@Override
+	public FlexoEventInstance makeNewEventInstance(FlexoEvent event, VirtualModelInstance<?, ?> ownerVirtualModelInstance,
+			AbstractCreationScheme creationScheme, RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

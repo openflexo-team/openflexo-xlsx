@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
@@ -290,10 +289,11 @@ public interface XLSVirtualModelInstance
 			return returned;
 		}*/
 
-		@Override
-		public XLSFlexoConceptInstance buildNewFlexoConceptInstance(FlexoConcept concept) {
+		/*@Override
+		public XLSFlexoConceptInstance makeNewFlexoConceptInstance(FlexoConcept concept, FlexoConceptInstance container,
+				AbstractCreationScheme creationScheme, RunTimeEvaluationContext evaluationContext) {
 			return getVirtualModelInstanceResource().getFactory().newInstance(XLSFlexoConceptInstance.class, concept);
-		}
+		}*/
 
 		@Override
 		public void updateData() throws XLSMappingException {

@@ -160,9 +160,8 @@ public interface CreateXLSResource extends AbstractCreateResource<FMLExcelModelS
 
 	public abstract String getSuffix();
 
-	abstract class CreateXLSResourceImpl
-			extends AbstractCreateResourceImpl<FMLExcelModelSlot, XLSVirtualModelInstance, ExcelTechnologyAdapter>
-			implements CreateXLSResource {
+	abstract class CreateXLSResourceImpl extends
+			AbstractCreateResourceImpl<FMLExcelModelSlot, XLSVirtualModelInstance, ExcelTechnologyAdapter> implements CreateXLSResource {
 
 		private DataBinding<ExcelWorkbook> excelWorkbook;
 
@@ -404,7 +403,7 @@ public interface CreateXLSResource extends AbstractCreateResource<FMLExcelModelS
 					System.out.println("Executing FML: " + getCreationScheme().getFMLPrettyPrint());
 					CreationSchemeAction creationSchemeAction = new CreationSchemeAction(getCreationScheme(), null, null,
 							(FlexoBehaviourAction<?, ?, ?>) evaluationContext);
-					creationSchemeAction.initWithFlexoConceptInstance(data);
+					creationSchemeAction.assignNewFlexoConceptInstance(data);
 					for (CreateXLSResourceParameter p : getParameters()) {
 						// Unused FlexoBehaviourParameter param = p.getParam();
 						Object value = p.evaluateParameterValue((FlexoBehaviourAction<?, ?, ?>) evaluationContext);
@@ -503,7 +502,8 @@ public interface CreateXLSResource extends AbstractCreateResource<FMLExcelModelS
 		}
 
 		@Override
-		public ValidationIssue<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource> applyValidation(CreateXLSResource action) {
+		public ValidationIssue<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource> applyValidation(
+				CreateXLSResource action) {
 			if (action.getCreationScheme() == null) {
 				Vector<FixProposal<CreateSEResourceMustAddressAValidCreationScheme, CreateXLSResource>> v = new Vector<>();
 				if (action.getVirtualModel() != null) {

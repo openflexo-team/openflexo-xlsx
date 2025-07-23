@@ -40,6 +40,7 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
@@ -100,7 +101,7 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 		return null;
 	}
 
-	public FCI insertFlexoConceptInstanceAtIndex(Integer index) {
+	public FCI insertFlexoConceptInstanceAtIndex(Integer index) throws FMLExecutionException {
 
 		int insertedRowIndex;
 		if (index != null && index >= 0) {
@@ -160,7 +161,11 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 			}
 			else {
 				// Create new instance
-				seFCI = makeNewInstance(excelRow.getRow());
+				try {
+					seFCI = makeNewInstance(excelRow.getRow());
+				} catch (FMLExecutionException e) {
+					e.printStackTrace();
+				}
 				isModified = true;
 			}
 		}
@@ -175,8 +180,8 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 	}
 
 	@SuppressWarnings("unchecked")
-	private FCI makeNewInstance(Row row) {
-		FCI newFCI = (FCI) virtualModelInstance.makeNewFlexoConceptInstance(getFlexoConceptType(), container);
+	private FCI makeNewInstance(Row row) throws FMLExecutionException {
+		FCI newFCI = (FCI) virtualModelInstance.makeNewFlexoConceptInstance(getFlexoConceptType(), container, null, null);
 		newFCI.setRowSupportObject(row);
 		int insertionIndex = insertionPoint(row);
 		add(insertionIndex, newFCI);
