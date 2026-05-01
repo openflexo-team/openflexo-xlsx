@@ -367,7 +367,7 @@ public class XLSVirtualModelInstanceResourceFactory extends
 	}
 
 	@Override
-	public AbstractVirtualModelInstanceModelFactory<?> makeModelFactory(XLSVirtualModelInstanceResource resource,
+	public AbstractVirtualModelInstanceModelFactory makeModelFactory(XLSVirtualModelInstanceResource resource,
 			TechnologyContextManager<ExcelTechnologyAdapter> technologyContextManager) throws ModelDefinitionException {
 		return null;
 		/*return new XLSVirtualModelInstanceModelFactory(resource,

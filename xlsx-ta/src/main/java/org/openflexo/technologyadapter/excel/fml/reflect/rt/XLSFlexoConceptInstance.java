@@ -162,7 +162,7 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 
 		@Override
 		public XLSObjectActorReference makeActorReference(FlexoConceptInstanceRole role, FlexoConceptInstance fci) {
-			AbstractVirtualModelInstanceModelFactory<?> factory = getFactory();
+			AbstractVirtualModelInstanceModelFactory factory = getFactory();
 			XLSObjectActorReference returned = factory.newInstance(XLSObjectActorReference.class);
 			returned.setFlexoRole(role);
 			returned.setFlexoConceptInstance(fci);

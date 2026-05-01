@@ -64,6 +64,7 @@ import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoBehaviours;
 import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
+import org.openflexo.foundation.fml.rt.ModelSlotInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.fml.rt.reflect.ReflectedFMLRTModelSlot;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
@@ -140,6 +141,14 @@ public interface FMLExcelModelSlot
 				super.setAccessedVirtualModel(aVirtualModel);
 				type = XLSVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
 			}
+		}
+
+		// ReflectedFMLRTModelSlotInstance<XMLVirtualModelInstance<RD>, XMLResource<RD, ?>, RD, XMLTechnologyAdapter>
+
+		@Override
+		public ModelSlotInstance<?, XLSVirtualModelInstance> connectTo(ExcelWorkbookResource resource, FlexoConceptInstance context) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 	}
