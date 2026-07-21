@@ -38,19 +38,7 @@
 
 package org.openflexo.technologyadapter.excel.fml.reflect.rm;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.openflexo.foundation.FlexoServiceManager;
-import org.openflexo.foundation.resource.FlexoResourceCenter;
-import org.openflexo.foundation.resource.ResourceRepository;
-import org.openflexo.foundation.resource.ResourceRepositoryImpl;
-import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.exceptions.ModelDefinitionException;
-import org.openflexo.pamela.factory.PamelaModelFactory;
-import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
  * A repository storing {@link XLSVirtualModelInstanceResource} for a resource center
@@ -59,76 +47,76 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
  * 
  */
 @ModelEntity
-@ImplementationClass(XLSVirtualModelInstanceRepository.XLSVirtualModelInstanceRepositoryImpl.class)
+// @ImplementationClass(XLSVirtualModelInstanceRepository.XLSVirtualModelInstanceRepositoryImpl.class)
 @Deprecated
-public interface XLSVirtualModelInstanceRepository<I> extends ResourceRepository<XLSVirtualModelInstanceResource, I> {
+public interface XLSVirtualModelInstanceRepository<I> /* extends ResourceRepository<XLSVirtualModelInstanceResource, I>*/ {
 
-	public static <I> XLSVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,
-			FlexoResourceCenter<I> resourceCenter) {
-		PamelaModelFactory factory;
-		try {
-			factory = new PamelaModelFactory(XLSVirtualModelInstanceRepository.class);
-			XLSVirtualModelInstanceRepository<I> newRepository = factory.newInstance(XLSVirtualModelInstanceRepository.class);
-			newRepository.setResourceCenter(resourceCenter);
-			newRepository.setBaseArtefact(resourceCenter.getBaseArtefact());
-			newRepository.getRootFolder().setRepositoryContext(null);
-			return newRepository;
-		} catch (ModelDefinitionException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public static abstract class XLSVirtualModelInstanceRepositoryImpl<I> extends ResourceRepositoryImpl<XLSVirtualModelInstanceResource, I>
-			implements XLSVirtualModelInstanceRepository<I> {
-
-		@Override
-		public FlexoServiceManager getServiceManager() {
-			if (getResourceCenter() != null) {
-				return getResourceCenter().getServiceManager();
+	/*	public static <I> XLSVirtualModelInstanceRepository<I> instanciateNewRepository(ExcelTechnologyAdapter adapter,
+				FlexoResourceCenter<I> resourceCenter) {
+			PamelaModelFactory factory;
+			try {
+				factory = new PamelaModelFactory(XLSVirtualModelInstanceRepository.class);
+				XLSVirtualModelInstanceRepository<I> newRepository = factory.newInstance(XLSVirtualModelInstanceRepository.class);
+				newRepository.setResourceCenter(resourceCenter);
+				newRepository.setBaseArtefact(resourceCenter.getBaseArtefact());
+				newRepository.getRootFolder().setRepositoryContext(null);
+				return newRepository;
+			} catch (ModelDefinitionException e) {
+				e.printStackTrace();
 			}
 			return null;
 		}
-
-		public List<XLSVirtualModelInstance> getVirtualModelInstancesConformToVirtualModel(String virtualModelURI) {
-			List<XLSVirtualModelInstance> views = new ArrayList<>();
-			for (XLSVirtualModelInstanceResource vmiRes : getAllResources()) {
-				if (vmiRes.getVirtualModelResource() != null && vmiRes.getVirtualModelResource().getURI().equals(virtualModelURI)) {
-					views.add(vmiRes.getVirtualModelInstance());
+	
+		public static abstract class XLSVirtualModelInstanceRepositoryImpl<I> extends ResourceRepositoryImpl<XLSVirtualModelInstanceResource, I>
+				implements XLSVirtualModelInstanceRepository<I> {
+	
+			@Override
+			public FlexoServiceManager getServiceManager() {
+				if (getResourceCenter() != null) {
+					return getResourceCenter().getServiceManager();
 				}
-			}
-			return views;
-		}
-
-		public boolean isValidForANewVirtualModelInstanceName(String value) {
-			if (value == null) {
-				return false;
-			}
-			return getRootFolder().isValidResourceName(value);
-		}
-
-		public XLSVirtualModelInstanceResource getVirtualModelInstanceResourceNamed(String value) {
-			if (value == null) {
 				return null;
 			}
-			return getRootFolder().getResourceWithName(value);
-		}
-
-		public XLSVirtualModelInstanceResource getVirtualModelInstance(String virtualModelInstanceURI) {
-			if (virtualModelInstanceURI == null) {
-				return null;
+	
+			public List<XLSVirtualModelInstance> getVirtualModelInstancesConformToVirtualModel(String virtualModelURI) {
+				List<XLSVirtualModelInstance> views = new ArrayList<>();
+				for (XLSVirtualModelInstanceResource vmiRes : getAllResources()) {
+					if (vmiRes.getVirtualModelResource() != null && vmiRes.getVirtualModelResource().getURI().equals(virtualModelURI)) {
+						views.add(vmiRes.getVirtualModelInstance());
+					}
+				}
+				return views;
 			}
-			return getResource(virtualModelInstanceURI);
-		}
-
-		@Override
-		public final String getDefaultBaseURI() {
-			return getResourceCenter().getDefaultBaseURI() /*+ "/" + getTechnologyAdapter().getIdentifier()*/;
-		}
-
-		@Override
-		public String getDisplayableName() {
-			return getResourceCenter().getDisplayableName();
-		}
-	}
+	
+			public boolean isValidForANewVirtualModelInstanceName(String value) {
+				if (value == null) {
+					return false;
+				}
+				return getRootFolder().isValidResourceName(value);
+			}
+	
+			public XLSVirtualModelInstanceResource getVirtualModelInstanceResourceNamed(String value) {
+				if (value == null) {
+					return null;
+				}
+				return getRootFolder().getResourceWithName(value);
+			}
+	
+			public XLSVirtualModelInstanceResource getVirtualModelInstance(String virtualModelInstanceURI) {
+				if (virtualModelInstanceURI == null) {
+					return null;
+				}
+				return getResource(virtualModelInstanceURI);
+			}
+	
+			@Override
+			public final String getDefaultBaseURI() {
+				return getResourceCenter().getDefaultBaseURI() ;
+			}
+	
+			@Override
+			public String getDisplayableName() {
+				return getResourceCenter().getDisplayableName();
+			}
+		}*/
 }

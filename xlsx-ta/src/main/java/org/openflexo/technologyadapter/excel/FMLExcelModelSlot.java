@@ -71,7 +71,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateReflectedXLSResource;
 import org.openflexo.technologyadapter.excel.fml.reflect.InsertXLSObject;
 import org.openflexo.technologyadapter.excel.fml.reflect.RemoveXLSObject;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
@@ -100,7 +100,7 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 @XMLElement
 @ImplementationClass(FMLExcelModelSlot.FMLExcelModelSlotImpl.class)
 @DeclareFlexoRoles({ XLSColumnRole.class, XLSDataAreaRole.class, XLSReferenceRole.class })
-@DeclareEditionActions({ CreateXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
+@DeclareEditionActions({ CreateReflectedXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
 @DeclareFlexoBehaviours({ XLSInitializer.class })
 @DeclareActorReferences({ XLSObjectActorReference.class })
 public interface FMLExcelModelSlot

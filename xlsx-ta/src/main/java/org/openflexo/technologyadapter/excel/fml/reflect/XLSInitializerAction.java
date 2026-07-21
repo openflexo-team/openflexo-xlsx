@@ -54,6 +54,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
  * @author sylvain
  *
  */
+@Deprecated
 public class XLSInitializerAction extends AbstractActionSchemeAction<XLSInitializerAction, XLSInitializer, XLSVirtualModelInstance> {
 
 	@SuppressWarnings("unused")
@@ -67,6 +68,7 @@ public class XLSInitializerAction extends AbstractActionSchemeAction<XLSInitiali
 	 * @param globalSelection
 	 * @param editor
 	 */
+	@Deprecated
 	public XLSInitializerAction(XLSInitializer behaviour, XLSVirtualModelInstance focusedObject,
 			List<VirtualModelInstanceObject> globalSelection, FlexoEditor editor) {
 		super(behaviour, focusedObject, globalSelection, editor);
@@ -81,11 +83,13 @@ public class XLSInitializerAction extends AbstractActionSchemeAction<XLSInitiali
 	 * @param ownerAction
 	 *            Action in which action to be created will be embedded
 	 */
+	@Deprecated
 	public XLSInitializerAction(XLSInitializer behaviour, XLSVirtualModelInstance focusedObject,
 			List<VirtualModelInstanceObject> globalSelection, FlexoAction<?, ?, ?> ownerAction) {
 		super(behaviour, focusedObject, globalSelection, ownerAction);
 	}
 
+	@Deprecated
 	@Override
 	protected void doAction(Object context) throws FlexoException {
 		XLSInitializer applicableActionScheme = getApplicableFlexoBehaviour();

@@ -63,7 +63,7 @@ import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
 import org.openflexo.technologyadapter.excel.action.CreateSemanticsExcelVirtualModel;
 import org.openflexo.technologyadapter.excel.action.CreateSemanticsExcelVirtualModel.SEFlexoConceptSpecification;
-import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateReflectedXLSResource;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSFlexoConcept;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance;
@@ -226,12 +226,12 @@ public class TestSEVirtualModel extends AbstractTestExcel {
 
 		CreateEditionAction createEditionAction1 = CreateEditionAction.actionType.makeNewAction(creationScheme.getControlGraph(), null,
 				_editor);
-		createEditionAction1.setEditionActionClass(CreateXLSResource.class);
+		createEditionAction1.setEditionActionClass(CreateReflectedXLSResource.class);
 		createEditionAction1.setAssignation(new DataBinding<>("personListing"));
 		createEditionAction1.doAction();
 		AssignationAction<?> action1 = (AssignationAction<?>) createEditionAction1.getNewEditionAction();
 
-		CreateXLSResource createSEResourceAction = (CreateXLSResource) action1.getAssignableAction();
+		CreateReflectedXLSResource createSEResourceAction = (CreateReflectedXLSResource) action1.getAssignableAction();
 		createSEResourceAction.setExcelWorkbook(new DataBinding<>("parameters.excelResource.getResourceData()"));
 		createSEResourceAction.setResourceName(new DataBinding<String>("(this.name + \"_xls\")"));
 		createSEResourceAction.setResourceCenter(new DataBinding<FlexoResourceCenter<?>>("this.resourceCenter"));

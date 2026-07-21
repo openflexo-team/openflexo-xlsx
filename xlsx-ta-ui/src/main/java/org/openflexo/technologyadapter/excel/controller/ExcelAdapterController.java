@@ -65,7 +65,7 @@ import org.openflexo.technologyadapter.excel.fml.editionaction.CellStyleAction;
 import org.openflexo.technologyadapter.excel.fml.editionaction.CreateExcelResource;
 import org.openflexo.technologyadapter.excel.fml.editionaction.GenerateExcelResource;
 import org.openflexo.technologyadapter.excel.fml.editionaction.MergeCells;
-import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
+import org.openflexo.technologyadapter.excel.fml.reflect.CreateReflectedXLSResource;
 import org.openflexo.technologyadapter.excel.fml.reflect.InsertXLSObject;
 import org.openflexo.technologyadapter.excel.fml.reflect.RemoveXLSObject;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
@@ -209,7 +209,7 @@ public class ExcelAdapterController extends TechnologyAdapterController<ExcelTec
 		else if (AbstractSelectExcelCell.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(getIconForTechnologyObject(ExcelCell.class), IconLibrary.IMPORT);
 		}
-		else if (CreateXLSResource.class.isAssignableFrom(editionActionClass)) {
+		else if (CreateReflectedXLSResource.class.isAssignableFrom(editionActionClass)) {
 			return IconFactory.getImageIcon(FMLRTIconLibrary.VIRTUAL_MODEL_INSTANCE_ICON, ExcelIconLibrary.EXCEL_MARKER);
 		}
 		else if (InsertXLSObject.class.isAssignableFrom(editionActionClass)) {

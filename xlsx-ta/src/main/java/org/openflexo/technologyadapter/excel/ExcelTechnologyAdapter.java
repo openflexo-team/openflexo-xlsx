@@ -47,9 +47,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapterBindingFactory;
 import org.openflexo.technologyadapter.excel.fml.binding.ExcelBindingFactory;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType.SEVirtualModelInstanceTypeFactory;
-import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceRepository;
-import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResourceFactory;
 import org.openflexo.technologyadapter.excel.model.ExcelCellRangeConverter;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookRepository;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
@@ -61,7 +58,7 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
  * 
  */
 @DeclareModelSlots({ BasicExcelModelSlot.class, FMLExcelModelSlot.class })
-@DeclareResourceFactories({ ExcelWorkbookResourceFactory.class, XLSVirtualModelInstanceResourceFactory.class })
+@DeclareResourceFactories({ ExcelWorkbookResourceFactory.class /*, XLSVirtualModelInstanceResourceFactory.class*/ })
 public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAdapter> {
 
 	protected static final Logger logger = Logger.getLogger(ExcelTechnologyAdapter.class.getPackage().getName());
@@ -113,7 +110,7 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAda
 		return getResourceFactory(ExcelWorkbookResourceFactory.class);
 	}
 
-	public <I> XLSVirtualModelInstanceRepository<I> getSEVirtualModelInstanceRepository(FlexoResourceCenter<I> resourceCenter) {
+	/*public <I> XLSVirtualModelInstanceRepository<I> getSEVirtualModelInstanceRepository(FlexoResourceCenter<I> resourceCenter) {
 		XLSVirtualModelInstanceRepository<I> returned = resourceCenter.retrieveRepository(XLSVirtualModelInstanceRepository.class, this);
 		if (returned == null) {
 			returned = XLSVirtualModelInstanceRepository.instanciateNewRepository(this, resourceCenter);
@@ -121,14 +118,14 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAda
 		}
 		return returned;
 	}
-
+	
 	private SEVirtualModelInstanceTypeFactory seVmiFactory;
-
+	
 	public SEVirtualModelInstanceTypeFactory getVirtualModelInstanceTypeFactory() {
 		if (seVmiFactory == null) {
 			seVmiFactory = new SEVirtualModelInstanceTypeFactory(this);
 		}
 		return seVmiFactory;
-	}
+	}*/
 
 }

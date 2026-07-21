@@ -64,8 +64,10 @@ import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 @ImplementationClass(XLSInitializer.SEInitializerImpl.class)
 @XMLElement
 @FML("XLSInitializer")
+@Deprecated
 public interface XLSInitializer extends AbstractActionScheme, TechnologySpecificFlexoBehaviour<ExcelTechnologyAdapter> {
 
+	@Deprecated
 	public static abstract class SEInitializerImpl extends AbstractActionSchemeImpl implements XLSInitializer {
 
 		@Override
@@ -78,6 +80,7 @@ public interface XLSInitializer extends AbstractActionScheme, TechnologySpecific
 
 	}
 
+	@Deprecated
 	@DefineValidationRule
 	public static class OnlyOneHbnInitializer extends ValidationRule<OnlyOneHbnInitializer, XLSInitializer> {
 		public OnlyOneHbnInitializer() {
@@ -88,7 +91,7 @@ public interface XLSInitializer extends AbstractActionScheme, TechnologySpecific
 		public ValidationIssue<OnlyOneHbnInitializer, XLSInitializer> applyValidation(XLSInitializer initializer) {
 
 			if (initializer.getFlexoConcept() instanceof VirtualModel
-					&& ((VirtualModel) initializer.getFlexoConcept()).getFlexoBehaviours(XLSInitializer.class).size() > 1) {
+					&& initializer.getFlexoConcept().getFlexoBehaviours(XLSInitializer.class).size() > 1) {
 				return new ValidationError<>(this, initializer, "more_than_one_initializer_defined");
 			}
 			return null;

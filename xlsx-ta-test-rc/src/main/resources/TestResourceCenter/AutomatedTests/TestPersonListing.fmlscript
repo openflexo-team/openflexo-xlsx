@@ -1,0 +1,38 @@
+// We test here the basic use of Excel technology adapter, with a xls file
+
+// Perform some initialization, display resources and the context
+service ResourceCenterService status;
+resources;
+context;
+
+// Load TestPersonListing virtual model
+virtualModel = load -r ["http://www.openflexo.org/excel-test/FML/TestPersonListing.fml"];
+context;
+assert virtualModel != null;
+log "Pretty-print of "+virtualModel;
+log virtualModel.fMLPrettyPrint;
+//validate virtualModel;
+
+// Load resources beeing used in this use case
+listing = load -r ["http://www.openflexo.org/excel-test/TestResourceCenter/Excel/PersonListing.xls"];
+log "listing="+listing;
+assert listing != null;
+log "listing="+listing+" of "+listing.class;
+log "resource="+listing.resource;
+
+// Instantiate TestPersonListing
+service ResourceCenterService add_temp_rc;
+myVMI = new TestPersonListing(listing.resource) with (name="test1");
+context;
+assert myVMI != null;
+
+persons = myVMI.getAllPersons();
+log "persons="+persons;
+
+assert persons.size==6;
+
+jeanDupont = persons.get(0);
+assert jeanDupont.name == "Jean Dupont";
+
+alainTerrieur = persons.get(5);
+assert alainTerrieur.name == "Alain Terrieur";

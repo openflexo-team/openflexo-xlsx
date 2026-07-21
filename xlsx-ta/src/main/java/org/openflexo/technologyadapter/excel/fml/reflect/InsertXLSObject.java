@@ -75,27 +75,35 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
 @ModelEntity
 @ImplementationClass(InsertXLSObject.InsertXLSObjectImpl.class)
 @XMLElement
+@Deprecated
 public interface InsertXLSObject extends AbstractAddFlexoConceptInstance<XLSFlexoConceptInstance, XLSVirtualModelInstance> {
 
+	@Deprecated
 	@PropertyIdentifier(type = DataBinding.class)
 	String DATA_AREA_KEY = "dataArea";
+	@Deprecated
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String ROW_INDEX_KEY = "rowIndex";
 
+	@Deprecated
 	@Getter(value = DATA_AREA_KEY)
 	@XMLAttribute
 	public DataBinding<XLSDataArea<?>> getDataArea();
 
+	@Deprecated
 	@Setter(DATA_AREA_KEY)
 	public void setDataArea(DataBinding<XLSDataArea<?>> dataArea);
 
+	@Deprecated
 	@Getter(value = ROW_INDEX_KEY)
 	@XMLAttribute
 	public DataBinding<Integer> getRowIndex();
 
+	@Deprecated
 	@Setter(ROW_INDEX_KEY)
 	public void setRowIndex(DataBinding<Integer> rowIndex);
 
+	@Deprecated
 	public static abstract class InsertXLSObjectImpl
 			extends AbstractAddFlexoConceptInstanceImpl<XLSFlexoConceptInstance, XLSVirtualModelInstance> implements InsertXLSObject {
 
@@ -277,6 +285,7 @@ public interface InsertXLSObject extends AbstractAddFlexoConceptInstance<XLSFlex
 		}
 	}
 
+	@Deprecated
 	@DefineValidationRule
 	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<InsertXLSObject> {
 		public DataAreaBindingIsRequiredAndMustBeValid() {

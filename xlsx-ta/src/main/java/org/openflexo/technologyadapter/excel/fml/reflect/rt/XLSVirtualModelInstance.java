@@ -36,31 +36,23 @@
 package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.VirtualModel;
-import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.fml.rt.reflect.ReflectedVirtualModelInstance;
 import org.openflexo.logging.FlexoLogger;
-import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.Import;
 import org.openflexo.pamela.annotations.Imports;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.PropertyIdentifier;
-import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
 import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
-import org.openflexo.toolbox.StringUtils;
 
 /**
  * A {@link VirtualModelInstance} reflecting XLS sheets objects accessible through a {@link FMLExcelModelSlot} configured with a
@@ -74,23 +66,23 @@ import org.openflexo.toolbox.StringUtils;
 public interface XLSVirtualModelInstance
 		extends ReflectedVirtualModelInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> {
 
-	@PropertyIdentifier(type = ExcelWorkbookResource.class)
+	/*@PropertyIdentifier(type = ExcelWorkbookResource.class)
 	String EXCEL_WORKBOOK_RESOURCE = "excelWorkbookResource";
 	@PropertyIdentifier(type = String.class)
 	String EXCEL_WORKBOOK_URI = "excelWorkbookURI";
-
+	
 	@Getter(EXCEL_WORKBOOK_RESOURCE)
 	public ExcelWorkbookResource getExcelWorkbookResource();
-
+	
 	@Setter(EXCEL_WORKBOOK_RESOURCE)
 	public void setExcelWorkbookResource(ExcelWorkbookResource excelWorkbookResource);
-
+	
 	@Getter(EXCEL_WORKBOOK_URI)
 	@XMLAttribute
 	public String getExcelWorkbookURI();
-
+	
 	@Setter(EXCEL_WORKBOOK_URI)
-	public void setExcelWorkbookURI(String excelWorkbook);
+	public void setExcelWorkbookURI(String excelWorkbook);*/
 
 	/**
 	 * Retrieve (build if not existant) {@link XLSFlexoConceptInstance} with supplied support object (a row in an excel workbook), asserting
@@ -131,9 +123,10 @@ public interface XLSVirtualModelInstance
 	/**
 	 * Update all data area by connecting to the excel workbook
 	 */
-	public void updateData() throws XLSMappingException;
+	// public void updateData() throws XLSMappingException;
 
-	abstract class XLSVirtualModelInstanceImpl extends VirtualModelInstanceImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
+	abstract class XLSVirtualModelInstanceImpl
+			extends ReflectedVirtualModelInstanceImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter>
 			implements XLSVirtualModelInstance {
 
 		private static final Logger logger = FlexoLogger.getLogger(XLSVirtualModelInstance.class.getPackage().toString());
@@ -144,10 +137,10 @@ public interface XLSVirtualModelInstance
 
 		private Map<XLSDataAreaRole, XLSDataArea<XLSFlexoConceptInstance>> instances = new HashMap<>();
 
-		private ExcelWorkbookResource wbResource;
-		private String wbURI;
+		// private ExcelWorkbookResource wbResource;
+		// private String wbURI;
 
-		@Override
+		/*@Override
 		public ExcelWorkbookResource getExcelWorkbookResource() {
 			if (wbResource == null && StringUtils.isNotEmpty(wbURI) && getServiceManager() != null
 					&& getServiceManager().getResourceManager() != null) {
@@ -156,12 +149,12 @@ public interface XLSVirtualModelInstance
 			}
 			return wbResource;
 		}
-
+		
 		@Override
 		public void setExcelWorkbookResource(ExcelWorkbookResource excelWorkbookResource) {
 			this.wbResource = excelWorkbookResource;
 		}
-
+		
 		@Override
 		public String getExcelWorkbookURI() {
 			if (wbResource != null) {
@@ -169,21 +162,13 @@ public interface XLSVirtualModelInstance
 			}
 			return wbURI;
 		}
-
+		
 		@Override
 		public void setExcelWorkbookURI(String excelWorkbookURI) {
 			this.wbURI = excelWorkbookURI;
-		}
+		}*/
 
-		@Override
-		public ExcelTechnologyAdapter getTechnologyAdapter() {
-			if (getVirtualModelInstanceResource() != null) {
-				return getVirtualModelInstanceResource().getTechnologyAdapter();
-			}
-			return null;
-		}
-
-		@SuppressWarnings("unchecked")
+		/*@SuppressWarnings("unchecked")
 		@Override
 		public List<FlexoConceptInstance> getFlexoConceptInstances() {
 			if (isSerializing()) {
@@ -191,20 +176,20 @@ public interface XLSVirtualModelInstance
 				return null;
 			}
 			return (List<FlexoConceptInstance>) performSuperGetter(FLEXO_CONCEPT_INSTANCES_KEY);
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public XLSVirtualModelInstanceModelFactory getFactory() {
 			return (XLSVirtualModelInstanceModelFactory) super.getFactory();
-		}
+		}*/
 
-		@Override
+		/*@Override
 		public <T> List<T> getFlexoActorList(FlexoRole<T> flexoRole) {
 			if (flexoRole instanceof XLSDataAreaRole) {
 				return (List<T>) instances.get(flexoRole);
 			}
 			return super.getFlexoActorList(flexoRole);
-		}
+		}*/
 
 		/**
 		 * Retrieve (build if not existant) {@link XLSFlexoConceptInstance} with supplied support object (an excel row), asserting returned
@@ -295,7 +280,7 @@ public interface XLSVirtualModelInstance
 			return getVirtualModelInstanceResource().getFactory().newInstance(XLSFlexoConceptInstance.class, concept);
 		}*/
 
-		@Override
+		/*@Override
 		public void updateData() throws XLSMappingException {
 			System.out.println("------------> Looking-up excel file: " + getExcelWorkbookResource() + " for " + getVirtualModel());
 			List<XLSDataAreaRole> dataAreaRoles = getVirtualModel().getAccessibleProperties(XLSDataAreaRole.class);
@@ -304,61 +289,61 @@ public interface XLSVirtualModelInstance
 					updateDataAreaRole(dataAreaRole);
 				}
 			}
-		}
+		}*/
 
-		private XLSDataArea<XLSFlexoConceptInstance> updateDataAreaRole(XLSDataAreaRole dataAreaRole) {
-
+		/*private XLSDataArea<XLSFlexoConceptInstance> updateDataAreaRole(XLSDataAreaRole dataAreaRole) {
+		
 			XLSDataArea<XLSFlexoConceptInstance> returned = instances.get(dataAreaRole);
-
+		
 			if (returned == null) {
 				returned = new XLSDataArea<>(dataAreaRole, this, null);
 				instances.put(dataAreaRole, returned);
 			}
-
+		
 			returned.update();
+		
+			return returned;*/
 
-			return returned;
-
-			/*Map<Integer, XLSFlexoConceptInstance> allFCI = instances.get(dataAreaRole);
-			
-			if (allFCI == null) {
-				allFCI = new LinkedHashMap<>();
-				instances.put(dataAreaRole.getFlexoConceptType(), allFCI);
-			}
-			ExcelCellRange matchingRange = getRange(dataAreaRole);
-			// System.out.println("matchingRange=" + matchingRange);
-			
-			int startRowIndex = matchingRange.getTopLeftCell().getRowIndex();
-			int endRowIndex = matchingRange.getBottomRightCell().getRowIndex();
-			for (int currentIndex = startRowIndex; currentIndex <= endRowIndex; currentIndex++) {
-				ExcelRow excelRow = matchingRange.getExcelSheet().getRowAt(currentIndex);
-				int fciIndex = currentIndex - startRowIndex;
-				if (currentIndex < allFCI.size()) {
-					// Update existing instance using row
-					XLSFlexoConceptInstance seFCI = allFCI.get(fciIndex);
-					seFCI.setRowSupportObject(excelRow.getRow());
-				}
-				else {
-					// New instance
-					XLSFlexoConceptInstance seFCI = getFlexoConceptInstance(excelRow.getRow(), null, dataAreaRole);
-					allFCI.put(excelRow.getRowIndex(), seFCI);
-				}
-			}
-			// What about instances to be deleted
-			for (Integer rowIndex : new ArrayList<>(allFCI.keySet())) {
-				if (rowIndex < startRowIndex || rowIndex > endRowIndex) {
-					XLSFlexoConceptInstance fciToRemove = allFCI.get(rowIndex);
-					allFCI.remove(rowIndex);
-					fciToRemove.delete();
-				}
-			}
-			
-			// Rebuilt the list of concept instances for this type
-			XLSDataArea<XLSFlexoConceptInstance> newDataArea = new XLSDataArea<>(dataAreaRole, matchingRange, allFCI.values());
-			instancesList.put(dataAreaRole.getFlexoConceptType(), newDataArea);
-			
-			return allFCI;*/
+		/*Map<Integer, XLSFlexoConceptInstance> allFCI = instances.get(dataAreaRole);
+		
+		if (allFCI == null) {
+			allFCI = new LinkedHashMap<>();
+			instances.put(dataAreaRole.getFlexoConceptType(), allFCI);
 		}
+		ExcelCellRange matchingRange = getRange(dataAreaRole);
+		// System.out.println("matchingRange=" + matchingRange);
+		
+		int startRowIndex = matchingRange.getTopLeftCell().getRowIndex();
+		int endRowIndex = matchingRange.getBottomRightCell().getRowIndex();
+		for (int currentIndex = startRowIndex; currentIndex <= endRowIndex; currentIndex++) {
+			ExcelRow excelRow = matchingRange.getExcelSheet().getRowAt(currentIndex);
+			int fciIndex = currentIndex - startRowIndex;
+			if (currentIndex < allFCI.size()) {
+				// Update existing instance using row
+				XLSFlexoConceptInstance seFCI = allFCI.get(fciIndex);
+				seFCI.setRowSupportObject(excelRow.getRow());
+			}
+			else {
+				// New instance
+				XLSFlexoConceptInstance seFCI = getFlexoConceptInstance(excelRow.getRow(), null, dataAreaRole);
+				allFCI.put(excelRow.getRowIndex(), seFCI);
+			}
+		}
+		// What about instances to be deleted
+		for (Integer rowIndex : new ArrayList<>(allFCI.keySet())) {
+			if (rowIndex < startRowIndex || rowIndex > endRowIndex) {
+				XLSFlexoConceptInstance fciToRemove = allFCI.get(rowIndex);
+				allFCI.remove(rowIndex);
+				fciToRemove.delete();
+			}
+		}
+		
+		// Rebuilt the list of concept instances for this type
+		XLSDataArea<XLSFlexoConceptInstance> newDataArea = new XLSDataArea<>(dataAreaRole, matchingRange, allFCI.values());
+		instancesList.put(dataAreaRole.getFlexoConceptType(), newDataArea);
+		
+		return allFCI;*/
+		// }
 
 	}
 }

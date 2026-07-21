@@ -40,8 +40,6 @@ package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.fml.FlexoConcept;
-import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.logging.FlexoLogger;
 import org.openflexo.pamela.annotations.Getter;
@@ -51,7 +49,6 @@ import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
 import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInstanceResource;
 
 /**
  * Implements {@link ActorReference} for {@link XLSFlexoConceptInstance}<br>
@@ -126,32 +123,32 @@ public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptI
 		}
 
 		protected XLSFlexoConceptInstance retrieveModellingElement() {
-			XLSVirtualModelInstanceResource httpVMIResource = (XLSVirtualModelInstanceResource) getServiceManager().getResourceManager()
+			/*XLSVirtualModelInstanceResource httpVMIResource = (XLSVirtualModelInstanceResource) getServiceManager().getResourceManager()
 					.getResource(getResourceURI());
 			// Unused XLSVirtualModelInstance hbnVMI = httpVMIResource.getVirtualModelInstance();
 			VirtualModel vm = httpVMIResource.getVirtualModel();
 			FlexoConcept concept = vm.getFlexoConcept(getFlexoConceptURI());
 			// TODO: find the container !!!
-
+			
 			if (concept.getKeyProperties().size() == 0) {
 				logger.warning("Could not retrieve JDBC object when no key defined on concept");
 				return null;
 			}
 			// Unused String identifier = null;
-			if (concept.getKeyProperties().size() == 1) {
-				/*FlexoProperty<?> uniqueKey = concept.getKeyProperties().get(0);
-				if (TypeUtils.isInteger(uniqueKey.getType()) || TypeUtils.isLong(uniqueKey.getType())) {
-					identifier = Integer.parseInt(getKey());
-				}
-				else if (TypeUtils.isString(uniqueKey.getType())) {*/
-				// Unused identifier = getKey();
-				// }
+			if (concept.getKeyProperties().size() == 1) {*/
+			/*FlexoProperty<?> uniqueKey = concept.getKeyProperties().get(0);
+			if (TypeUtils.isInteger(uniqueKey.getType()) || TypeUtils.isLong(uniqueKey.getType())) {
+				identifier = Integer.parseInt(getKey());
 			}
+			else if (TypeUtils.isString(uniqueKey.getType())) {*/
+			// Unused identifier = getKey();
+			// }
+			/*}
 			else {
 				// TODO
 				logger.warning("Composite key not implemented here");
 				return null;
-			}
+			}*/
 
 			// return hbnVMI.getFlexoConceptInstance(identifier, hbnVMI, concept);
 			return null;
@@ -159,7 +156,7 @@ public interface XLSObjectActorReference extends ActorReference<XLSFlexoConceptI
 
 		@Override
 		public String toString() {
-			return "HbnObjectActorReference [" + getRoleName() + "] " + Integer.toHexString(hashCode()) + " references "
+			return "XLSObjectActorReference [" + getRoleName() + "] " + Integer.toHexString(hashCode()) + " references "
 					+ getModellingElement() + "[resource: " + getResourceURI() + " key:" + getKey() + "]";
 		}
 	}

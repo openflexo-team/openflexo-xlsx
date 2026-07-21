@@ -384,7 +384,7 @@ public class BasicExcelModelConverter {
 			// This is an object in a sheet
 			String sheetName = id.substring(0, id.indexOf("/"));
 			String objectId = id.substring(id.indexOf("/") + 1);
-			SheetReference sheetRef = references.get(sheetName);
+			SheetReference sheetRef = getSheetReference(sheetName);
 			if (sheetRef != null) {
 				ExcelSheet sheet = sheetRef.excelSheet;
 				if (objectId.startsWith("row[")) {
@@ -421,7 +421,10 @@ public class BasicExcelModelConverter {
 				return null;
 			}
 			else {
-				logger.warning("Could not find sheet " + sheetName);
+				logger.warning("Could not find sheet [" + sheetName + "] references=" + references);
+				for (String key : references.keySet()) {
+					System.err.println("> key=[" + key + "] -> " + references.get(key));
+				}
 				return null;
 			}
 		}
@@ -472,6 +475,11 @@ public class BasicExcelModelConverter {
 			getExcelSheet(sheet);
 		}
 		return excelWorkbook;
+	}
+
+	public SheetReference getSheetReference(String sheetName) {
+		Sheet sheet = excelWorkbook.getWorkbook().getSheet(sheetName);
+		return getSheetReference(sheet);
 	}
 
 	public SheetReference getSheetReference(Sheet sheet) {

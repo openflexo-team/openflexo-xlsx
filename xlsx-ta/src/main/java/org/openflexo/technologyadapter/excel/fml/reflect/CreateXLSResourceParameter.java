@@ -60,9 +60,11 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rm.XLSVirtualModelInsta
 @ModelEntity
 @ImplementationClass(CreateXLSResourceParameter.CreateHbnResourceParameterImpl.class)
 @XMLElement
-public interface CreateXLSResourceParameter extends BehaviourCallArgument<CreateXLSResource> {
+@Deprecated
+public interface CreateXLSResourceParameter extends BehaviourCallArgument<CreateReflectedXLSResource> {
 
-	public static abstract class CreateHbnResourceParameterImpl extends BehaviourCallArgumentImpl<CreateXLSResource>
+	@Deprecated
+	public static abstract class CreateHbnResourceParameterImpl extends BehaviourCallArgumentImpl<CreateReflectedXLSResource>
 			implements CreateXLSResourceParameter {
 
 		static final Logger logger = Logger.getLogger(CreateXLSResourceParameter.class.getPackage().getName());
@@ -73,6 +75,7 @@ public interface CreateXLSResourceParameter extends BehaviourCallArgument<Create
 		}
 	}
 
+	@Deprecated
 	@DefineValidationRule
 	public static class ValueBindingMustBeValid extends BindingIsRequiredAndMustBeValid<CreateXLSResourceParameter> {
 		public ValueBindingMustBeValid() {

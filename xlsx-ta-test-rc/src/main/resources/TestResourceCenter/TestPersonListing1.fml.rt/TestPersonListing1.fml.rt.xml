@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FMLRTVirtualModelInstance id="0" virtualModelURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml" modelVersion="1.0" title="TestPersonListing1" version="0.1" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml" userID="SYL" flexoID="1">
+  <FlexoConceptInstance id="1" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="3">
+    <ExcelActorReference id="2" objectURI="Sheet1/row[1]" roleName="row" userID="SYL" flexoID="2" />
+  </FlexoConceptInstance>
+  <FlexoConceptInstance id="3" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="5">
+    <ExcelActorReference id="4" objectURI="Sheet1/row[2]" roleName="row" userID="SYL" flexoID="4" />
+  </FlexoConceptInstance>
+  <FlexoConceptInstance id="5" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="7">
+    <ExcelActorReference id="6" objectURI="Sheet1/row[3]" roleName="row" userID="SYL" flexoID="6" />
+  </FlexoConceptInstance>
+  <FlexoConceptInstance id="7" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="9">
+    <ExcelActorReference id="8" objectURI="Sheet1/row[4]" roleName="row" userID="SYL" flexoID="8" />
+  </FlexoConceptInstance>
+  <FlexoConceptInstance id="9" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="11">
+    <ExcelActorReference id="10" objectURI="Sheet1/row[5]" roleName="row" userID="SYL" flexoID="10" />
+  </FlexoConceptInstance>
+  <FlexoConceptInstance id="11" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="13">
+    <ExcelActorReference id="12" objectURI="Sheet1/row[6]" roleName="row" userID="SYL" flexoID="12" />
+  </FlexoConceptInstance>
+  <FreeModelSlotInstance id="13" resourceURI="file:/Users/sylvainguerin/GIT-2.99/openflexo-xlsx/xlsx-ta-test-rc/src/main/resources/TestResourceCenter/Excel/PersonListing.xls" modelSlotName="listing" roleName="listing" userID="SYL" flexoID="14" />
+</FMLRTVirtualModelInstance>

@@ -2,8 +2,12 @@ dependencies {
     implementation project(':xlsx-ta')
     implementation flexoFoundation()
 
+	// testing dep
     implementation testUtils()
-    implementation flexoFoundationTest()
+   	testImplementation flexoFoundation()
+  	implementation flexoFoundationTest()
+  	testImplementation fmlCli()
+  	testImplementation fmlCliTest()
 
     // Test resource center
     testRuntimeOnly project(':xlsx-ta-test-rc')

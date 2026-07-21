@@ -89,10 +89,6 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 		return dataAreaRole.getServiceManager().getTechnologyAdapterService().getTechnologyAdapter(ExcelTechnologyAdapter.class);
 	}
 
-	/*public List<FCI> getInstances() {
-		return instances;
-	}*/
-
 	public FCI getFlexoConceptInstance(Row row) {
 
 		int foundIndex = indexedBinarySearch(row);
@@ -249,17 +245,17 @@ public class XLSDataArea<FCI extends XLSFlexoConceptInstance> extends ArrayList<
 		// System.out.println("Template: " + dataAreaRole.getCellRange().getExcelWorkbook().getResource());
 		// System.out.println("Working on: " + getExcelWorkbookResource());
 
-		if (virtualModelInstance.getExcelWorkbookResource() == null) {
+		if (virtualModelInstance.getReflectedResource() == null) {
 			throw new XLSMappingException("Could not find workbook resource");
 		}
 
 		ExcelCellRange templateRange = dataAreaRole.getCellRange();
 
-		System.out.println("getExcelWorkbookResource=" + virtualModelInstance.getExcelWorkbookResource());
+		System.out.println("getReflectedResource=" + virtualModelInstance.getReflectedResource());
 		System.out.println("dataAreaRole=" + dataAreaRole);
 		System.out.println("templateRange=" + templateRange);
 
-		ExcelSheet sheet = virtualModelInstance.getExcelWorkbookResource().getExcelWorkbook()
+		ExcelSheet sheet = virtualModelInstance.getReflectedResource().getExcelWorkbook()
 				.getExcelSheetByName(templateRange.getExcelSheet().getName());
 		if (sheet == null) {
 			throw new XLSMappingException("Could not find sheet: " + templateRange.getExcelSheet().getName());

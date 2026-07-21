@@ -1,0 +1,55 @@
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+
+@URI("http://www.openflexo.org/excel-test/FML/TestPersonListing.fml")
+public model TestPersonListing {
+	ExcelWorkbook listing with BasicExcelModelSlot();
+   ExcelSheet sheet values listing.getExcelSheetAtPosition(0);
+
+	create(required Resource<ExcelWorkbook> aListing) {
+      connect listing using parameters.aListing;
+      this.synchronize();
+      this.displayAllPersons();
+	}
+
+   public synchronize() {
+     log "calcul du MatchingSet";
+      MatchingSet<Person> matchingSet = begin match Person from this;
+      log "matchingSet=" + matchingSet;
+      for (ExcelRow aRow : sheet.getExcelRows()) {
+          log " >>> " + aRow.rowIndex;
+          if (aRow.rowIndex > 0) { // skip header
+            match Person 
+                  in matchingSet from this 
+                  where (row=aRow) unmatched:new Person(aRow);
+          }
+      }
+      end match Person in matchingSet unmatched:delete();
+   }
+
+   displayAllPersons() {
+      for (Person p : this.getAllPersons()) {
+         log " > Person genre=" + p.genre + " name=" + p.name + " activity=" + p.activity + " age=" + p.age + " city=" + p.city;
+      }
+   }
+
+   List<Person> getAllPersons() {
+      return select Person from this;
+   }
+
+   concept Person {
+	  ExcelRow row with ExcelRowRole(container=listing);
+	  
+	  String genre values row.getExcelCellAt(0).getCellValueAsString();
+      String name values row.getExcelCellAt(1).getCellValueAsString();
+      String activity values row.getExcelCellAt(2).getCellValueAsString();
+      int age values row.getExcelCellAt(3).getCellValueAsInteger();
+      String city values row.getExcelCellAt(4).getCellValueAsString();
+
+      create(required ExcelRow aRow) {
+         row = parameters.aRow;
+      }
+   }
+}

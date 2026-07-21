@@ -71,27 +71,35 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInsta
 @ModelEntity
 @ImplementationClass(RemoveXLSObject.RemoveXLSObjectImpl.class)
 @XMLElement
+@Deprecated
 public interface RemoveXLSObject extends AssignableAction<XLSFlexoConceptInstance> {
 
+	@Deprecated
 	@PropertyIdentifier(type = DataBinding.class)
 	public static final String OBJECT_KEY = "object";
+	@Deprecated
 	@PropertyIdentifier(type = DataBinding.class)
 	String DATA_AREA_KEY = "dataArea";
 
+	@Deprecated
 	@Getter(value = OBJECT_KEY)
 	@XMLAttribute
 	public DataBinding<XLSFlexoConceptInstance> getObjectToRemove();
 
+	@Deprecated
 	@Setter(OBJECT_KEY)
 	public void setObjectToRemove(DataBinding<XLSFlexoConceptInstance> object);
 
+	@Deprecated
 	@Getter(value = DATA_AREA_KEY)
 	@XMLAttribute
 	public DataBinding<XLSDataArea<?>> getDataArea();
 
+	@Deprecated
 	@Setter(DATA_AREA_KEY)
 	public void setDataArea(DataBinding<XLSDataArea<?>> dataArea);
 
+	@Deprecated
 	public static abstract class RemoveXLSObjectImpl extends AssignableActionImpl<XLSFlexoConceptInstance> implements RemoveXLSObject {
 
 		private static final Logger logger = Logger.getLogger(RemoveXLSObject.class.getPackage().getName());
@@ -181,6 +189,7 @@ public interface RemoveXLSObject extends AssignableAction<XLSFlexoConceptInstanc
 		}
 	}
 
+	@Deprecated
 	@DefineValidationRule
 	public static class ObjectToRemoveBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveXLSObject> {
 		public ObjectToRemoveBindingIsRequiredAndMustBeValid() {
@@ -193,6 +202,7 @@ public interface RemoveXLSObject extends AssignableAction<XLSFlexoConceptInstanc
 		}
 	}
 
+	@Deprecated
 	@DefineValidationRule
 	public static class DataAreaBindingIsRequiredAndMustBeValid extends BindingIsRequiredAndMustBeValid<RemoveXLSObject> {
 		public DataAreaBindingIsRequiredAndMustBeValid() {

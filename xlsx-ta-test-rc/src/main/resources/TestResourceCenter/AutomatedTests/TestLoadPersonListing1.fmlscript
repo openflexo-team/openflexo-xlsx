@@ -1,0 +1,24 @@
+// Perform some initialization, display resources and the context
+service ResourceCenterService status;
+resources;
+context;
+
+// Load virtual model instance
+vmi = load -r ["http://www.openflexo.org/excel-test/TestPersonListing1.fml.rt"];
+context;
+assert vmi != null;
+
+log "vmi="+vmi;
+
+log "instances: "+vmi.getFlexoConceptInstances();
+
+/*persons = vmi.getAllPersons();
+log "persons="+persons;
+
+assert persons.size==6;
+
+jeanDupont = persons.get(0);
+assert jeanDupont.name == "Jean Dupont";
+
+alainTerrieur = persons.get(5);
+assert alainTerrieur.name == "Alain Terrieur";*/
