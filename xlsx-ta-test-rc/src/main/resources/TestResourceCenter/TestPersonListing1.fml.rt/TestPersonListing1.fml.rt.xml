@@ -18,5 +18,5 @@
   <FlexoConceptInstance id="11" flexoConceptURI="http://www.openflexo.org/excel-test/FML/TestPersonListing.fml#Person" userID="SYL" flexoID="13">
     <ExcelActorReference id="12" objectURI="Sheet1/row[6]" roleName="row" userID="SYL" flexoID="12" />
   </FlexoConceptInstance>
-  <FreeModelSlotInstance id="13" resourceURI="file:/Users/sylvainguerin/GIT-2.99/openflexo-xlsx/xlsx-ta-test-rc/src/main/resources/TestResourceCenter/Excel/PersonListing.xls" modelSlotName="listing" roleName="listing" userID="SYL" flexoID="14" />
+  <FreeModelSlotInstance id="13" resourceURI="http://www.openflexo.org/excel-test/TestResourceCenter/Excel/PersonListing.xls" modelSlotName="listing" roleName="listing" userID="SYL" flexoID="14" />
 </FMLRTVirtualModelInstance>

@@ -1,4 +1,4 @@
-// We test here the basic use of Excel technology adapter, with a xls file in loading mode
+// We test here the basic use of Excel technology adapter, with a xlsx file in loading mode
 
 // Perform some initialization, display resources and the context
 service ResourceCenterService status;
@@ -6,7 +6,7 @@ resources;
 context;
 
 // Load virtual model instance
-vmi = load -r ["http://www.openflexo.org/excel-test/TestPersonListing1.fml.rt"];
+vmi = load -r ["http://www.openflexo.org/excel-test/TestPersonListing2.fml.rt"];
 context;
 assert vmi != null;
 

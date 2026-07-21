@@ -54,7 +54,6 @@ import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.technologyadapter.FreeModelSlot;
-import org.openflexo.foundation.technologyadapter.TechnologyAdapterResource;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
@@ -232,22 +231,11 @@ public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook, ExcelW
 					return o;
 				}
 				else {
-					TechnologyAdapterResource<ExcelWorkbook, ?> resource = model.getResource();
+					ExcelWorkbookResource resource = model.getResource();
 					if (!resource.isLoaded()) {
 						resource.loadResourceData();
 					}
-					System.out.println("Tiens, la faut retrouver " + URLDecoder.decode(objectURI, "UTF-8"));
-					return null;
-					/*ArrayList<ExcelObject> excelObject = (ArrayList<ExcelObject>) msInstance.getAccessedResourceData()
-							.getAccessibleExcelObjects();
-					if (excelObject.size() > 100) {
-						logger.fine("WARNING: more than one hundred lines in Excel file");
-					}
-					for (ExcelObject obj : excelObject) {
-						if (obj.getUri().equals(URLDecoder.decode(objectURI, "UTF-8"))) {
-							return obj;
-						}
-					}*/
+					return resource.getConverter().fromSerializationIdentifier(URLDecoder.decode(objectURI, "UTF-8"));
 				}
 
 				// return o;
@@ -261,18 +249,6 @@ public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook, ExcelW
 		public ExcelTechnologyAdapter getModelSlotTechnologyAdapter() {
 			return (ExcelTechnologyAdapter) super.getModelSlotTechnologyAdapter();
 		}
-
-		/*@Override
-		public ExcelWorkbookResource createProjectSpecificEmptyResource(VirtualModelInstance<?, ?> view, String filename, String modelUri) {
-			try {
-				return getModelSlotTechnologyAdapter().createNewWorkbook(view.getResourceCenter(), filename);
-			} catch (SaveResourceException e) {
-				e.printStackTrace();
-			} catch (ModelDefinitionException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}*/
 
 	}
 }

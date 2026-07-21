@@ -62,16 +62,10 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  *
  */
+// TODO : this code must be refactored
 public class BasicExcelModelConverter {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelConverter.class.getPackage().getName());
-
-	/**
-	 * Excel Objects. We have to build here a map for each sheet because equals() method of HSSFRow does not check sheet<br>
-	 * (two rows at same index in multiple sheet respond to equals())
-	 */
-	// protected final Map<ExcelSheet, Map<Object, ExcelObject>> excelObjectsForSheet = new HashMap<>();
-	// protected final Map<Object, ExcelObject> excelObjects = new HashMap<>();
 
 	private ExcelWorkbookResource excelWorkbookResource;
 
@@ -386,6 +380,7 @@ public class BasicExcelModelConverter {
 			String objectId = id.substring(id.indexOf("/") + 1);
 			SheetReference sheetRef = getSheetReference(sheetName);
 			if (sheetRef != null) {
+				sheetRef.ensureConversion();
 				ExcelSheet sheet = sheetRef.excelSheet;
 				if (objectId.startsWith("row[")) {
 					// This is a row
