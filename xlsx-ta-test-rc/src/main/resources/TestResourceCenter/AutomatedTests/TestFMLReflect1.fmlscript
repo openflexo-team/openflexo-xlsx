@@ -21,6 +21,24 @@ service ResourceCenterService add_temp_rc;
 myVMI = new ReflectPersonListing(listing.resource) with (name="testReflect1");
 context;
 assert myVMI != null;
+
+// Each significative row of the data range is reflected as a Person
+listingVMI = myVMI.personListing;
+assert listingVMI != null;
+assert listingVMI.flexoConceptInstances.size() == 6;
+person1 = listingVMI.flexoConceptInstances.get(0);
+log "person1="+person1;
+assert person1.genre == "MR";
+assert person1.name == "Jean Dupont";
+assert person1.activity == "Architect";
+assert person1.age == 45;
+assert person1.city == "BREST";
+person6 = listingVMI.flexoConceptInstances.get(5);
+log "person6="+person6;
+assert person6.name == "Alain Terrieur";
+assert person6.age == 55;
+assert person6.city == "MULHOUSE";
+
 //assert myVMI.library != null;
 /*library = myVMI.library;
 assert library.name == "A Library";

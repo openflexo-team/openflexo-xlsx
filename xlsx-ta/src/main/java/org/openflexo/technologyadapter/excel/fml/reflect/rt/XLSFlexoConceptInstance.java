@@ -40,10 +40,13 @@ import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.openflexo.connie.type.PrimitiveType;
 import org.openflexo.connie.type.TypeUtils;
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.FlexoConceptInstanceRole;
 import org.openflexo.foundation.fml.FlexoRole;
+import org.openflexo.foundation.fml.PrimitiveRole;
+import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.rt.AbstractVirtualModelInstanceModelFactory;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.reflect.ReflectedFlexoConceptInstance;
@@ -66,7 +69,7 @@ import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
 public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<Row> {
 
 	@Initializer
-	void initialize(FlexoConcept concept);
+	void initialize(FlexoConcept concept, Row supportObject);
 
 	/**
 	 * Default implementation for {@link XLSFlexoConceptInstance}
@@ -78,18 +81,62 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 
 		private static final Logger logger = FlexoLogger.getLogger(XLSFlexoConceptInstance.class.getPackage().toString());
 
+		/**
+		 * Initialize this {@link XLSFlexoConceptInstance} with supplied row support object, and explicit concept (type)
+		 */
+		@Override
+		public void initialize(FlexoConcept concept, Row supportObject) {
+			setFlexoConcept(concept);
+			setSupportObject(supportObject);
+		}
+
 		@Override
 		public XLSVirtualModelInstance getVirtualModelInstance() {
 			return (XLSVirtualModelInstance) super.getVirtualModelInstance();
 		}
 
 		@Override
-		public <T> T getFlexoActor(FlexoRole<T> flexoRole) {
+		public AbstractVirtualModelInstanceModelFactory getFactory() {
+			if (getVirtualModelInstance() != null) {
+				return getVirtualModelInstance().getFactory();
+			}
+			return super.getFactory();
+		}
+
+		/**
+		 * Return index of column supporting values of supplied {@link FlexoRole}, or null when this role is not bound to a column<br>
+		 *
+		 * Binding to a column is either expressed by a {@link XLSColumnRole}, or by a <code>@Property(col="2")</code> meta-data declared on
+		 * a {@link PrimitiveRole} (reflected {@link VirtualModel})
+		 */
+		private Integer getColumnIndex(FlexoRole<?> flexoRole) {
 			if (flexoRole instanceof XLSColumnRole) {
-				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
-				Cell cell = getSupportObject().getCell(columnRole.getColumnIndex());
+				return ((XLSColumnRole<?>) flexoRole).getColumnIndex();
+			}
+			if (flexoRole instanceof PrimitiveRole) {
+				return XLSVirtualModelInstanceBuilder.getColumnIndex(flexoRole);
+			}
+			return null;
+		}
+
+		private PrimitiveType getPrimitiveType(FlexoRole<?> flexoRole) {
+			if (flexoRole instanceof XLSColumnRole) {
+				return ((XLSColumnRole<?>) flexoRole).getPrimitiveType();
+			}
+			if (flexoRole instanceof PrimitiveRole) {
+				return ((PrimitiveRole<?>) flexoRole).getPrimitiveType();
+			}
+			return null;
+		}
+
+		@Override
+		public <T> T getFlexoActor(FlexoRole<T> flexoRole) {
+			Integer columnIndex = getColumnIndex(flexoRole);
+			PrimitiveType primitiveType = getPrimitiveType(flexoRole);
+			if (columnIndex != null && primitiveType != null && getSupportObject() != null) {
+				Cell cell = getSupportObject().getCell(columnIndex);
 				// System.out.println("cell: " + cell);
-				switch (columnRole.getPrimitiveType()) {
+				switch (primitiveType) {
 					case String:
 						if (cell != null) {
 							return (T) cell.getStringCellValue();
@@ -100,10 +147,10 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 					case Double:
 					case Float:
 						if (cell != null) {
-							return (T) TypeUtils.castTo(cell.getNumericCellValue(), columnRole.getPrimitiveType().getType());
+							return (T) TypeUtils.castTo(cell.getNumericCellValue(), primitiveType.getType());
 						}
 						else {
-							return (T) TypeUtils.castTo(0, columnRole.getPrimitiveType().getType());
+							return (T) TypeUtils.castTo(0, primitiveType.getType());
 						}
 					case Date:
 						if (cell != null) {
@@ -115,7 +162,7 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 						}
 						return (T) Boolean.FALSE;
 					default:
-						logger.warning("Unexpected primitive type: " + columnRole.getPrimitiveType());
+						logger.warning("Unexpected primitive type: " + primitiveType);
 						return null;
 				}
 			}
@@ -124,11 +171,12 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 
 		@Override
 		public <T> void setFlexoActor(T object, FlexoRole<T> flexoRole) {
-			if (flexoRole instanceof XLSColumnRole) {
-				XLSColumnRole<T> columnRole = (XLSColumnRole<T>) flexoRole;
-				Cell cell = getSupportObject().getCell(columnRole.getColumnIndex());
+			Integer columnIndex = getColumnIndex(flexoRole);
+			PrimitiveType primitiveType = getPrimitiveType(flexoRole);
+			if (columnIndex != null && primitiveType != null && getSupportObject() != null) {
+				Cell cell = getSupportObject().getCell(columnIndex);
 				// System.out.println("cell: " + cell);
-				switch (columnRole.getPrimitiveType()) {
+				switch (primitiveType) {
 					case String:
 						cell.setCellValue((String) object);
 						break;
@@ -151,7 +199,7 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 						cell.setCellValue((Boolean) object);
 						break;
 					default:
-						logger.warning("Unexpected primitive type: " + columnRole.getPrimitiveType());
+						logger.warning("Unexpected primitive type: " + primitiveType);
 						break;
 				}
 			}

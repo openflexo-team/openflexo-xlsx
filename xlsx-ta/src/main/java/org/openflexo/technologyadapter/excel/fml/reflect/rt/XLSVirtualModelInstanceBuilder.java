@@ -36,21 +36,45 @@
  * 
  */
 
+
 package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.foundation.fml.FlexoConcept;
+import org.openflexo.foundation.fml.FlexoProperty;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.md.FMLMetaData;
 import org.openflexo.foundation.fml.md.MultiValuedMetaData;
+import org.openflexo.foundation.fml.md.SingleMetaData;
+import org.openflexo.foundation.fml.rt.FMLExecutionException;
 import org.openflexo.foundation.fml.visitor.FlexoConceptVisitor;
+import org.openflexo.technologyadapter.excel.model.ExcelCell;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
+import org.openflexo.toolbox.StringUtils;
 
 /**
- * A builder for a XLSVirtualModelInstance
+ * A builder for a {@link XLSVirtualModelInstance}<br>
+ *
+ * This builder reflects an excel workbook (the reflected resource) as a {@link XLSVirtualModelInstance} conform to a given
+ * {@link VirtualModel} (the reflected virtual model).<br>
+ *
+ * Mapping between the workbook and the {@link VirtualModel} is expressed using FML meta-data:
+ * <ul>
+ * <li>a {@link FlexoConcept} declaring a <code>@DataRange(sheet="Sheet1",rows="1,*",cols="0,4")</code> meta-data is instantiated for each
+ * significative row of matching area (a <code>*</code> value indicates that the area is not bounded, and is then computed from the contents
+ * of the workbook)</li>
+ * <li>a {@link FlexoProperty} declaring a <code>@Property(col="2")</code> meta-data is bound to matching cell of the row supporting the
+ * {@link XLSFlexoConceptInstance} (see {@link XLSFlexoConceptInstance#getFlexoActor(org.openflexo.foundation.fml.FlexoRole)})</li>
+ * </ul>
+ *
+ * @author sylvain
  */
 public class XLSVirtualModelInstanceBuilder {
 
@@ -60,14 +84,18 @@ public class XLSVirtualModelInstanceBuilder {
 	private static final String SHEET = "sheet";
 	private static final String ROWS = "rows";
 	private static final String COLS = "cols";
-	private static final String PROPERTY = "Property";
+	static final String PROPERTY = "Property";
+	static final String COL = "col";
 
-	private XLSVirtualModelInstanceModelFactory factory;
-	private VirtualModel reflectedVM;
+	/** Value used in a <code>@DataRange</code> meta-data to indicate an unbounded start or end index */
+	private static final String UNBOUNDED = "*";
 
-	private List<FlexoConcept> concepts;
+	private final XLSVirtualModelInstanceModelFactory factory;
+	private final VirtualModel reflectedVM;
 
-	private ExcelWorkbookResource reflectedResource;
+	private final List<DataRange> dataRanges;
+
+	private final ExcelWorkbookResource reflectedResource;
 
 	public XLSVirtualModelInstanceBuilder(XLSVirtualModelInstanceModelFactory factory, VirtualModel reflectedVM) {
 		this.reflectedVM = reflectedVM;
@@ -75,9 +103,7 @@ public class XLSVirtualModelInstanceBuilder {
 
 		reflectedResource = factory.getReflectedResource();
 
-		System.out.println("reflectedResource=" + reflectedResource);
-
-		concepts = new ArrayList<>();
+		dataRanges = new ArrayList<>();
 
 		reflectedVM.accept(new FlexoConceptVisitor() {
 
@@ -96,236 +122,246 @@ public class XLSVirtualModelInstanceBuilder {
 
 	}
 
-	/*@Override
-	public RootNodeStrategy getRootNodeStrategy() {
-		return RootNodeStrategy.ROOT_NODE_IS_THE_MODEL;
-	}*/
+	public VirtualModel getReflectedVirtualModel() {
+		return reflectedVM;
+	}
 
+	public ExcelWorkbookResource getReflectedResource() {
+		return reflectedResource;
+	}
+
+	/**
+	 * Return the list of {@link DataRange} which were found in reflected {@link VirtualModel}
+	 */
+	public List<DataRange> getDataRanges() {
+		return Collections.unmodifiableList(dataRanges);
+	}
+
+	/**
+	 * Register supplied {@link FlexoConcept} when this concept declares a <code>@DataRange</code> meta-data
+	 */
 	private void registerConcept(FlexoConcept concept) {
 		FMLMetaData md = concept.getMetaData(DATA_RANGE);
 		if (md instanceof MultiValuedMetaData) {
 			MultiValuedMetaData metaData = (MultiValuedMetaData) md;
-			System.out.println("Found : " + metaData + " of " + metaData.getClass() + " for " + concept);
 			String sheetName = metaData.getValue(SHEET, String.class);
 			String rows = metaData.getValue(ROWS, String.class);
 			String cols = metaData.getValue(COLS, String.class);
-
-			// System.out.println("Found : " + metaData + " of " + metaData.getClass() + " for " + concept);
-			/*String xmlElementName = ((SingleMetaData<String>) metaData).getValue(String.class);
-			List<FlexoConcept> l = conceptsByXMLElementName.get(xmlElementName);
-			if (l == null) {
-				l = new ArrayList<FlexoConcept>();
-				conceptsByXMLElementName.put(xmlElementName, l);
+			if (StringUtils.isEmpty(sheetName)) {
+				logger.warning("Ignoring @" + DATA_RANGE + " for " + concept + " : no " + SHEET + " declared");
+				return;
 			}
-			l.add(concept);*/
-		}
-	}
-
-	/*@Override
-	public XMLFlexoConceptInstance createInstance(Type aType, String name,
-			ParsedElement<XMLFlexoConceptInstance, FlexoConceptInstance, FlexoProperty<?>> parsed) {
-	
-		if (aType instanceof FlexoConceptInstanceType) {
 			try {
-				return (XMLFlexoConceptInstance) factory.makeNewFlexoConceptInstance(((FlexoConceptInstanceType) aType).getFlexoConcept(),
-						parsed, getModelContext(), getModelContext(), null);
-			} catch (FMLExecutionException e) {
-				e.printStackTrace();
-				return null;
+				dataRanges.add(new DataRange(concept, sheetName, rows, cols));
+			} catch (XLSMappingException e) {
+				logger.warning("Ignoring @" + DATA_RANGE + " for " + concept + " : " + e.getMessage());
 			}
 		}
-		return null;
-	}
-	
-	@Override
-	public Type getType(String typeURI, String localName, FlexoConceptInstance container) {
-		// System.out.println("getTypeForObject() ??? " + typeURI + " container: " + container + " objectName=" + objectName);
-	
-		List<FlexoConcept> matchingConcepts = conceptsByXMLElementName.get(typeURI);
-	
-		if (matchingConcepts == null) {
-			// logger.warning("Cannot find concept matching " + typeURI);
-			return null;
-		}
-		else if (matchingConcepts.size() == 1) {
-			return matchingConcepts.get(0).getInstanceType();
-		}
-		else {
-			logger.warning("Not implemented : multiple concept with same XML tag " + typeURI);
-			return null;
-			// TODO : remove ambiguity with container
+		else if (md != null) {
+			logger.warning("Unexpected @" + DATA_RANGE + " meta-data " + md + " for " + concept);
 		}
 	}
-	
-	@Override
-	public void updateRootNode(ParsedElement<XMLFlexoConceptInstance, FlexoConceptInstance, FlexoProperty<?>> parsed) {
-	
-		if (parsed.objectType instanceof VirtualModelInstanceType) {
-			// This is the root element : we set here the VirtualModel for the root element
-			getModelContext().setVirtualModel(((VirtualModelInstanceType) parsed.objectType).getVirtualModel());
+
+	/**
+	 * Build supplied {@link XLSVirtualModelInstance} by reflecting the excel workbook: a {@link XLSFlexoConceptInstance} is created for each
+	 * row of each {@link DataRange} declared in reflected {@link VirtualModel}
+	 *
+	 * @param vmi
+	 *            the {@link XLSVirtualModelInstance} to build
+	 * @return supplied {@link XLSVirtualModelInstance}
+	 */
+	public XLSVirtualModelInstance buildVirtualModelInstance(XLSVirtualModelInstance vmi) {
+
+		vmi.setVirtualModel(reflectedVM);
+		vmi.setReflectedResource(reflectedResource);
+
+		ExcelWorkbook workbook = (reflectedResource != null ? reflectedResource.getExcelWorkbook() : null);
+		if (workbook == null) {
+			logger.warning("Could not access excel workbook for " + reflectedResource);
+			return vmi;
 		}
-		else {
-			logger.warning("Unexpected objectType " + parsed.objectType + " as root node");
+
+		for (DataRange dataRange : dataRanges) {
+			dataRange.buildFlexoConceptInstances(vmi, workbook);
 		}
-	
+
+		return vmi;
 	}
-	
-	@Override
-	public void setRootNode(XMLFlexoConceptInstance rootNode) {
-		// not applicable
-	}
-	
-	@Override
-	public void addToRootNodes(XMLFlexoConceptInstance anObject) {
-		// not applicable
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setModelProperty(String propertyName, Object value) {
-	}
-	
-	@Override
-	public FlexoProperty<?> getPropertyForElementName(FlexoConceptInstance object, String elementName) {
-	
-		if (object == null) {
-			return null;
+
+	/**
+	 * Internal representation of a <code>@DataRange(sheet=...,rows=...,cols=...)</code> meta-data declared for a {@link FlexoConcept}
+	 */
+	public class DataRange {
+
+		private final FlexoConcept concept;
+		private final String sheetName;
+		private final int startRowIndex;
+		// -1 when unbounded : end of area is then computed from workbook contents
+		private final int endRowIndex;
+		private final int startColumnIndex;
+		private final int endColumnIndex;
+
+		DataRange(FlexoConcept concept, String sheetName, String rows, String cols) throws XLSMappingException {
+			this.concept = concept;
+			this.sheetName = sheetName;
+			this.startRowIndex = parseBound(rows, 0, 0);
+			this.endRowIndex = parseBound(rows, 1, -1);
+			this.startColumnIndex = parseBound(cols, 0, 0);
+			this.endColumnIndex = parseBound(cols, 1, -1);
 		}
-	
-		FlexoConcept concept = object.getFlexoConcept();
-	
-		if (concept == null) {
-			return null;
+
+		public FlexoConcept getFlexoConcept() {
+			return concept;
 		}
-	
-		for (FlexoProperty<?> p : concept.getAccessibleProperties()) {
-			FMLMetaData metaData = p.getMetaData(XML_ELEMENT);
-			// System.err.println("Property: " + p + " metaData=" + metaData);
-			if (metaData instanceof BasicMetaData) {
-				// Basic @XMLElement where XML tag is not specified : use property name
-				if (elementName.equals(p.getName())) {
-					return p;
-				}
-				if (p.getType() instanceof FlexoConceptInstanceType) {
-					FlexoConcept targetType = ((FlexoConceptInstanceType) p.getType()).getFlexoConcept();
-					FMLMetaData conceptMetaData = targetType.getMetaData(XML_ELEMENT);
-					if (conceptMetaData instanceof BasicMetaData) {
-						if (elementName.equals(targetType.getName())) {
-							return p;
-						}
-					}
-					else if (conceptMetaData instanceof SingleMetaData) {
-						if (elementName.equals(((SingleMetaData<String>) conceptMetaData).getValue(String.class))) {
-							return p;
-						}
-					}
-				}
+
+		public String getSheetName() {
+			return sheetName;
+		}
+
+		public int getStartRowIndex() {
+			return startRowIndex;
+		}
+
+		/**
+		 * Return index of last row of this area, or -1 when this area is unbounded
+		 */
+		public int getEndRowIndex() {
+			return endRowIndex;
+		}
+
+		public int getStartColumnIndex() {
+			return startColumnIndex;
+		}
+
+		/**
+		 * Return index of last column of this area, or -1 when this area is unbounded
+		 */
+		public int getEndColumnIndex() {
+			return endColumnIndex;
+		}
+
+		/**
+		 * Instantiate a {@link XLSFlexoConceptInstance} for each significative row of this area
+		 */
+		private void buildFlexoConceptInstances(XLSVirtualModelInstance vmi, ExcelWorkbook workbook) {
+
+			ExcelSheet sheet = workbook.getExcelSheetByName(sheetName);
+			if (sheet == null) {
+				logger.warning("Could not find sheet " + sheetName + " in " + workbook + " while reflecting " + concept);
+				return;
 			}
-			else if (metaData instanceof SingleMetaData) {
-				String xmlElementName = ((SingleMetaData<String>) metaData).getValue(String.class);
-				if (elementName.equals(xmlElementName)) {
-					return p;
-				}
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public FlexoProperty<?> getPropertyForAttributeName(FlexoConceptInstance object, String attributeName) {
-		if (object == null) {
-			return null;
-		}
-	
-		FlexoConcept concept = object.getFlexoConcept();
-	
-		if (concept == null) {
-			return null;
-		}
-	
-		for (FlexoProperty<?> p : concept.getAccessibleProperties()) {
-			FMLMetaData metaData = p.getMetaData(XML_ATTRIBUTE);
-			// System.err.println("Property: " + p + " metaData=" + metaData);
-			if (metaData instanceof BasicMetaData) {
-				// Basic @XMLAttribute where XML tag is not specified : use property name
-				if (attributeName.equals(p.getName())) {
-					return p;
-				}
-			}
-			else if (metaData instanceof SingleMetaData) {
-				String xmlAttributetName = ((SingleMetaData<String>) metaData).getValue(String.class);
-				if (attributeName.equals(xmlAttributetName)) {
-					return p;
-				}
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public void addOrSetDataPropertyValue(FlexoConceptInstance targetObject, FlexoProperty<?> property, Object value) {
-		if (property != null) {
-			addPropertyValue(targetObject, property, value);
-		}
-		else {
-			logger.warning("addOrSetDataPropertyValue() : null property for " + targetObject);
-		}
-	}
-	
-	private <T> void addPropertyValue(FlexoConceptInstance object, FlexoProperty<T> property, Object value) {
-		if (property != null) {
-			// System.err.println(
-			// "addPropertyValue for " + object + " will set " + property + " with " + value + " type=" + property.getType());
-	
-			Class<?> typeClass = TypeUtils.getBaseClass(property.getType());
-	
-			if (StringConverterLibrary.getInstance().hasConverter(typeClass)) {
+
+			for (int rowIndex = startRowIndex; isSignificative(rowIndex, sheet); rowIndex++) {
+				ExcelRow excelRow = sheet.getRowAt(rowIndex);
 				try {
-					T val = (T) StringConverterLibrary.getInstance().getConverter(typeClass).convertFromString((String) value, null);
-					object.setFlexoPropertyValue(property, val);
-				} catch (InvalidDataException e) {
+					factory.makeNewFlexoConceptInstance(concept, excelRow.getRow(), vmi, vmi, null, null);
+					// System.out.println("Built " + concept + " for row " + rowIndex);
+				} catch (FMLExecutionException e) {
+					logger.warning("Could not instantiate " + concept + " for row " + rowIndex + " : " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
 		}
-	}
-	
-	@Override
-	public void addOrSetObjectPropertyValue(FlexoConceptInstance targetObject, FlexoProperty<?> property, FlexoConceptInstance value) {
-		if (property instanceof FlexoRole) {
-			targetObject.addToFlexoActors(value, (FlexoRole) property);
+
+		/**
+		 * Return true when row identified by supplied index belongs to this area, and contains at least one non-empty cell in the columns of
+		 * this area
+		 */
+		private boolean isSignificative(int rowIndex, ExcelSheet sheet) {
+
+			if (endRowIndex >= 0 && rowIndex > endRowIndex) {
+				return false;
+			}
+			if (rowIndex >= sheet.getExcelRows().size()) {
+				// This row does not exist, do not create it
+				return false;
+			}
+
+			ExcelRow row = sheet.getRowAt(rowIndex);
+			if (row == null) {
+				return false;
+			}
+
+			int lastColumnIndex = (endColumnIndex >= 0 ? endColumnIndex : row.getExcelCells().size() - 1);
+			for (int columnIndex = startColumnIndex; columnIndex <= lastColumnIndex; columnIndex++) {
+				ExcelCell cell = row.getExcelCellAt(columnIndex);
+				if (cell != null && StringUtils.isNotEmpty(cell.getCellValueAsString())) {
+					return true;
+				}
+			}
+			return false;
 		}
-		else {
-			logger.warning("addOrSetObjectPropertyValue() : property " + property + " is not a FlexoRole " + targetObject);
+
+		@Override
+		public String toString() {
+			return "@" + DATA_RANGE + "(" + SHEET + "=\"" + sheetName + "\"," + ROWS + "=\"" + startRowIndex + ","
+					+ (endRowIndex >= 0 ? endRowIndex : UNBOUNDED) + "\"," + COLS + "=\"" + startColumnIndex + ","
+					+ (endColumnIndex >= 0 ? endColumnIndex : UNBOUNDED) + "\") for " + concept;
 		}
 	}
-	
-	@Override
-	public void addChildToObject(XMLFlexoConceptInstance child, FlexoConceptInstance container) {
-		if (container != null && container != getModelContext()) {
-			container.addToEmbeddedFlexoConceptInstances(child);
+
+	/**
+	 * Parse bound at supplied position in a <code>"start,end"</code> meta-data value
+	 *
+	 * @param value
+	 *            value to parse (eg <code>"1,*"</code>)
+	 * @param position
+	 *            0 for start bound, 1 for end bound
+	 * @param defaultValue
+	 *            value to be returned when bound is not declared, or declared as unbounded (<code>*</code>)
+	 */
+	private static int parseBound(String value, int position, int defaultValue) throws XLSMappingException {
+
+		if (StringUtils.isEmpty(value)) {
+			return defaultValue;
 		}
-	
-	}
-	
-	@Override
-	public FlexoProperty<?> getPropertyNamed(FlexoConceptInstance object, String propertyName) {
-		if (object != null) {
-			return object.getFlexoConcept().getAccessibleProperty(propertyName);
+
+		String[] bounds = value.split(",");
+		if (position >= bounds.length) {
+			return defaultValue;
 		}
-		return null;
-	}
-	
-	@Override
-	public Type getTypeForProperty(FlexoProperty<?> property) {
-		if (property != null) {
-			return property.getType();
+
+		String bound = bounds[position].trim();
+		if (bound.length() == 0 || UNBOUNDED.equals(bound)) {
+			return defaultValue;
 		}
-		return null;
+
+		try {
+			return Integer.parseInt(bound);
+		} catch (NumberFormatException e) {
+			throw new XLSMappingException("Cannot parse bound '" + bound + "' in '" + value + "'");
+		}
 	}
-	
-	@Override
-	public void handleCData(XMLFlexoConceptInstance object, String value) {
+
+	/**
+	 * Return column index to be used to access value of supplied {@link FlexoProperty}, as it is declared using a
+	 * <code>@Property(col="2")</code> meta-data, or null when this property is not bound to a column
+	 */
+	public static Integer getColumnIndex(FlexoProperty<?> property) {
+
+		if (property == null) {
+			return null;
+		}
+
+		FMLMetaData md = property.getMetaData(PROPERTY);
+		String col = null;
+		if (md instanceof MultiValuedMetaData) {
+			col = ((MultiValuedMetaData) md).getValue(COL, String.class);
+		}
+		else if (md instanceof SingleMetaData) {
+			col = ((SingleMetaData<String>) md).getValue(String.class);
+		}
+
+		if (StringUtils.isEmpty(col)) {
+			return null;
+		}
+
+		try {
+			return Integer.parseInt(col.trim());
+		} catch (NumberFormatException e) {
+			logger.warning("Cannot parse column index '" + col + "' declared for " + property);
+			return null;
+		}
 	}
-	*/
+
 }

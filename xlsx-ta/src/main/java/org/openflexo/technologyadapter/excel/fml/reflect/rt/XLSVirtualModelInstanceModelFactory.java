@@ -72,8 +72,15 @@ public class XLSVirtualModelInstanceModelFactory
 	public XLSFlexoConceptInstance makeNewFlexoConceptInstance(FlexoConcept concept, Row supportObject, FlexoConceptInstance container,
 			VirtualModelInstance<?, ?> ownerVirtualModelInstance, AbstractCreationScheme creationScheme,
 			RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
-		// TODO Auto-generated method stub
-		return null;
+
+		XLSFlexoConceptInstance returned = newInstance(XLSFlexoConceptInstance.class, concept, supportObject);
+		if (ownerVirtualModelInstance != null) {
+			ownerVirtualModelInstance.addToFlexoConceptInstances(returned);
+		}
+		if (container != null && container != ownerVirtualModelInstance) {
+			container.addToEmbeddedFlexoConceptInstances(returned);
+		}
+		return returned;
 	}
 
 	/*public XLSFlexoConceptInstance newFlexoConceptInstance(XLSVirtualModelInstance owner, FlexoConceptInstance container, Row row,

@@ -131,10 +131,7 @@ public interface FMLExcelModelSlot
 						&& xmlVmi.getReflectedModelFactory().getReflectedResource().getIODelegate() instanceof StreamIODelegate) {
 
 					XLSVirtualModelInstanceBuilder builder = new XLSVirtualModelInstanceBuilder(factory, getAccessedVirtualModel());
-					/*builder.setModelContext(xmlVmi);
-					builder.deserialize(
-							((StreamIODelegate) xmlVmi.getReflectedModelFactory().getReflectedResource().getIODelegate()).getInputStream());
-					builder.resetModelContext();*/
+					builder.buildVirtualModelInstance(xmlVmi);
 				}
 
 				ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> modelSlotInstance;
