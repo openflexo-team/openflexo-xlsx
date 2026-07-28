@@ -85,7 +85,7 @@ public class TestRequestExcelWorkbook extends OpenflexoProjectAtRunTimeTestCase 
 		assertTrue(project.getProjectDirectory().exists());
 
 		FlexoResourceCenter<?> resourceCenter = serviceManager.getResourceCenterService()
-				.getFlexoResourceCenter("http://www.openflexo.org/test/excel");
+				.getFlexoResourceCenter("http://www.openflexo.org/excel-test");
 		assertNotNull(resourceCenter);
 
 		baseUrl = resourceCenter.getDefaultBaseURI();
@@ -94,7 +94,7 @@ public class TestRequestExcelWorkbook extends OpenflexoProjectAtRunTimeTestCase 
 
 		ExcelWorkbookRepository<?> excelWorkbookRepository = technologicalAdapter.getExcelWorkbookRepository(resourceCenter);
 		assertNotNull(excelWorkbookRepository);
-		workbook = excelWorkbookRepository.getResource(baseUrl + "/Excel/Workbook3.xlsx");
+		workbook = excelWorkbookRepository.getResource(baseUrl + "/TestResourceCenter/Excel/Workbook3.xlsx");
 		assertNotNull(workbook);
 	}
 

@@ -56,7 +56,6 @@ import org.openflexo.pamela.annotations.Initializer;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.FMLExcelModelSlot;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
 
 /**
  * A Excel-specific {@link FlexoConceptInstance} reflecting a distant object (represented by a row in a workbook) accessible in an
@@ -110,9 +109,6 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 		 * a {@link PrimitiveRole} (reflected {@link VirtualModel})
 		 */
 		private Integer getColumnIndex(FlexoRole<?> flexoRole) {
-			if (flexoRole instanceof XLSColumnRole) {
-				return ((XLSColumnRole<?>) flexoRole).getColumnIndex();
-			}
 			if (flexoRole instanceof PrimitiveRole) {
 				return XLSVirtualModelInstanceBuilder.getColumnIndex(flexoRole);
 			}
@@ -120,9 +116,6 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 		}
 
 		private PrimitiveType getPrimitiveType(FlexoRole<?> flexoRole) {
-			if (flexoRole instanceof XLSColumnRole) {
-				return ((XLSColumnRole<?>) flexoRole).getPrimitiveType();
-			}
 			if (flexoRole instanceof PrimitiveRole) {
 				return ((PrimitiveRole<?>) flexoRole).getPrimitiveType();
 			}
