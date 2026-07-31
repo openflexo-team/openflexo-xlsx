@@ -334,6 +334,22 @@ public class XLSVirtualModelInstanceBuilder {
 	}
 
 	/**
+	 * Return the name of the sheet supporting supplied {@link FlexoConcept}, as it is declared using its
+	 * <code>@DataRange(sheet="...")</code> meta-data, or null when this concept is not bound to a sheet.<br>
+	 * Used to locate the target sheet when explicitly adding a new reflected instance (a new row).
+	 */
+	public static String getSheetName(FlexoConcept concept) {
+		if (concept == null) {
+			return null;
+		}
+		FMLMetaData md = concept.getMetaData(DATA_RANGE);
+		if (md instanceof MultiValuedMetaData) {
+			return ((MultiValuedMetaData) md).getValue(SHEET, String.class);
+		}
+		return null;
+	}
+
+	/**
 	 * Return column index to be used to access value of supplied {@link FlexoProperty}, as it is declared using a
 	 * <code>@Property(col="2")</code> meta-data, or null when this property is not bound to a column
 	 */

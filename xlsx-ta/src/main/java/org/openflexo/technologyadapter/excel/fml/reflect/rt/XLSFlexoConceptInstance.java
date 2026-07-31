@@ -167,7 +167,9 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 			Integer columnIndex = getColumnIndex(flexoRole);
 			PrimitiveType primitiveType = getPrimitiveType(flexoRole);
 			if (columnIndex != null && primitiveType != null && getSupportObject() != null) {
-				Cell cell = getSupportObject().getCell(columnIndex);
+				// Get-or-create the backing cell: a freshly created row (or an empty write-back column such as
+				// Parc!H) has no POI Cell yet, and Row.getCell(int) would then return null (NPE on setCellValue).
+				Cell cell = getSupportObject().getCell(columnIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
 				// System.out.println("cell: " + cell);
 				switch (primitiveType) {
 					case String:
