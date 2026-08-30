@@ -69,6 +69,7 @@ import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSObjectActorReference;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceBuilder;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceModelFactory;
@@ -90,7 +91,7 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 @ModelEntity
 @ImplementationClass(FMLExcelModelSlot.FMLExcelModelSlotImpl.class)
 // TODO : it would be nice to inherits from super declaration
-@DeclareActorReferences({ ReflectedFMLRTModelSlotInstance.class })
+@DeclareActorReferences({ ReflectedFMLRTModelSlotInstance.class, XLSObjectActorReference.class })
 @FML("FMLExcelModelSlot")
 public interface FMLExcelModelSlot
 		extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> {
