@@ -313,7 +313,11 @@ public class BasicExcelModelConverter {
 			if (rowIndex >= 0 && rowIndex < rows.size()) {
 				RowReference rowReference = getExcelRowReference(rowIndex);
 				excelSheet.getSheet().removeRow(rowReference.excelRow.getRow());
-				excelSheet.getSheet().shiftRows(rowIndex + 1, excelSheet.getSheet().getLastRowNum(), -1);
+				// Nothing to shift when the removed row was the last one: POI rejects a shiftRows()
+				// whose first index is beyond the last one (firstMovedIndex, lastMovedIndex out of order)
+				if (rowIndex + 1 <= excelSheet.getSheet().getLastRowNum()) {
+					excelSheet.getSheet().shiftRows(rowIndex + 1, excelSheet.getSheet().getLastRowNum(), -1);
+				}
 				excelSheet.removeFromExcelRows(rowReference.excelRow);
 				rows.remove(rowReference);
 				return rowReference.excelRow;
