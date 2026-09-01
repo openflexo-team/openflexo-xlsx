@@ -113,38 +113,54 @@ public interface FMLExcelModelSlot
 			return (ExcelTechnologyAdapter) super.getModelSlotTechnologyAdapter();
 		}
 
+		/**
+		 * Reflect the workbook as a {@link XLSVirtualModelInstance} typed by this model slot's VirtualModel contract: one
+		 * {@link org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance} per significative row.
+		 *
+		 * Called both when connecting the model slot and when the owning instance is deserialized (the reflected instance itself is never
+		 * serialized, only the workbook URI is).
+		 */
 		@Override
-		public ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> connectTo(
-				ExcelWorkbookResource resource, FlexoConceptInstance context) {
+		public XLSVirtualModelInstance reflectVirtualModelInstance(ExcelWorkbookResource resource) {
 
+			if (resource == null) {
+				return null;
+			}
 			try {
 				XLSVirtualModelInstanceModelFactory factory = new XLSVirtualModelInstanceModelFactory(resource,
 						getServiceManager().getEditingContext(), getServiceManager().getTechnologyAdapterService());
-				XLSVirtualModelInstance xmlVmi = factory.newInstance(XLSVirtualModelInstance.class);
-				xmlVmi.setReflectedModelFactory(factory);
+				XLSVirtualModelInstance xlsVmi = factory.newInstance(XLSVirtualModelInstance.class);
+				xlsVmi.setReflectedModelFactory(factory);
 
-				System.out.println("Built VMI: " + xmlVmi);
-				System.out.println("Factory: " + xmlVmi.getReflectedModelFactory());
-				// System.out.println("Resource: " + xmlVmi.getReflectedModelFactory().getResource());
-				System.out.println("VM: " + getAccessedVirtualModel());
-
-				if (xmlVmi.getReflectedModelFactory().getReflectedResource() != null
-						&& xmlVmi.getReflectedModelFactory().getReflectedResource().getIODelegate() instanceof StreamIODelegate) {
+				if (xlsVmi.getReflectedModelFactory().getReflectedResource() != null
+						&& xlsVmi.getReflectedModelFactory().getReflectedResource().getIODelegate() instanceof StreamIODelegate) {
 
 					XLSVirtualModelInstanceBuilder builder = new XLSVirtualModelInstanceBuilder(factory, getAccessedVirtualModel());
-					builder.buildVirtualModelInstance(xmlVmi);
+					builder.buildVirtualModelInstance(xlsVmi);
 				}
 
-				ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> modelSlotInstance;
-				modelSlotInstance = makeActorReference(xmlVmi, context);
-				context.addToActors(modelSlotInstance);
-				return modelSlotInstance;
+				return xlsVmi;
 
 			} catch (ModelDefinitionException e) {
 				logger.warning("Unexpected ModelDefinitionException: " + e);
 				e.printStackTrace();
 				return null;
 			}
+		}
+
+		@Override
+		public ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> connectTo(
+				ExcelWorkbookResource resource, FlexoConceptInstance context) {
+
+			XLSVirtualModelInstance xlsVmi = reflectVirtualModelInstance(resource);
+			if (xlsVmi == null) {
+				return null;
+			}
+
+			ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> modelSlotInstance;
+			modelSlotInstance = makeActorReference(xlsVmi, context);
+			context.addToActors(modelSlotInstance);
+			return modelSlotInstance;
 		}
 
 		/*@Override
