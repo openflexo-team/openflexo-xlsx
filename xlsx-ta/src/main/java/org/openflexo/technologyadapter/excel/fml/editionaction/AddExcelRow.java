@@ -46,6 +46,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.validation.BindingIsRequiredAndMustBeValid;
 import org.openflexo.pamela.annotations.DefineValidationRule;
@@ -77,6 +78,7 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 
 	@Getter(value = EXCEL_SHEET_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = EXCEL_SHEET_KEY, required = true, description = "<html>sheet the row is added to</html>")
 	public DataBinding<ExcelSheet> getExcelSheet();
 
 	@Setter(EXCEL_SHEET_KEY)
@@ -84,6 +86,7 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 
 	@Getter(value = EXCEL_CELLS_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = EXCEL_CELLS_KEY, required = false, description = "<html>cells of the new row</html>")
 	public DataBinding<List<ExcelCell>> getExcelCells();
 
 	@Setter(EXCEL_CELLS_KEY)
@@ -91,6 +94,7 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 
 	@Getter(value = ROW_INDEX_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = ROW_INDEX_KEY, required = true, description = "<html>index of the new row in the sheet</html>")
 	public DataBinding<Integer> getRowIndex();
 
 	@Setter(ROW_INDEX_KEY)

@@ -46,6 +46,7 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
@@ -74,6 +75,7 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 
 	@Getter(value = SHEET_NAME_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SHEET_NAME_KEY, required = true, description = "<html>name of the new sheet</html>")
 	public DataBinding<String> getSheetName();
 
 	@Setter(SHEET_NAME_KEY)
@@ -81,6 +83,7 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 
 	@Getter(value = SHEET_ROWS_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SHEET_ROWS_KEY, required = false, description = "<html>rows of the new sheet</html>")
 	public DataBinding<List<ExcelRow>> getSheetRows();
 
 	@Setter(SHEET_ROWS_KEY)
@@ -88,6 +91,7 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 
 	@Getter(value = OVERRIDE_KEY, defaultValue = "false")
 	@XMLAttribute
+	@FMLAttribute(value = OVERRIDE_KEY, required = false, description = "<html>replace an existing sheet with that name</html>")
 	public boolean getOverride();
 
 	@Setter(OVERRIDE_KEY)

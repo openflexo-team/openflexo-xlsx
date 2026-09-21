@@ -63,7 +63,7 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 @ModelEntity
 @ImplementationClass(MergeCells.MergeCellsImpl.class)
 @XMLElement
-@FML("AddExcelCell")
+@FML("MergeCells")
 public interface MergeCells extends ExcelAction<ExcelCell> {
 
 	@PropertyIdentifier(type = DataBinding.class)

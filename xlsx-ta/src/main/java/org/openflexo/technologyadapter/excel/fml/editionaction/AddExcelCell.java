@@ -47,6 +47,8 @@ import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.exception.NullReferenceException;
 import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.annotations.FMLAttribute;
+import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.Getter;
 import org.openflexo.pamela.annotations.ImplementationClass;
@@ -87,6 +89,7 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = ROW_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = ROW_KEY, required = false, description = "<html>row the cell is added to</html>")
 	public DataBinding<ExcelRow> getRow();
 
 	@Setter(ROW_KEY)
@@ -94,6 +97,7 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = VALUE_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = VALUE_KEY, required = false, description = "<html>value of the new cell</html>")
 	public DataBinding<Object> getValue();
 
 	@Setter(VALUE_KEY)
@@ -101,6 +105,11 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = CELL_TYPE_KEY)
 	@XMLAttribute
+	@FMLAttribute(
+			value = CELL_TYPE_KEY,
+			required = false,
+			kind = AttributeKind.Enum,
+			description = "<html>type of the new cell: Blank, Numeric, String, NumericFormula, StringFormula, Boolean, Error, Empty or Unknown</html>")
 	public CellType getCellType();
 
 	@Setter(CELL_TYPE_KEY)
@@ -108,6 +117,7 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = COLUMN_INDEX_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = COLUMN_INDEX_KEY, required = false, description = "<html>index of the new cell in the row</html>")
 	public DataBinding<Integer> getColumnIndex();
 
 	@Setter(COLUMN_INDEX_KEY)
@@ -115,6 +125,7 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = ROW_INDEX_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = ROW_INDEX_KEY, required = false, description = "<html>index of the row, when the cell is added to a sheet</html>")
 	public DataBinding<Integer> getRowIndex();
 
 	@Setter(ROW_INDEX_KEY)
@@ -122,6 +133,7 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
 	@Getter(value = SHEET_KEY)
 	@XMLAttribute
+	@FMLAttribute(value = SHEET_KEY, required = false, description = "<html>sheet the cell is added to, when no row is supplied</html>")
 	public DataBinding<ExcelSheet> getSheet();
 
 	@Setter(SHEET_KEY)
