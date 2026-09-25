@@ -101,7 +101,8 @@ public class ExcelTechnologyAdapter extends TechnologyAdapter<ExcelTechnologyAda
 		ExcelWorkbookRepository<I> returned = resourceCenter.retrieveRepository(ExcelWorkbookRepository.class, this);
 		if (returned == null) {
 			returned = ExcelWorkbookRepository.instanciateNewRepository(this, resourceCenter);
-			resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
+			// Another thread may have registered one meanwhile: use the registered one (CORE-D-25)
+			returned = resourceCenter.registerRepository(returned, ExcelWorkbookRepository.class, this);
 		}
 		return returned;
 	}
