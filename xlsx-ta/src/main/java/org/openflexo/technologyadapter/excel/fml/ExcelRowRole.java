@@ -97,7 +97,7 @@ public interface ExcelRowRole extends FlexoRole<ExcelRow> {
 
 		@Override
 		public ActorReference<ExcelRow> makeActorReference(ExcelRow object, FlexoConceptInstance fci) {
-			AbstractVirtualModelInstanceModelFactory<?> factory = fci.getFactory();
+			AbstractVirtualModelInstanceModelFactory factory = fci.getFactory();
 			ExcelActorReference<ExcelRow> returned = factory.newInstance(ExcelActorReference.class);
 			returned.setFlexoRole(this);
 			returned.setFlexoConceptInstance(fci);

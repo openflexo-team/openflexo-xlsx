@@ -56,73 +56,13 @@ public class TestExcelInspectors extends GenericFIBInspectorTestCase {
 	}
 
 	@Test
-	public void testBasicExcelModelSlotInspector() {
-		validateFIB("Inspectors/Excel/BasicExcelModelSlot.inspector");
-	}
-
-	@Test
-	public void testAddExcelCellInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/AddExcelCell.inspector");
-	}
-
-	@Test
-	public void testAddExcelRowInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/AddExcelRow.inspector");
-	}
-
-	@Test
-	public void testAddExcelSheetInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/AddExcelSheet.inspector");
-	}
-
-	@Test
-	public void testCellStyleActionInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/CellStyleAction.inspector");
-	}
-
-	@Test
-	public void testCreateExcelResourceInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/CreateExcelResource.inspector");
-	}
-
-	@Test
-	public void testCreateSEResourceInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/CreateXLSResource.inspector");
-	}
-
-	@Test
-	public void testInsertSEObjectInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/InsertXLSObject.inspector");
-	}
-
-	@Test
-	public void testRemoveSEObjectInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/RemoveXLSObject.inspector");
-	}
-
-	@Test
-	public void testSelectExcelCellInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/SelectExcelCell.inspector");
-	}
-
-	@Test
-	public void testSelectExcelRowInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/SelectExcelRow.inspector");
-	}
-
-	@Test
-	public void testSelectExcelSheetInspector() {
-		validateFIB("Inspectors/Excel/EditionAction/SelectExcelSheet.inspector");
-	}
-
-	@Test
 	public void testExcelCellInspector() {
 		validateFIB("Inspectors/Excel/ExcelCell.inspector");
 	}
 
 	@Test
-	public void testExcelSheetInspector() {
-		validateFIB("Inspectors/Excel/ExcelSheet.inspector");
+	public void testBasicExcelModelSlotInspector() {
+		validateFIB("Inspectors/Excel/BasicExcelModelSlot.inspector");
 	}
 
 	@Test
@@ -131,18 +71,48 @@ public class TestExcelInspectors extends GenericFIBInspectorTestCase {
 	}
 
 	@Test
-	public void testSEColumnRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/XLSColumnRole.inspector");
+	public void testExcelSheetInspector() {
+		validateFIB("Inspectors/Excel/ExcelSheet.inspector");
 	}
 
 	@Test
-	public void testSEDataAreaRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/XLSDataAreaRole.inspector");
+	public void testSelectExcelSheetInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/SelectExcelSheet.inspector");
 	}
 
 	@Test
-	public void testSEReferenceRoleInspector() {
-		validateFIB("Inspectors/Excel/FlexoRole/XLSReferenceRole.inspector");
+	public void testCreateExcelResourceInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/CreateExcelResource.inspector");
+	}
+
+	@Test
+	public void testSelectExcelRowInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/SelectExcelRow.inspector");
+	}
+
+	@Test
+	public void testAddExcelRowInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/AddExcelRow.inspector");
+	}
+
+	@Test
+	public void testMergeCellsInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/MergeCells.inspector");
+	}
+
+	@Test
+	public void testCellStyleActionInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/CellStyleAction.inspector");
+	}
+
+	@Test
+	public void testAddExcelCellInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/AddExcelCell.inspector");
+	}
+
+	@Test
+	public void testSelectExcelCellInspector() {
+		validateFIB("Inspectors/Excel/EditionAction/SelectExcelCell.inspector");
 	}
 
 }

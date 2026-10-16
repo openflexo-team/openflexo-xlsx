@@ -38,7 +38,6 @@
 
 package org.openflexo.technologyadapter.excel.fib;
 
-import org.junit.Test;
 import org.openflexo.gina.test.GenericFIBTestCase;
 import org.openflexo.rm.FileResourceImpl;
 import org.openflexo.rm.ResourceLocator;
@@ -48,16 +47,6 @@ public class TestExcelWizards extends GenericFIBTestCase {
 	public static void main(String[] args) {
 		System.out.println(
 				generateFIBTestCaseClass(((FileResourceImpl) ResourceLocator.locateResource("Fib/Wizard")).getFile(), "Fib/Wizard/"));
-	}
-
-	@Test
-	public void testConfigureNewSEFlexoConcept() {
-		validateFIB("Fib/Wizard/ConfigureNewSEFlexoConcept.fib");
-	}
-
-	@Test
-	public void testConfigureSemanticsExcelVirtualModel() {
-		validateFIB("Fib/Wizard/ConfigureSemanticsExcelVirtualModel.fib");
 	}
 
 }

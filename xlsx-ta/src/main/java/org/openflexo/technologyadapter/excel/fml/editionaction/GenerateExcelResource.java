@@ -59,7 +59,7 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
 @ModelEntity
 @ImplementationClass(GenerateExcelResource.GenerateExcelResourceImpl.class)
 @XMLElement
-@FML("GenerateDocXDocument")
+@FML("GenerateExcelResource")
 public interface GenerateExcelResource extends CreateExcelResource {
 
 	/*@PropertyIdentifier(type = File.class)

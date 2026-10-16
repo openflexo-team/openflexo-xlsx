@@ -1,3 +1,8 @@
+Default=Default
+Private=Private
+Protected=Protected
+Public=Public
+author=author
 cells_range=Plage de cellules
 choose_virtual_model_name_and_template_excel=Choisir un classeur excel d'exemple et un nom pour le VirtualModel
 configure_jdbc_connection=Configurer la connexion JDBC
@@ -15,3 +20,5 @@ required=Requis
 row_index=Index de la ligne
 technology=Technologie
 template=Exemple
+viewpoint=viewpoint
+visibility=visibility

@@ -39,6 +39,9 @@
 package org.openflexo.technologyadapter.excel.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import java.lang.reflect.InvocationTargetException;
@@ -280,6 +283,117 @@ public class TestInsertRowModelLevel extends AbstractTestExcel {
 		assertEquals("Gérard Menvusat", sheet.getCellAt(7, 1).getCellValue());
 		assertEquals("Alain Terrieur", sheet.getCellAt(8, 1).getCellValue());
 		assertEquals("Mary Robinson", sheet.getCellAt(9, 1).getCellValue());
+
+	}
+
+	/**
+	 * Remove a row in the middle of the data area, and perform some checks
+	 *
+	 * @throws TypeMismatchException
+	 * @throws NullReferenceException
+	 * @throws InvocationTargetException
+	 * @throws InvalidBindingException
+	 */
+	@Test
+	@TestOrder(9)
+	public void testRemoveRow() throws TypeMismatchException, NullReferenceException, InvocationTargetException, InvalidBindingException {
+		ExcelSheet sheet = personListingWB.getExcelSheetAtPosition(0);
+
+		System.out.println("Found sheet: " + sheet);
+		System.out.println("rows: " + sheet.getExcelRows().size());
+
+		assertEquals(10, sheet.getExcelRows().size());
+
+		System.out.println("Now remove row at index 4");
+
+		ExcelRow removedRow = sheet.removeRowAt(4);
+		assertNotNull(removedRow);
+		assertFalse(sheet.getExcelRows().contains(removedRow));
+
+		assertEquals(9, sheet.getExcelRows().size());
+
+		for (int i = 0; i < sheet.getExcelRows().size(); i++) {
+			ExcelRow row = sheet.getRowAt(i);
+			assertSame(row, sheet.getExcelRows().get(i));
+			assertEquals(5, row.getExcelCells().size());
+			assertEquals(i, row.getRowIndex());
+			StringBuffer sb = new StringBuffer();
+			sb.append("[ROW-" + row.getRowIndex() + "]");
+			for (int j = 0; j < row.getExcelCells().size(); j++) {
+				ExcelCell cell = row.getExcelCellAt(j);
+				assertSame(cell, row.getExcelCells().get(j));
+				assertSame(cell, sheet.getCellAt(i, j));
+				sb.append(" " + cell.getCellValue());
+			}
+			System.out.println(sb.toString());
+		}
+
+		// Patty Smith is gone, and all rows below have been shifted to the top
+		assertEquals("Jean Dupont", sheet.getCellAt(1, 1).getCellValue());
+		assertEquals("John McLane", sheet.getCellAt(2, 1).getCellValue());
+		assertEquals("Bernardette Dupont", sheet.getCellAt(3, 1).getCellValue());
+		assertEquals("Jules Dupont", sheet.getCellAt(4, 1).getCellValue());
+		assertEquals("Nina Dupont", sheet.getCellAt(5, 1).getCellValue());
+		assertEquals("Gérard Menvusat", sheet.getCellAt(6, 1).getCellValue());
+		assertEquals("Alain Terrieur", sheet.getCellAt(7, 1).getCellValue());
+		assertEquals("Mary Robinson", sheet.getCellAt(8, 1).getCellValue());
+
+	}
+
+	/**
+	 * Remove the last row of the data area (nothing to shift), then check that an inconsistent index is safely ignored
+	 *
+	 * @throws TypeMismatchException
+	 * @throws NullReferenceException
+	 * @throws InvocationTargetException
+	 * @throws InvalidBindingException
+	 */
+	@Test
+	@TestOrder(10)
+	public void testRemoveLastRow()
+			throws TypeMismatchException, NullReferenceException, InvocationTargetException, InvalidBindingException {
+		ExcelSheet sheet = personListingWB.getExcelSheetAtPosition(0);
+
+		System.out.println("Found sheet: " + sheet);
+		System.out.println("rows: " + sheet.getExcelRows().size());
+
+		assertEquals(9, sheet.getExcelRows().size());
+
+		System.out.println("Now remove last row");
+
+		ExcelRow removedRow = sheet.removeRowAt(8);
+		assertNotNull(removedRow);
+
+		assertEquals(8, sheet.getExcelRows().size());
+
+		for (int i = 0; i < sheet.getExcelRows().size(); i++) {
+			ExcelRow row = sheet.getRowAt(i);
+			assertSame(row, sheet.getExcelRows().get(i));
+			assertEquals(5, row.getExcelCells().size());
+			assertEquals(i, row.getRowIndex());
+			StringBuffer sb = new StringBuffer();
+			sb.append("[ROW-" + row.getRowIndex() + "]");
+			for (int j = 0; j < row.getExcelCells().size(); j++) {
+				ExcelCell cell = row.getExcelCellAt(j);
+				assertSame(cell, row.getExcelCells().get(j));
+				assertSame(cell, sheet.getCellAt(i, j));
+				sb.append(" " + cell.getCellValue());
+			}
+			System.out.println(sb.toString());
+		}
+
+		assertEquals("Jean Dupont", sheet.getCellAt(1, 1).getCellValue());
+		assertEquals("John McLane", sheet.getCellAt(2, 1).getCellValue());
+		assertEquals("Bernardette Dupont", sheet.getCellAt(3, 1).getCellValue());
+		assertEquals("Jules Dupont", sheet.getCellAt(4, 1).getCellValue());
+		assertEquals("Nina Dupont", sheet.getCellAt(5, 1).getCellValue());
+		assertEquals("Gérard Menvusat", sheet.getCellAt(6, 1).getCellValue());
+		assertEquals("Alain Terrieur", sheet.getCellAt(7, 1).getCellValue());
+
+		// An inconsistent index must be a no-op returning null
+		assertNull(sheet.removeRowAt(8));
+		assertNull(sheet.removeRowAt(-1));
+		assertEquals(8, sheet.getExcelRows().size());
 
 	}
 

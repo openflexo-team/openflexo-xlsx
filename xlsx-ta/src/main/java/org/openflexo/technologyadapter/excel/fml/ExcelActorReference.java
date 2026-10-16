@@ -123,13 +123,27 @@ public interface ExcelActorReference<T extends ExcelObject> extends ActorReferen
 		@Override
 		public T getModellingElement(boolean forceLoading) {
 			if (object == null && objectURI != null) {
-				System.out.println("Tiens j'essaie de trouver l'objet avec l'URI " + objectURI);
-				System.out.println("msInstance=" + getModelSlotInstance());
-				System.out.println("msInstance.getModelSlot()=" + getModelSlotInstance().getModelSlot());
-				System.out.println("ExcelWorkbookResource=" + getExcelWorkbookResource());
 				ExcelWorkbookResource res = getExcelWorkbookResource();
+				if (!res.isLoaded()) {
+					if (forceLoading) {
+						try {
+							res.loadResourceData();
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (ResourceLoadingCancelledException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (FlexoException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else {
+						return null;
+					}
+				}
 				object = (T) res.getConverter().fromSerializationIdentifier(objectURI);
-				System.out.println("je trouve " + object);
 
 				/*if (msInstance != null && msInstance.getAccessedResourceData() != null) {
 					object = (T) msInstance.getModelSlot().retrieveObjectWithURI(msInstance, objectURI);

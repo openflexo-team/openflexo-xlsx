@@ -38,31 +38,10 @@
 
 package org.openflexo.technologyadapter.excel.fml.reflect.rm;
 
-import java.util.logging.Logger;
-
-import org.openflexo.foundation.FlexoEditor;
-import org.openflexo.foundation.FlexoProject;
-import org.openflexo.foundation.IOFlexoException;
-import org.openflexo.foundation.InconsistentDataException;
-import org.openflexo.foundation.InvalidModelDefinitionException;
-import org.openflexo.foundation.InvalidXMLException;
 import org.openflexo.foundation.fml.rt.FMLRTVirtualModelInstance;
-import org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResource;
-import org.openflexo.foundation.fml.rt.rm.AbstractVirtualModelInstanceResourceImpl;
-import org.openflexo.foundation.resource.FileIODelegate;
-import org.openflexo.foundation.resource.FlexoFileNotFoundException;
 import org.openflexo.foundation.resource.FlexoResource;
-import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.rm.FileSystemResourceLocatorImpl;
-import org.openflexo.rm.Resource;
-import org.openflexo.rm.ResourceLocator;
-import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializer;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializerAction;
-import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSMappingException;
-import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
 
 /**
  * This is the {@link FlexoResource} encoding a {@link FMLRTVirtualModelInstance}
@@ -71,11 +50,11 @@ import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInsta
  * 
  */
 @ModelEntity
-@ImplementationClass(XLSVirtualModelInstanceResource.XLSVirtualModelInstanceResourceImpl.class)
+// @ImplementationClass(XLSVirtualModelInstanceResource.XLSVirtualModelInstanceResourceImpl.class)
 @XMLElement
 @Deprecated
 public interface XLSVirtualModelInstanceResource
-		extends AbstractVirtualModelInstanceResource<XLSVirtualModelInstance, ExcelTechnologyAdapter> {
+/*extends AbstractVirtualModelInstanceResource<XLSVirtualModelInstance, ExcelTechnologyAdapter>*/ {
 
 	/**
 	 * Default implementation for {@link XLSVirtualModelInstanceResource}
@@ -84,12 +63,12 @@ public interface XLSVirtualModelInstanceResource
 	 * @author Sylvain
 	 * 
 	 */
-	public abstract class XLSVirtualModelInstanceResourceImpl
+	/*public abstract class XLSVirtualModelInstanceResourceImpl
 			extends AbstractVirtualModelInstanceResourceImpl<XLSVirtualModelInstance, ExcelTechnologyAdapter>
 			implements XLSVirtualModelInstanceResource {
-
+	
 		static final Logger logger = Logger.getLogger(XLSVirtualModelInstanceResourceImpl.class.getPackage().getName());
-
+	
 		@Override
 		public ExcelTechnologyAdapter getTechnologyAdapter() {
 			if (getServiceManager() != null) {
@@ -97,7 +76,7 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return null;
 		}
-
+	
 		@Deprecated
 		@Override
 		public Resource getDirectory() {
@@ -107,7 +86,7 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return ResourceLocator.locateResource(parentPath);
 		}
-
+	
 		@Deprecated
 		public String getDirectoryPath() {
 			if (getIODelegate() instanceof FileIODelegate) {
@@ -116,7 +95,7 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return "";
 		}
-
+	
 		@Override
 		public String computeDefaultURI() {
 			if (getContainer() != null) {
@@ -128,14 +107,14 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return null;
 		}
-
+	
 		@Override
 		public Class<ExcelTechnologyAdapter> getTechnologyAdapterClass() {
 			return ExcelTechnologyAdapter.class;
 		}
-
+	
 		private String virtualModelURI;
-
+	
 		@Override
 		public String getVirtualModelURI() {
 			if (getVirtualModelResource() != null) {
@@ -143,32 +122,32 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return virtualModelURI;
 		}
-
+	
 		@Override
 		public void setVirtualModelURI(String virtualModelURI) {
 			this.virtualModelURI = virtualModelURI;
 		}
-
+	
 		public String getSuffix() {
 			return XLSVirtualModelInstanceResourceFactory.EXCEL_SE_SUFFIX;
 		}
-
+	
 		@Override
 		public Class<XLSVirtualModelInstance> getResourceDataClass() {
 			return XLSVirtualModelInstance.class;
 		}
-
+	
 		@Override
 		public XLSVirtualModelInstance loadResourceData() throws FlexoFileNotFoundException, IOFlexoException, InvalidXMLException,
 				InconsistentDataException, InvalidModelDefinitionException {
 			XLSVirtualModelInstance returned = super.loadResourceData();
-
+	
 			try {
 				returned.updateData();
 			} catch (XLSMappingException e) {
 				e.printStackTrace();
 			}
-
+	
 			if (returned.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).size() > 0) {
 				XLSInitializer initializer = returned.getVirtualModel().getFlexoBehaviours(XLSInitializer.class).get(0);
 				FlexoEditor editor = null;
@@ -184,7 +163,7 @@ public interface XLSVirtualModelInstanceResource
 			}
 			return returned;
 		}
-
-	}
+	
+	}*/
 
 }

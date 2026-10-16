@@ -1,0 +1,14 @@
+use org.openflexo.technologyadapter.excel.FMLExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+
+import ["http://www.openflexo.org/excel-test/FML/PersonListing.fml"];
+
+@URI("http://www.openflexo.org/excel-test/FML/ReflectPersonListing.fml")
+public model ReflectPersonListing {
+   PersonListing personListing with FMLExcelModelSlot();
+
+   create(required Resource<ExcelWorkbook> aListing) {
+      connect personListing using parameters.aListing ;
+   }
+}

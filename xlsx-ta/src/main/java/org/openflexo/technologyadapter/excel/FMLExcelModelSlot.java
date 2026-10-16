@@ -55,31 +55,24 @@
 
 package org.openflexo.technologyadapter.excel;
 
-import java.lang.reflect.Type;
+import java.util.logging.Logger;
 
-import org.openflexo.foundation.fml.FlexoRole;
 import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.annotations.DeclareActorReferences;
-import org.openflexo.foundation.fml.annotations.DeclareEditionActions;
-import org.openflexo.foundation.fml.annotations.DeclareFlexoBehaviours;
-import org.openflexo.foundation.fml.annotations.DeclareFlexoRoles;
+import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.fml.rt.reflect.ReflectedFMLRTModelSlot;
+import org.openflexo.foundation.fml.rt.reflect.ReflectedFMLRTModelSlotInstance;
+import org.openflexo.foundation.resource.StreamIODelegate;
 import org.openflexo.foundation.technologyadapter.ModelSlot;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
-import org.openflexo.technologyadapter.excel.fml.reflect.CreateXLSResource;
-import org.openflexo.technologyadapter.excel.fml.reflect.InsertXLSObject;
-import org.openflexo.technologyadapter.excel.fml.reflect.RemoveXLSObject;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSColumnRole;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSDataAreaRole;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSInitializer;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSReferenceRole;
-import org.openflexo.technologyadapter.excel.fml.reflect.XLSVirtualModelInstanceType;
+import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSObjectActorReference;
 import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceBuilder;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstanceModelFactory;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
 
@@ -96,12 +89,10 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResource;
  * 
  */
 @ModelEntity
-@XMLElement
 @ImplementationClass(FMLExcelModelSlot.FMLExcelModelSlotImpl.class)
-@DeclareFlexoRoles({ XLSColumnRole.class, XLSDataAreaRole.class, XLSReferenceRole.class })
-@DeclareEditionActions({ CreateXLSResource.class, InsertXLSObject.class, RemoveXLSObject.class })
-@DeclareFlexoBehaviours({ XLSInitializer.class })
-@DeclareActorReferences({ XLSObjectActorReference.class })
+// TODO : it would be nice to inherits from super declaration
+@DeclareActorReferences({ ReflectedFMLRTModelSlotInstance.class, XLSObjectActorReference.class })
+@FML("FMLExcelModelSlot")
 public interface FMLExcelModelSlot
 		extends ReflectedFMLRTModelSlot<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> {
 
@@ -109,7 +100,8 @@ public interface FMLExcelModelSlot
 			extends ReflectedFMLRTModelSlotImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter>
 			implements FMLExcelModelSlot {
 
-		private XLSVirtualModelInstanceType type;
+		@SuppressWarnings("unused")
+		private static final Logger logger = Logger.getLogger(FMLExcelModelSlotImpl.class.getPackage().getName());
 
 		@Override
 		public Class<ExcelTechnologyAdapter> getTechnologyAdapterClass() {
@@ -117,30 +109,101 @@ public interface FMLExcelModelSlot
 		}
 
 		@Override
-		public <PR extends FlexoRole<?>> String defaultFlexoRoleName(Class<PR> flexoRoleClass) {
-			return super.defaultFlexoRoleName(flexoRoleClass);
-		}
-
-		@Override
 		public ExcelTechnologyAdapter getModelSlotTechnologyAdapter() {
 			return (ExcelTechnologyAdapter) super.getModelSlotTechnologyAdapter();
 		}
 
+		/**
+		 * Reflect the workbook as a {@link XLSVirtualModelInstance} typed by this model slot's VirtualModel contract: one
+		 * {@link org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSFlexoConceptInstance} per significative row.
+		 *
+		 * Called both when connecting the model slot and when the owning instance is deserialized (the reflected instance itself is never
+		 * serialized, only the workbook URI is).
+		 */
 		@Override
-		public Type getType() {
-			if (type == null || type.getVirtualModel() != getAccessedVirtualModel()) {
-				type = XLSVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
+		public XLSVirtualModelInstance reflectVirtualModelInstance(ExcelWorkbookResource resource) {
+
+			if (resource == null) {
+				return null;
 			}
-			return type;
+			try {
+				XLSVirtualModelInstanceModelFactory factory = new XLSVirtualModelInstanceModelFactory(resource,
+						getServiceManager().getEditingContext(), getServiceManager().getTechnologyAdapterService());
+				XLSVirtualModelInstance xlsVmi = factory.newInstance(XLSVirtualModelInstance.class);
+				xlsVmi.setReflectedModelFactory(factory);
+
+				if (xlsVmi.getReflectedModelFactory().getReflectedResource() != null
+						&& xlsVmi.getReflectedModelFactory().getReflectedResource().getIODelegate() instanceof StreamIODelegate) {
+
+					XLSVirtualModelInstanceBuilder builder = new XLSVirtualModelInstanceBuilder(factory, getAccessedVirtualModel());
+					builder.buildVirtualModelInstance(xlsVmi);
+				}
+
+				return xlsVmi;
+
+			} catch (ModelDefinitionException e) {
+				logger.warning("Unexpected ModelDefinitionException: " + e);
+				e.printStackTrace();
+				return null;
+			}
 		}
 
 		@Override
-		public void setAccessedVirtualModel(VirtualModel aVirtualModel) {
-			if (aVirtualModel != getAccessedVirtualModel()) {
-				super.setAccessedVirtualModel(aVirtualModel);
-				type = XLSVirtualModelInstanceType.getVirtualModelInstanceType(getAccessedVirtualModel());
+		public ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> connectTo(
+				ExcelWorkbookResource resource, FlexoConceptInstance context) {
+
+			XLSVirtualModelInstance xlsVmi = reflectVirtualModelInstance(resource);
+			if (xlsVmi == null) {
+				return null;
 			}
+
+			ReflectedFMLRTModelSlotInstance<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter> modelSlotInstance;
+			modelSlotInstance = makeActorReference(xlsVmi, context);
+			context.addToActors(modelSlotInstance);
+			return modelSlotInstance;
 		}
+
+		/*@Override
+		public ReflectedFMLRTModelSlotInstance<XMLVirtualModelInstance<RD>, XMLResource<RD, ?>, RD, XMLTechnologyAdapter> connectTo(
+				XMLResource<RD, ?> resource, FlexoConceptInstance context) {
+		
+			try {
+				XMLVirtualModelInstanceModelFactory<RD> factory = new XMLVirtualModelInstanceModelFactory<RD>(resource,
+						getServiceManager().getEditingContext(), getServiceManager().getTechnologyAdapterService());
+				XMLVirtualModelInstance<RD> xmlVmi = factory.newInstance(XMLVirtualModelInstance.class);
+				xmlVmi.setReflectedModelFactory(factory);
+		
+				//System.out.println("Built VMI: " + xmlVmi);
+				//System.out.println("Factory: " + xmlVmi.getReflectedModelFactory());
+				//System.out.println("Resource: " + xmlVmi.getReflectedModelFactory().getResource());
+				//System.out.println("VM: " + getAccessedVirtualModel());
+		
+				if (xmlVmi.getReflectedModelFactory().getReflectedResource() != null
+						&& xmlVmi.getReflectedModelFactory().getReflectedResource().getIODelegate() instanceof StreamIODelegate) {
+		
+					FMLXMLModelBuilder builder = new FMLXMLModelBuilder(factory, getAccessedVirtualModel());
+					builder.setModelContext(xmlVmi);
+					builder.deserialize(
+							((StreamIODelegate) xmlVmi.getReflectedModelFactory().getReflectedResource().getIODelegate()).getInputStream());
+					builder.resetModelContext();
+				}
+		
+				ReflectedFMLRTModelSlotInstance<XMLVirtualModelInstance<RD>, XMLResource<RD, ?>, RD, XMLTechnologyAdapter> modelSlotInstance;
+				modelSlotInstance = makeActorReference(xmlVmi, context);
+				context.addToActors(modelSlotInstance);
+				return modelSlotInstance;
+		
+			} catch (ModelDefinitionException e) {
+				logger.warning("Unexpected ModelDefinitionException: " + e);
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				logger.warning("Unexpected IOException: " + e);
+				e.printStackTrace();
+				return null;
+			}
+		
+		}		*/
 
 	}
 

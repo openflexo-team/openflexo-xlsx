@@ -62,16 +62,10 @@ import org.openflexo.toolbox.StringUtils;
  * @author sylvain
  *
  */
+// TODO : this code must be refactored
 public class BasicExcelModelConverter {
 
 	private static final Logger logger = Logger.getLogger(BasicExcelModelConverter.class.getPackage().getName());
-
-	/**
-	 * Excel Objects. We have to build here a map for each sheet because equals() method of HSSFRow does not check sheet<br>
-	 * (two rows at same index in multiple sheet respond to equals())
-	 */
-	// protected final Map<ExcelSheet, Map<Object, ExcelObject>> excelObjectsForSheet = new HashMap<>();
-	// protected final Map<Object, ExcelObject> excelObjects = new HashMap<>();
 
 	private ExcelWorkbookResource excelWorkbookResource;
 
@@ -319,7 +313,11 @@ public class BasicExcelModelConverter {
 			if (rowIndex >= 0 && rowIndex < rows.size()) {
 				RowReference rowReference = getExcelRowReference(rowIndex);
 				excelSheet.getSheet().removeRow(rowReference.excelRow.getRow());
-				excelSheet.getSheet().shiftRows(rowIndex + 1, excelSheet.getSheet().getLastRowNum(), -1);
+				// Nothing to shift when the removed row was the last one: POI rejects a shiftRows()
+				// whose first index is beyond the last one (firstMovedIndex, lastMovedIndex out of order)
+				if (rowIndex + 1 <= excelSheet.getSheet().getLastRowNum()) {
+					excelSheet.getSheet().shiftRows(rowIndex + 1, excelSheet.getSheet().getLastRowNum(), -1);
+				}
 				excelSheet.removeFromExcelRows(rowReference.excelRow);
 				rows.remove(rowReference);
 				return rowReference.excelRow;
@@ -384,8 +382,9 @@ public class BasicExcelModelConverter {
 			// This is an object in a sheet
 			String sheetName = id.substring(0, id.indexOf("/"));
 			String objectId = id.substring(id.indexOf("/") + 1);
-			SheetReference sheetRef = references.get(sheetName);
+			SheetReference sheetRef = getSheetReference(sheetName);
 			if (sheetRef != null) {
+				sheetRef.ensureConversion();
 				ExcelSheet sheet = sheetRef.excelSheet;
 				if (objectId.startsWith("row[")) {
 					// This is a row
@@ -421,7 +420,10 @@ public class BasicExcelModelConverter {
 				return null;
 			}
 			else {
-				logger.warning("Could not find sheet " + sheetName);
+				logger.warning("Could not find sheet [" + sheetName + "] references=" + references);
+				for (String key : references.keySet()) {
+					System.err.println("> key=[" + key + "] -> " + references.get(key));
+				}
 				return null;
 			}
 		}
@@ -472,6 +474,11 @@ public class BasicExcelModelConverter {
 			getExcelSheet(sheet);
 		}
 		return excelWorkbook;
+	}
+
+	public SheetReference getSheetReference(String sheetName) {
+		Sheet sheet = excelWorkbook.getWorkbook().getSheet(sheetName);
+		return getSheetReference(sheet);
 	}
 
 	public SheetReference getSheetReference(Sheet sheet) {

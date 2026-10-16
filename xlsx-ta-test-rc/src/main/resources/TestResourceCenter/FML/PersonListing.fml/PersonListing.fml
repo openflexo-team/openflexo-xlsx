@@ -1,0 +1,27 @@
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import java.lang.String;
+
+/**
+ * A VirtualModel built to reflect an Excel sheet as a VirtualModel instance
+ */
+@URI("http://www.openflexo.org/excel-test/FML/PersonListing.fml")
+public model PersonListing {
+
+	@DataRange(sheet="Sheet1",rows="1,*",cols="0,4")
+	concept Person {
+	  
+	  @Property(col="0")
+	  String genre;
+	  @Property(col="1")
+     String name;
+	  @Property(col="2")
+     String activity;
+	  @Property(col="3")
+     int age;
+	  @Property(col="4")
+     String city;
+   }
+}
