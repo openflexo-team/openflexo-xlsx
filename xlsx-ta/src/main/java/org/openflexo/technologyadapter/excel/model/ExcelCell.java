@@ -593,7 +593,7 @@ public interface ExcelCell extends ExcelObject, ExcelStyleObject {
 			if (getCell() == null) {
 				return CellType.Empty;
 			}
-			switch (getCell().getCellTypeEnum()) {
+			switch (getCell().getCellType()) {
 				case BLANK:
 					return CellType.Blank;
 				case NUMERIC:
@@ -912,48 +912,48 @@ public interface ExcelCell extends ExcelObject, ExcelStyleObject {
 
 		@Override
 		public boolean hasTopBorder() {
-			if ((getCell() != null && getCell().getCellStyle().getBorderTopEnum() != BorderStyle.NONE)) {
+			if ((getCell() != null && getCell().getCellStyle().getBorderTop() != BorderStyle.NONE)) {
 				return true;
 			}
 			if (isMerged()) {
 				return getTopMergedCell().getCell() != null
-						&& getTopMergedCell().getCell().getCellStyle().getBorderTopEnum() != BorderStyle.NONE;
+						&& getTopMergedCell().getCell().getCellStyle().getBorderTop() != BorderStyle.NONE;
 			}
 			return false;
 		}
 
 		@Override
 		public boolean hasLeftBorder() {
-			if (getCell() != null && getCell().getCellStyle().getBorderLeftEnum() != BorderStyle.NONE) {
+			if (getCell() != null && getCell().getCellStyle().getBorderLeft() != BorderStyle.NONE) {
 				return true;
 			}
 			if (isMerged()) {
 				return getLeftMergedCell().getCell() != null
-						&& getLeftMergedCell().getCell().getCellStyle().getBorderLeftEnum() != BorderStyle.NONE;
+						&& getLeftMergedCell().getCell().getCellStyle().getBorderLeft() != BorderStyle.NONE;
 			}
 			return false;
 		}
 
 		@Override
 		public boolean hasRightBorder() {
-			if (getCell() != null && getCell().getCellStyle().getBorderRightEnum() != BorderStyle.NONE) {
+			if (getCell() != null && getCell().getCellStyle().getBorderRight() != BorderStyle.NONE) {
 				return true;
 			}
 			if (isMerged()) {
 				return getRightMergedCell().getCell() != null
-						&& getRightMergedCell().getCell().getCellStyle().getBorderRightEnum() != BorderStyle.NONE;
+						&& getRightMergedCell().getCell().getCellStyle().getBorderRight() != BorderStyle.NONE;
 			}
 			return false;
 		}
 
 		@Override
 		public boolean hasBottomBorder() {
-			if (getCell() != null && getCell().getCellStyle().getBorderBottomEnum() != BorderStyle.NONE) {
+			if (getCell() != null && getCell().getCellStyle().getBorderBottom() != BorderStyle.NONE) {
 				return true;
 			}
 			if (isMerged()) {
 				return getBottomMergedCell().getCell() != null
-						&& getBottomMergedCell().getCell().getCellStyle().getBorderBottomEnum() != BorderStyle.NONE;
+						&& getBottomMergedCell().getCell().getCellStyle().getBorderBottom() != BorderStyle.NONE;
 			}
 			return false;
 		}

@@ -365,7 +365,7 @@ public class ExcelSheetView extends JPanel implements HasPropertyChangeSupport {
 				foreground = getForegroundColor(style);
 				font = getFont(style);
 
-				switch (style.getAlignmentEnum()) {
+				switch (style.getAlignment()) {
 					case CENTER:
 						returned.setHorizontalAlignment(SwingConstants.CENTER);
 						break;
@@ -378,7 +378,7 @@ public class ExcelSheetView extends JPanel implements HasPropertyChangeSupport {
 					default:
 						returned.setHorizontalAlignment(SwingConstants.LEFT);
 				}
-				switch (style.getVerticalAlignmentEnum()) {
+				switch (style.getVerticalAlignment()) {
 					case TOP:
 						returned.setVerticalAlignment(SwingConstants.TOP);
 						break;
@@ -438,7 +438,7 @@ public class ExcelSheetView extends JPanel implements HasPropertyChangeSupport {
 				Rectangle2D stringBounds = fm.getStringBounds(cell.getDisplayValue(), g);
 				int x;
 				int y;
-				switch (cell.getCellStyle().getAlignmentEnum()) {
+				switch (cell.getCellStyle().getAlignment()) {
 					case CENTER:
 						x = (int) (cellBounds.x - stringBounds.getCenterX() + cellBounds.getWidth() / 2);
 						break;
@@ -451,7 +451,7 @@ public class ExcelSheetView extends JPanel implements HasPropertyChangeSupport {
 					default:
 						x = (int) (cellBounds.x - stringBounds.getX());
 				}
-				switch (cell.getCellStyle().getVerticalAlignmentEnum()) {
+				switch (cell.getCellStyle().getVerticalAlignment()) {
 					case TOP:
 						y = (int) (cellBounds.y - stringBounds.getY());
 						break;

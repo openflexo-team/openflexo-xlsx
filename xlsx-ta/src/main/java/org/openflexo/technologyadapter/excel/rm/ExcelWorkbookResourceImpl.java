@@ -47,7 +47,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -230,8 +229,6 @@ public abstract class ExcelWorkbookResourceImpl extends PamelaResourceImpl<Excel
 			// by consequence I don't know whether the workbook gets closed at some point or not
 			// maybe there is a resource leak here
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InvalidFormatException e) {
 			e.printStackTrace();
 		}
 		return newWorkbook;

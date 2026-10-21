@@ -2,8 +2,8 @@ dependencies {
   // openflexo dep
   implementation flexoFoundation()
   // external dep
-  api group: 'org.apache.poi', name: 'poi', version: '3.17'
-  api group: 'org.apache.poi', name: 'poi-ooxml', version: '3.17'
+  api poi()
+  api poiOoxml()
 
   // Test resource center
   testRuntimeOnly project(':xlsx-ta-test-rc')

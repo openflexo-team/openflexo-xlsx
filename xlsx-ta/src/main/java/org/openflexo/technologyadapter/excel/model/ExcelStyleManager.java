@@ -194,8 +194,8 @@ public class ExcelStyleManager {
 		HSSFPalette palette = ((HSSFWorkbook) (getWorkbook().getWorkbook())).getCustomPalette();
 		HSSFColor hssfColor = palette.findColor((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
 		if (hssfColor == null) {
-			palette.setColorAtIndex(HSSFColor.LAVENDER.index, (byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
-			hssfColor = palette.getColor(HSSFColor.LAVENDER.index);
+			palette.setColorAtIndex(HSSFColor.HSSFColorPredefined.LAVENDER.getIndex(), (byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+			hssfColor = palette.getColor(HSSFColor.HSSFColorPredefined.LAVENDER.getIndex());
 		}
 		return hssfColor;
 	}
@@ -214,7 +214,7 @@ public class ExcelStyleManager {
 
 	private static void setForeground(Object value, XSSFCellStyle style) {
 		if (value instanceof Color) {
-			style.setFillForegroundColor(new XSSFColor((Color) value));
+			style.setFillForegroundColor(new XSSFColor((Color) value, null));
 		}
 		if (value instanceof String) {
 			style.setFillForegroundColor(Short.parseShort((String) value));
@@ -226,7 +226,7 @@ public class ExcelStyleManager {
 
 	private static void setBackground(Object value, XSSFCellStyle style) {
 		if (value instanceof Color) {
-			style.setFillBackgroundColor(new XSSFColor((Color) value));
+			style.setFillBackgroundColor(new XSSFColor((Color) value, null));
 		}
 		if (value instanceof String) {
 			style.setFillBackgroundColor(Short.parseShort((String) value));
