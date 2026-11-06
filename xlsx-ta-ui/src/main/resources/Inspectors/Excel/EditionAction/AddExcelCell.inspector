@@ -102,7 +102,5 @@
 	<FIBVariable id="26" name="data"
 		type="org.openflexo.technologyadapter.excel.fml.editionaction.AddExcelCell" />
 	<LocalizedDictionary id="27">
-		<Localized id="28" value="Avancé" lang="French" key="Advanced" />
-		<Localized id="29" value="Basique" lang="French" key="Basic" />
 	</LocalizedDictionary>
 </Inspector>
