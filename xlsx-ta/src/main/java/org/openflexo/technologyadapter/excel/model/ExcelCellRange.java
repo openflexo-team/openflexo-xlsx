@@ -151,7 +151,7 @@ public interface ExcelCellRange extends ExcelObject {
 
 		@Override
 		public ExcelWorkbook getResourceData() {
-			return getExcelSheet().getExcelWorkbook();
+			return getExcelSheet() != null ? getExcelSheet().getExcelWorkbook() : null;
 		}
 
 		/**

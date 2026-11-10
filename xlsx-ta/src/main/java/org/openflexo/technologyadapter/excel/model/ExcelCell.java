@@ -348,12 +348,19 @@ public interface ExcelCell extends ExcelObject, ExcelStyleObject {
 
 		@Override
 		public ExcelWorkbook getResourceData() {
-			return getExcelSheet().getExcelWorkbook();
+			// The converter builds a cell before attaching it to its row
+			if (getExcelSheet() != null) {
+				return getExcelSheet().getExcelWorkbook();
+			}
+			return null;
 		}
 
 		@Override
 		public ExcelSheet getExcelSheet() {
-			return getExcelRow().getExcelSheet();
+			if (getExcelRow() != null) {
+				return getExcelRow().getExcelSheet();
+			}
+			return null;
 		}
 
 		@Override
