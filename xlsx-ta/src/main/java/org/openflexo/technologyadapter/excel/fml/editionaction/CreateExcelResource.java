@@ -53,7 +53,6 @@ import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.foundation.resource.SaveResourceException;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
@@ -69,7 +68,6 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
  */
 @ModelEntity
 @ImplementationClass(CreateExcelResource.CreateExcelResourceImpl.class)
-@XMLElement
 @FML("CreateExcelResource")
 public interface CreateExcelResource extends AbstractCreateResource<BasicExcelModelSlot, ExcelWorkbook, ExcelTechnologyAdapter> {
 

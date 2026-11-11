@@ -54,15 +54,12 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(MergeCells.MergeCellsImpl.class)
-@XMLElement
 @FML("MergeCells")
 public interface MergeCells extends ExcelAction<ExcelCell> {
 
@@ -72,14 +69,12 @@ public interface MergeCells extends ExcelAction<ExcelCell> {
 	public static final String END_CELL_KEY = "endCell";
 
 	@Getter(value = START_CELL_KEY)
-	@XMLAttribute
 	public DataBinding<ExcelCell> getStartCell();
 
 	@Setter(START_CELL_KEY)
 	public void setStartCell(DataBinding<ExcelCell> cell);
 
 	@Getter(value = END_CELL_KEY)
-	@XMLAttribute
 	public DataBinding<ExcelCell> getEndCell();
 
 	@Setter(END_CELL_KEY)

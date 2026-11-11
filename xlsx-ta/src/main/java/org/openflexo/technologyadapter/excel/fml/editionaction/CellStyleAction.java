@@ -57,8 +57,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelStyleManager;
@@ -71,7 +69,6 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(CellStyleAction.CellStyleActionImpl.class)
-@XMLElement
 @FML("CellStyleAction")
 public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 
@@ -92,21 +89,18 @@ public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 	public static final String CELL_COLOR_STYLE_KEY = "cellColorStyle";
 
 	@Getter(value = SUBJECT_KEY)
-	@XMLAttribute
 	public DataBinding<ExcelStyleObject> getSubject();
 
 	@Setter(SUBJECT_KEY)
 	public void setSubject(DataBinding<ExcelStyleObject> subject);
 
 	@Getter(value = VALUE_KEY)
-	@XMLAttribute
 	public DataBinding<?> getValue();
 
 	@Setter(VALUE_KEY)
 	public void setValue(DataBinding<?> value);
 
 	@Getter(value = CELL_STYLE_KEY)
-	@XMLAttribute
 	public CellStyleFeature getCellStyle();
 
 	@Setter(CELL_STYLE_KEY)
@@ -115,19 +109,15 @@ public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 	public List<CellStyleFeature> getAvailableCellStyles();
 
 	@Getter(value = CELL_BORDER_STYLE_KEY)
-	@XMLAttribute
 	public CellBorderStyleFeature getCellBorderStyle();
 
 	@Getter(value = CELL_ALIGNEMENT_STYLE_KEY)
-	@XMLAttribute
 	public CellAlignmentStyleFeature getCellAlignmentStyle();
 
 	@Getter(value = CELL_PATTERN_STYLE_KEY)
-	@XMLAttribute
 	public CellPatternStyleFeature getCellPatternStyle();
 
 	@Getter(value = CELL_COLOR_STYLE_KEY)
-	@XMLAttribute
 	public Color getCellColorStyle();
 
 	@Setter(CELL_BORDER_STYLE_KEY)

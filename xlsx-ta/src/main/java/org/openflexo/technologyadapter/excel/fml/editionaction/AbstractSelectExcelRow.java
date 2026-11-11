@@ -53,7 +53,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -67,7 +66,6 @@ public interface AbstractSelectExcelRow<AT> extends AbstractFetchRequest<BasicEx
 	public static final String EXCEL_SHEET_KEY = "excelSheet";
 
 	@Getter(value = EXCEL_SHEET_KEY)
-	@XMLAttribute
 	public DataBinding<ExcelSheet> getExcelSheet();
 
 	@Setter(EXCEL_SHEET_KEY)

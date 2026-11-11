@@ -49,7 +49,6 @@ import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.pamela.exceptions.ModelDefinitionException;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
@@ -58,7 +57,6 @@ import org.openflexo.technologyadapter.excel.rm.ExcelWorkbookResourceFactory;
 
 @ModelEntity
 @ImplementationClass(GenerateExcelResource.GenerateExcelResourceImpl.class)
-@XMLElement
 @FML("GenerateExcelResource")
 public interface GenerateExcelResource extends CreateExcelResource {
 
@@ -66,7 +64,6 @@ public interface GenerateExcelResource extends CreateExcelResource {
 	public static final String FILE_KEY = "file";
 	
 	@Getter(value = FILE_KEY)
-	@XMLAttribute
 	public File getFile();
 	
 	@Setter(FILE_KEY)

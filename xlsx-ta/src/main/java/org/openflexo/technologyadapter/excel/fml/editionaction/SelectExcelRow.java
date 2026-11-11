@@ -44,7 +44,6 @@ import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.FetchRequest;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
@@ -57,7 +56,6 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
  */
 @ModelEntity
 @ImplementationClass(SelectExcelRow.AbstractSelectExcelRowImpl.class)
-@XMLElement
 @FML("SelectExcelRow")
 public interface SelectExcelRow extends AbstractSelectExcelRow<List<ExcelRow>>, FetchRequest<BasicExcelModelSlot, ExcelWorkbook, ExcelRow> {
 

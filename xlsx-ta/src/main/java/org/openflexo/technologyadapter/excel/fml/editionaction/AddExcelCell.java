@@ -55,8 +55,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.CellType;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
@@ -66,7 +64,6 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(AddExcelCell.AddExcelCellImpl.class)
-@XMLElement
 @FML("AddExcelCell")
 public interface AddExcelCell extends ExcelAction<ExcelCell> {
 
@@ -88,7 +85,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public static final String IS_ROW_INDEX_KEY = "isRowIndex";
 
 	@Getter(value = ROW_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = ROW_KEY, required = false, description = "<html>row the cell is added to</html>")
 	public DataBinding<ExcelRow> getRow();
 
@@ -96,7 +92,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setRow(DataBinding<ExcelRow> row);
 
 	@Getter(value = VALUE_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = VALUE_KEY, required = false, description = "<html>value of the new cell</html>")
 	public DataBinding<Object> getValue();
 
@@ -104,7 +99,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setValue(DataBinding<Object> value);
 
 	@Getter(value = CELL_TYPE_KEY)
-	@XMLAttribute
 	@FMLAttribute(
 			value = CELL_TYPE_KEY,
 			required = false,
@@ -116,7 +110,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setCellType(CellType cellType);
 
 	@Getter(value = COLUMN_INDEX_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = COLUMN_INDEX_KEY, required = false, description = "<html>index of the new cell in the row</html>")
 	public DataBinding<Integer> getColumnIndex();
 
@@ -124,7 +117,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setColumnIndex(DataBinding<Integer> columnIndex);
 
 	@Getter(value = ROW_INDEX_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = ROW_INDEX_KEY, required = false, description = "<html>index of the row, when the cell is added to a sheet</html>")
 	public DataBinding<Integer> getRowIndex();
 
@@ -132,7 +124,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setRowIndex(DataBinding<Integer> rowIndex);
 
 	@Getter(value = SHEET_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SHEET_KEY, required = false, description = "<html>sheet the cell is added to, when no row is supplied</html>")
 	public DataBinding<ExcelSheet> getSheet();
 
@@ -140,7 +131,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public void setSheet(DataBinding<ExcelSheet> sheet);
 
 	@Getter(value = IS_ROW_INDEX_KEY, defaultValue = "false")
-	@XMLAttribute
 	public boolean isRowIndex();
 
 	@Setter(IS_ROW_INDEX_KEY)
@@ -149,7 +139,6 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 	public List<CellType> getAvailableCellTypes();
 
 	@Getter(value = CELL_TO_COPY_KEY)
-	@XMLAttribute
 	public DataBinding<ExcelCell> getCellToCopy();
 
 	@Setter(CELL_TO_COPY_KEY)

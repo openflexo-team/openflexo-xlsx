@@ -53,8 +53,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
@@ -62,7 +60,6 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(AddExcelSheet.AddExcelSheetImpl.class)
-@XMLElement
 @FML("AddExcelSheet")
 public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 
@@ -74,7 +71,6 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 	public static final String OVERRIDE_KEY = "override";
 
 	@Getter(value = SHEET_NAME_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SHEET_NAME_KEY, required = true, description = "<html>name of the new sheet</html>")
 	public DataBinding<String> getSheetName();
 
@@ -82,7 +78,6 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 	public void setSheetName(DataBinding<String> sheetName);
 
 	@Getter(value = SHEET_ROWS_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = SHEET_ROWS_KEY, required = false, description = "<html>rows of the new sheet</html>")
 	public DataBinding<List<ExcelRow>> getSheetRows();
 
@@ -90,7 +85,6 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 	public void setSheetRows(DataBinding<List<ExcelRow>> sheetRows);
 
 	@Getter(value = OVERRIDE_KEY, defaultValue = "false")
-	@XMLAttribute
 	@FMLAttribute(value = OVERRIDE_KEY, required = false, description = "<html>replace an existing sheet with that name</html>")
 	public boolean getOverride();
 

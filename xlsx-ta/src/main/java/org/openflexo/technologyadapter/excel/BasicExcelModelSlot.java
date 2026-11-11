@@ -59,8 +59,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.fml.ExcelActorReference;
 import org.openflexo.technologyadapter.excel.fml.ExcelCellRole;
 import org.openflexo.technologyadapter.excel.fml.ExcelColumnRole;
@@ -99,7 +97,6 @@ import org.openflexo.toolbox.StringUtils;
 		SelectUniqueExcelRow.class, SelectUniqueExcelCell.class })
 @ModelEntity
 @ImplementationClass(BasicExcelModelSlot.BasicExcelModelSlotImpl.class)
-@XMLElement
 @FML("BasicExcelModelSlot")
 public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook, ExcelWorkbookResource> {
 
@@ -110,7 +107,6 @@ public interface BasicExcelModelSlot extends FreeModelSlot<ExcelWorkbook, ExcelW
 	public static final String TEMPLATE_WORKBOOK_URI_KEY = "templateWorkbookURI";
 
 	@Getter(value = TEMPLATE_WORKBOOK_URI_KEY)
-	@XMLAttribute
 	public String getTemplateWorkbookURI();
 
 	@Setter(TEMPLATE_WORKBOOK_URI_KEY)

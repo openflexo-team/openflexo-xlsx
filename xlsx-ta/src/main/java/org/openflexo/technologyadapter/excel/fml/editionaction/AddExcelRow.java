@@ -55,8 +55,6 @@ import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
 import org.openflexo.pamela.annotations.PropertyIdentifier;
 import org.openflexo.pamela.annotations.Setter;
-import org.openflexo.pamela.annotations.XMLAttribute;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.BasicExcelModelSlot;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
@@ -65,7 +63,6 @@ import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
 
 @ModelEntity
 @ImplementationClass(AddExcelRow.AddExcelRowImpl.class)
-@XMLElement
 @FML("AddExcelRow")
 public interface AddExcelRow extends ExcelAction<ExcelRow> {
 
@@ -77,7 +74,6 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 	public static final String ROW_INDEX_KEY = "rowIndex";
 
 	@Getter(value = EXCEL_SHEET_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = EXCEL_SHEET_KEY, required = true, description = "<html>sheet the row is added to</html>")
 	public DataBinding<ExcelSheet> getExcelSheet();
 
@@ -85,7 +81,6 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 	public void setExcelSheet(DataBinding<ExcelSheet> excelSheet);
 
 	@Getter(value = EXCEL_CELLS_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = EXCEL_CELLS_KEY, required = false, description = "<html>cells of the new row</html>")
 	public DataBinding<List<ExcelCell>> getExcelCells();
 
@@ -93,7 +88,6 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 	public void setExcelCells(DataBinding<List<ExcelCell>> excelCells);
 
 	@Getter(value = ROW_INDEX_KEY)
-	@XMLAttribute
 	@FMLAttribute(value = ROW_INDEX_KEY, required = true, description = "<html>index of the new row in the sheet</html>")
 	public DataBinding<Integer> getRowIndex();
 

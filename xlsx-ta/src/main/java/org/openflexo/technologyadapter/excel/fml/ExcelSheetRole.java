@@ -48,13 +48,11 @@ import org.openflexo.foundation.fml.rt.FlexoConceptInstance;
 import org.openflexo.foundation.technologyadapter.TechnologyAdapter;
 import org.openflexo.pamela.annotations.ImplementationClass;
 import org.openflexo.pamela.annotations.ModelEntity;
-import org.openflexo.pamela.annotations.XMLElement;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
 import org.openflexo.technologyadapter.excel.model.ExcelSheet;
 
 @ModelEntity
 @ImplementationClass(ExcelSheetRole.ExcelSheetRoleImpl.class)
-@XMLElement
 @FML("ExcelSheetRole")
 public interface ExcelSheetRole extends FlexoRole<ExcelSheet> {
 
