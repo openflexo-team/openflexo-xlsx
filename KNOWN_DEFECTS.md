@@ -27,3 +27,26 @@ code, the test resource or the base class `AbstractTestExcelUI` is at fault is u
 
 **Consequence for the 2.99 release.** The release job `openflexo-xlsx-release` runs the `test` task, so the UI tests of this module were not
 executed for the release (tracked as `JENKINS-D-6` in the Jenkins backlog).
+
+## Reflected model slot
+
+### XLSX-D-2 — After an external edit and a refresh, the reflected model slot is rebuilt over a stale sheet: `NullPointerException`  ·  `TODO`
+
+**Symptom (verified 2026-11-15 by execution).** In `openflexo-integration-tests/digital-twin-demo`, `ExternalWorkbookEditTest.externalEditIsPickedUpByRefresh`
+fails: a `select` whose container is a property of the reflected Excel model slot rebuilds the reflected virtual model instance
+(`ReflectedFMLRTModelSlotInstance.getAccessedResourceData` → `FMLExcelModelSlot.reflectVirtualModelInstance` →
+`XLSVirtualModelInstanceBuilder.buildVirtualModelInstance` → `DataRange.isSignificative` → `ExcelSheet.getRowAt` → `getExcelRows` →
+`ensureConversion`), and `BasicExcelModelConverter.getSheetReference` throws a `NullPointerException`: `excelWorkbook` is null, the converter
+having been deleted (`BasicExcelModelConverter.delete()`). So the sheet traversed belongs to the workbook released by the refresh.
+
+**What is verified.** Before `CORE-F-11` phase 3 the failure was swallowed: the container of the `select` printed the stack and gave null, and
+the test passed. It now reaches the test as an `FMLInternalError` (a defect of the platform). Not investigated: why the rebuild after the
+refresh still reaches the sheets of the former workbook (the data ranges of the reflected slot keeping their sheets, or the reflected instance
+not dropped by the refresh; see the hot reload of the reflected slot, `refresh()` versus `synchronize()`).
+
+**Not reproduced since.** In the final run of `CORE-F-11` phase 3 (whole suite) and in two runs of the test alone, the test passes: the
+failure was seen once, in a run of the whole suite before the last changes of phase 3 (none of which touches this path knowingly). Possibly
+order- or timing-dependent; the stack above is the evidence.
+
+**To reproduce (not reproduced since).** From `openflexo-dev`:
+`./gradlew :openflexo-integration-tests:digital-twin-demo:cleanTest :openflexo-integration-tests:digital-twin-demo:test --tests '*ExternalWorkbookEditTest'`.

@@ -12,8 +12,6 @@ assert vmi != null;
 
 log "vmi="+vmi;
 
-log "instances: "+vmi.getFlexoConceptInstances();
-
 persons = vmi.getAllPersons();
 log "persons="+persons;
 

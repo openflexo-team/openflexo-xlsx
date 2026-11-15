@@ -38,6 +38,7 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public interface AbstractSelectExcelRow<AT> extends AbstractFetchRequest<BasicEx
 		}
 
 		@Override
-		public List<ExcelRow> performExecute(RunTimeEvaluationContext evaluationContext) {
+		public List<ExcelRow> performExecute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
 

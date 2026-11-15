@@ -38,6 +38,7 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
@@ -112,7 +113,7 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 		}
 
 		@Override
-		public ExcelSheet execute(RunTimeEvaluationContext evaluationContext) {
+		public ExcelSheet execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			ExcelSheet result = null;
 
