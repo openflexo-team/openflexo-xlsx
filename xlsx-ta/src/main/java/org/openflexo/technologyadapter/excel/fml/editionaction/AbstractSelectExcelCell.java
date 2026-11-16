@@ -38,6 +38,8 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,8 +47,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.editionaction.AbstractFetchRequest;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.Getter;
@@ -92,37 +92,31 @@ public interface AbstractSelectExcelCell<AT> extends AbstractFetchRequest<BasicE
 		@Override
 		public List<ExcelCell> performExecute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
-
 			List<ExcelCell> selectedExcelCells = new ArrayList<>(0);
 
-			try {
-				if (getExcelSheet() != null) {
-					ExcelSheet excelSheet = getExcelSheet().getBindingValue(evaluationContext);
-
+			if (getExcelSheet().isSet()) {
+				// A sheet given, but null, is a null source (CORE-F-11)
+				ExcelSheet excelSheet = FMLEvaluation.evaluate(getExcelSheet(), evaluationContext, this);
+				if (excelSheet == null) {
+					throw new FMLNullReferenceError(getStringRepresentation() + ": no sheet to select from");
+				}
+				for (ExcelRow excelRow : excelSheet.getExcelRows()) {
+					selectedExcelCells.addAll(excelRow.getExcelCells());
+				}
+			}
+			else {
+				ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
+				if (excelWorkbook == null) {
+					throw new FMLNullReferenceError(getStringRepresentation() + ": no workbook to select from");
+				}
+				for (ExcelSheet excelSheet : excelWorkbook.getExcelSheets()) {
 					for (ExcelRow excelRow : excelSheet.getExcelRows()) {
 						selectedExcelCells.addAll(excelRow.getExcelCells());
 					}
 				}
-				else {
-					for (ExcelSheet excelSheet : excelWorkbook.getExcelSheets()) {
-						for (ExcelRow excelRow : excelSheet.getExcelRows()) {
-							selectedExcelCells.addAll(excelRow.getExcelCells());
-						}
-					}
-				}
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
 			}
 
-			List<ExcelCell> returned = filterWithConditions(selectedExcelCells, evaluationContext);
-
-			return returned;
-
+			return filterWithConditions(selectedExcelCells, evaluationContext);
 		}
 
 		@Override

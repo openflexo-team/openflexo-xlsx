@@ -38,14 +38,14 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -115,41 +115,18 @@ public interface AddExcelSheet extends ExcelAction<ExcelSheet> {
 		@Override
 		public ExcelSheet execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			ExcelSheet result = null;
-
 			ExcelWorkbook excelWB = getReceiver(evaluationContext);
-			// Sheet sheet = null;
-			try {
-				if (excelWB != null) {
-					String name = getSheetName().getBindingValue(evaluationContext);
-					if (name != null) {
-						// Create or retrieve this sheet
-						result = excelWB.getConverter().newSheet(name, getOverride());
-
-						// sheet = retrieveOrCreateSheet(wb, name);
-						// Instanciate Wrapper.
-						// result = modelSlotInstance.getAccessedResourceData().getConverter().convertExcelSheetToSheet(sheet,
-						// modelSlotInstance.getAccessedResourceData(), null);
-						// modelSlotInstance.getAccessedResourceData().addToExcelSheets(result);
-						excelWB.setIsModified();
-					}
-					else {
-						logger.warning("Create a sheet requires a name");
-					}
-				}
-				else {
-					logger.warning("Create a sheet requires a workbook");
-				}
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			if (excelWB == null) {
+				throw new FMLNullReferenceError("No workbook to create the sheet in");
 			}
-
+			String name = FMLEvaluation.evaluate(getSheetName(), evaluationContext, this);
+			if (name == null) {
+				throw new FMLNullReferenceError("The name of the new sheet is null");
+			}
+			// Create or retrieve this sheet
+			ExcelSheet result = excelWB.getConverter().newSheet(name, getOverride());
+			excelWB.setIsModified();
 			return result;
-
 		}
 
 		@Override

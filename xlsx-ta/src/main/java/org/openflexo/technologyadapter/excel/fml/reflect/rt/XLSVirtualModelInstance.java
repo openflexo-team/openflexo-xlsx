@@ -39,6 +39,8 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.fml.FlexoConcept;
 import org.openflexo.foundation.fml.VirtualModel;
+import org.openflexo.foundation.fml.rt.error.FMLResolutionError;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.VirtualModelInstance;
 import org.openflexo.foundation.fml.rt.reflect.ReflectedVirtualModelInstance;
@@ -71,10 +73,13 @@ public interface XLSVirtualModelInstance
 	 * Explicitly add a new reflected instance of the concept named <code>conceptName</code> to this reflected
 	 * {@link XLSVirtualModelInstance}: a new row is appended to the sheet declared by the concept's <code>@DataRange</code>
 	 * meta-data, and a {@link XLSFlexoConceptInstance} backed by that new row is created and registered.<br>
-	 * Setting a typed property on the returned instance writes back to the corresponding cell. Returns null when the
-	 * concept, its sheet or the workbook cannot be resolved.
+	 * Setting a typed property on the returned instance writes back to the corresponding cell.
+	 * 
+	 * @throws FMLExecutionException
+	 *             an {@link FMLResolutionError} for an unknown concept, an {@link FMLTechnologyError} when its sheet or the workbook cannot be
+	 *             found (CORE-F-11)
 	 */
-	XLSFlexoConceptInstance createReflectedInstance(String conceptName);
+	XLSFlexoConceptInstance createReflectedInstance(String conceptName) throws FMLExecutionException;
 
 	abstract class XLSVirtualModelInstanceImpl
 			extends ReflectedVirtualModelInstanceImpl<XLSVirtualModelInstance, ExcelWorkbookResource, ExcelWorkbook, ExcelTechnologyAdapter>
@@ -83,36 +88,30 @@ public interface XLSVirtualModelInstance
 		private static final Logger logger = FlexoLogger.getLogger(XLSVirtualModelInstance.class.getPackage().toString());
 
 		@Override
-		public XLSFlexoConceptInstance createReflectedInstance(String conceptName) {
+		public XLSFlexoConceptInstance createReflectedInstance(String conceptName) throws FMLExecutionException {
 			VirtualModel vm = getVirtualModel();
 			if (vm == null) {
-				logger.warning("Cannot create reflected instance: no virtual model bound to " + this);
-				return null;
+				throw new FMLTechnologyError("Cannot create a reflected instance of " + conceptName + ": no virtual model bound to " + this);
 			}
 			FlexoConcept concept = vm.getFlexoConcept(conceptName);
 			if (concept == null) {
-				logger.warning("Cannot create reflected instance: no concept '" + conceptName + "' in " + vm);
-				return null;
+				throw new FMLResolutionError("Cannot create a reflected instance: no concept " + conceptName + " in " + vm.getName());
 			}
 			String sheetName = XLSVirtualModelInstanceBuilder.getSheetName(concept);
+			if (sheetName == null) {
+				throw new FMLTechnologyError("Cannot create a reflected instance of " + conceptName + ": the concept declares no @DataRange sheet");
+			}
 			ExcelWorkbook workbook = (getReflectedResource() != null ? getReflectedResource().getExcelWorkbook() : null);
-			if (sheetName == null || workbook == null) {
-				logger.warning("Cannot create reflected instance for " + concept + ": sheet=" + sheetName + " workbook=" + workbook);
-				return null;
+			if (workbook == null) {
+				throw new FMLTechnologyError("Cannot create a reflected instance of " + conceptName + ": no workbook reflected by " + this);
 			}
 			ExcelSheet sheet = workbook.getExcelSheetByName(sheetName);
 			if (sheet == null) {
-				logger.warning("Cannot create reflected instance for " + concept + ": sheet '" + sheetName + "' not found");
-				return null;
+				throw new FMLTechnologyError("Cannot create a reflected instance of " + conceptName + ": no sheet " + sheetName + " in the workbook");
 			}
 			ExcelRow newRow = sheet.createNewRow();
-			try {
-				XLSVirtualModelInstanceModelFactory factory = (XLSVirtualModelInstanceModelFactory) getReflectedModelFactory();
-				return factory.makeNewFlexoConceptInstance(concept, newRow.getRow(), this, this, null, null);
-			} catch (FMLExecutionException e) {
-				logger.warning("Could not instantiate " + concept + " on new row: " + e.getMessage());
-				return null;
-			}
+			XLSVirtualModelInstanceModelFactory factory = (XLSVirtualModelInstanceModelFactory) getReflectedModelFactory();
+			return factory.makeNewFlexoConceptInstance(concept, newRow.getRow(), this, this, null, null);
 		}
 
 	}

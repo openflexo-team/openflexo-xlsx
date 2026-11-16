@@ -42,9 +42,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
@@ -111,56 +112,28 @@ public interface AddExcelRow extends ExcelAction<ExcelRow> {
 		}
 
 		@Override
-		public ExcelRow execute(RunTimeEvaluationContext evaluationContext) {
+		public ExcelRow execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			ExcelRow excelRow = null;
-
-			try {
-				ExcelSheet excelSheet = getExcelSheet().getBindingValue(evaluationContext);
-				if (excelSheet != null) {
-					Integer rowIndex = getRowIndex().getBindingValue(evaluationContext);
-					if (rowIndex != null) {
-						if (excelSheet.getRowAt(rowIndex) != null) {
-							excelRow = excelSheet.getRowAt(rowIndex);
-						}
-						else {
-							excelRow = excelSheet.insertRowAt(rowIndex);
-							/*Row row = excelSheet.getSheet().createRow(rowIndex);
-							BasicExcelModelConverter converter = ((ExcelWorkbookResource) excelSheet.getResourceData().getResource())
-									.getConverter();
-							excelRow = converter.convertExcelRowToRow(row, excelSheet, null);
-							excelSheet.addToExcelRows(excelRow);*/
-						}
-						if (getExcelCells().getBindingValue(evaluationContext) != null) {
-							excelRow.getExcelCells().addAll(getExcelCells().getBindingValue(evaluationContext));
-						}
-						excelSheet.getExcelWorkbook().setIsModified();
-						excelSheet.getExcelWorkbook().getResource().setModified(true);
-
-					}
-					else {
-						logger.warning("Create a row requires a rowindex");
-					}
-				}
-				else {
-					logger.warning("Create a row requires a sheet");
-					System.out.println("Alors ca marche pas, donc.");
-					System.out.println("j'essaie d'evaluer: " + getExcelSheet());
-					System.out.println("valid=" + getExcelSheet().isValid());
-					System.out.println("reason:" + getExcelSheet().invalidBindingReason());
-					System.out.println("evaluationContext=" + evaluationContext);
-				}
-
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			ExcelSheet excelSheet = FMLEvaluation.evaluate(getExcelSheet(), evaluationContext, this);
+			if (excelSheet == null) {
+				throw new FMLNullReferenceError("No sheet to create the row in");
 			}
+			Integer rowIndex = FMLEvaluation.evaluate(getRowIndex(), evaluationContext, this);
+			if (rowIndex == null) {
+				throw new FMLNullReferenceError("No row index to create the row at, in sheet " + excelSheet.getName());
+			}
+			ExcelRow excelRow = excelSheet.getRowAt(rowIndex);
+			if (excelRow == null) {
+				excelRow = excelSheet.insertRowAt(rowIndex);
+			}
+			List<ExcelCell> cells = FMLEvaluation.evaluate(getExcelCells(), evaluationContext, this);
+			if (cells != null) {
+				excelRow.getExcelCells().addAll(cells);
+			}
+			excelSheet.getExcelWorkbook().setIsModified();
+			excelSheet.getExcelWorkbook().getResource().setModified(true);
 
 			return excelRow;
-
 		}
 
 		@Override

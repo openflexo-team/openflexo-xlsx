@@ -38,6 +38,8 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -45,8 +47,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.editionaction.AbstractFetchRequest;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.Getter;
@@ -91,41 +91,26 @@ public interface AbstractSelectExcelRow<AT> extends AbstractFetchRequest<BasicEx
 		@Override
 		public List<ExcelRow> performExecute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
-
-			//System.out.println("getReceiver()=" + getReceiver());
-			//System.out.println("getReceiver() valid=" + getReceiver().isValid());
-			//System.out.println("getReceiver() reason=" + getReceiver().invalidBindingReason());
-			//System.out.println("excelWorkbook=" + excelWorkbook);
-
 			List<ExcelRow> selectedExcelRows = new ArrayList<>();
-			ExcelSheet excelSheet;
-			try {
-				excelSheet = getExcelSheet().getBindingValue(evaluationContext);
-
-				//System.out.println("getExcelSheet()=" + getExcelSheet());
-				//System.out.println("excelSheet=" + excelSheet);
-
-				if (excelSheet != null) {
-					selectedExcelRows.addAll(excelSheet.getExcelRows());
+			if (getExcelSheet().isSet()) {
+				// A sheet given, but null, is a null source (CORE-F-11)
+				ExcelSheet excelSheet = FMLEvaluation.evaluate(getExcelSheet(), evaluationContext, this);
+				if (excelSheet == null) {
+					throw new FMLNullReferenceError(getStringRepresentation() + ": no sheet to select from");
 				}
-				else {
-					for (ExcelSheet excelSheetItem : excelWorkbook.getExcelSheets()) {
-						selectedExcelRows.addAll(excelSheetItem.getExcelRows());
-					}
+				selectedExcelRows.addAll(excelSheet.getExcelRows());
+			}
+			else {
+				ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
+				if (excelWorkbook == null) {
+					throw new FMLNullReferenceError(getStringRepresentation() + ": no workbook to select from");
 				}
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+				for (ExcelSheet excelSheetItem : excelWorkbook.getExcelSheets()) {
+					selectedExcelRows.addAll(excelSheetItem.getExcelRows());
+				}
 			}
 
-			List<ExcelRow> returned = filterWithConditions(selectedExcelRows, evaluationContext);
-
-			return returned;
-
+			return filterWithConditions(selectedExcelRows, evaluationContext);
 		}
 
 		@Override

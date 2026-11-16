@@ -43,9 +43,11 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Logger;
 
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.annotations.FMLAttribute;
 import org.openflexo.foundation.fml.annotations.FMLAttribute.AttributeKind;
@@ -170,84 +172,52 @@ public interface AddExcelCell extends ExcelAction<ExcelCell> {
 		}
 
 		@Override
-		public ExcelCell execute(RunTimeEvaluationContext evaluationContext) {
+		public ExcelCell execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			ExcelCell excelCell = null;
-
-			try {
-				ExcelRow excelRow = null;
-				if (isRowIndex()) {
-					Integer rowIndex = getRowIndex().getBindingValue(evaluationContext);
-					ExcelSheet excelSheet = getSheet().getBindingValue(evaluationContext);
-					if (excelSheet != null && rowIndex != null) {
-						excelRow = excelSheet.getRowAt(rowIndex);
-					}
-					else if (excelSheet == null) {
-						logger.severe("Excel sheet is not defined.");
-					}
-					else if (rowIndex == null) {
-						logger.severe("Row index is not defined.");
-					}
-
+			ExcelRow excelRow;
+			if (isRowIndex()) {
+				ExcelSheet excelSheet = FMLEvaluation.evaluate(getSheet(), evaluationContext, this);
+				if (excelSheet == null) {
+					throw new FMLNullReferenceError("No sheet to create the cell in");
 				}
-				else {
-					excelRow = getRow().getBindingValue(evaluationContext);
+				Integer rowIndex = FMLEvaluation.evaluate(getRowIndex(), evaluationContext, this);
+				if (rowIndex == null) {
+					throw new FMLNullReferenceError("No row index to create the cell at, in sheet " + excelSheet.getName());
 				}
-
-				System.out.println("On vient faire AddExcelCell pour row=" + excelRow);
-
-				Integer columnIndex = getColumnIndex().getBindingValue(evaluationContext);
-
-				System.out.println("columnIndex=" + columnIndex);
-
-				// If this is possible, create the cell
-				if (columnIndex != null) {
-					if (excelRow != null) {
-						Object value = getValue().getBindingValue(evaluationContext);
-						// If this cell exists, just get it
-						if (excelRow.getExcelCellAt(columnIndex) != null) {
-							excelCell = excelRow.getExcelCellAt(columnIndex);
-						}
-						else {
-							excelCell = excelRow.createCellAt(columnIndex);
-							/*Cell cell = excelRow.getRow().createCell(columnIndex);
-							BasicExcelModelConverter converter = ((ExcelWorkbookResource) excelRow.getResourceData().getResource())
-									.getConverter();
-							excelCell = converter.convertExcelCellToCell(cell, excelRow, null);*/
-						}
-
-						ExcelCell cellToCopy = getCellToCopy().getBindingValue(evaluationContext);
-
-						System.out.println("excelCell=" + excelCell);
-						System.out.println("cellToCopy=" + cellToCopy);
-						System.out.println("value=" + value);
-
-						if (cellToCopy != null) {
-							excelCell.copyCellFrom(cellToCopy);
-						}
-
-						if (value != null) {
-							excelCell.setCellValue(value);
-						}
-						else {
-							logger.warning("Create a cell requires a value.");
-						}
-						excelCell.getExcelSheet().getExcelWorkbook().setIsModified();
-					}
-					else {
-						logger.warning("Create a cell requires a row.");
-					}
+				excelRow = excelSheet.getRowAt(rowIndex);
+				if (excelRow == null) {
+					throw new FMLTechnologyError("No row " + rowIndex + " in sheet " + excelSheet.getName() + " to create the cell in");
 				}
-				else {
-					logger.warning("Create a cell requires a column index.");
-				}
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
 			}
+			else {
+				excelRow = FMLEvaluation.evaluate(getRow(), evaluationContext, this);
+				if (excelRow == null) {
+					throw new FMLNullReferenceError("No row to create the cell in");
+				}
+			}
+
+			Integer columnIndex = FMLEvaluation.evaluate(getColumnIndex(), evaluationContext, this);
+			if (columnIndex == null) {
+				throw new FMLNullReferenceError("No column index to create the cell at");
+			}
+
+			Object value = FMLEvaluation.evaluate(getValue(), evaluationContext, this);
+			// If this cell exists, just get it
+			ExcelCell excelCell = excelRow.getExcelCellAt(columnIndex);
+			if (excelCell == null) {
+				excelCell = excelRow.createCellAt(columnIndex);
+			}
+
+			ExcelCell cellToCopy = FMLEvaluation.evaluate(getCellToCopy(), evaluationContext, this);
+			if (cellToCopy != null) {
+				excelCell.copyCellFrom(cellToCopy);
+			}
+
+			// A null value leaves the cell empty
+			if (value != null) {
+				excelCell.setCellValue(value);
+			}
+			excelCell.getExcelSheet().getExcelWorkbook().setIsModified();
 
 			return excelCell;
 		}

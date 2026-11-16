@@ -1,0 +1,32 @@
+use org.openflexo.technologyadapter.excel.FMLExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.fml.reflect.rt.XLSVirtualModelInstance;
+
+import ["http://www.openflexo.org/excel-test/FML/PersonListing.fml"];
+
+/**
+ * Failures of a reflected Excel virtual model instance (CORE-F-11 phase 6, XLSX-F-2): see the scripts of ExcelErrorKinds/ and
+ * TestExcelErrorKinds. The line numbers of the behaviours are asserted there.
+ */
+@URI("http://www.openflexo.org/excel-test/FML/ReflectErrorKinds.fml")
+public model ReflectErrorKinds {
+
+	PersonListing personListing with FMLExcelModelSlot();
+
+	create(required Resource<ExcelWorkbook> aListing) {
+		connect personListing using parameters.aListing;
+	}
+
+	public createUnknown() {
+		XLSVirtualModelInstance xls = (XLSVirtualModelInstance)this.personListing;
+		Object created = xls.createReflectedInstance("Nobody");
+	}
+
+	public int ageOfFirst() {
+		XLSVirtualModelInstance xls = (XLSVirtualModelInstance)this.personListing;
+		Person first = (Person)xls.flexoConceptInstances.get(0);
+		int age = first.age;
+		return age;
+	}
+}

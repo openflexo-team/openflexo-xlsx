@@ -44,9 +44,11 @@ import java.util.logging.Logger;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.RegionUtil;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.DataBinding;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.pamela.annotations.Getter;
@@ -95,14 +97,18 @@ public interface MergeCells extends ExcelAction<ExcelCell> {
 		}
 
 		@Override
-		public ExcelCell execute(RunTimeEvaluationContext evaluationContext) {
+		public ExcelCell execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+
+			ExcelCell startCell = FMLEvaluation.evaluate(getStartCell(), evaluationContext, this);
+			if (startCell == null) {
+				throw new FMLNullReferenceError("No start cell to merge from");
+			}
+			ExcelCell endCell = FMLEvaluation.evaluate(getEndCell(), evaluationContext, this);
+			if (endCell == null) {
+				throw new FMLNullReferenceError("No end cell to merge to");
+			}
 
 			try {
-				ExcelCell startCell = getStartCell().getBindingValue(evaluationContext);
-				ExcelCell endCell = getEndCell().getBindingValue(evaluationContext);
-
-				System.out.println("On doit merger " + startCell + " et " + endCell);
-
 				CellRangeAddress region = new CellRangeAddress(startCell.getRowIndex(), endCell.getRowIndex(), startCell.getColumnIndex(),
 						endCell.getColumnIndex());
 				startCell.getExcelSheet().getSheet().addMergedRegion(region);
@@ -111,21 +117,12 @@ public interface MergeCells extends ExcelAction<ExcelCell> {
 				RegionUtil.setBorderLeft(BorderStyle.MEDIUM, region, startCell.getExcelSheet().getSheet());
 				RegionUtil.setBorderRight(BorderStyle.MEDIUM, region, startCell.getExcelSheet().getSheet());
 				RegionUtil.setBorderBottom(BorderStyle.MEDIUM, region, startCell.getExcelSheet().getSheet());
-
-				return startCell;
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				e.printStackTrace();
+			} catch (IllegalArgumentException | IllegalStateException e) {
+				// POI refuses the region: a single cell, or a region overlapping a merged one
+				throw new FMLTechnologyError("Cannot merge " + startCell + " to " + endCell + ": " + e.getMessage(), e);
 			}
 
-			return null;
+			return startCell;
 		}
 
 		@Override

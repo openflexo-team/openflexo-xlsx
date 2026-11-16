@@ -38,6 +38,10 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
+import org.openflexo.foundation.fml.rt.error.FMLEvaluation;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
+
 import java.awt.Color;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -47,8 +51,6 @@ import java.util.logging.Logger;
 
 import org.openflexo.connie.DataBinding;
 import org.openflexo.connie.DataBinding.BindingDefinitionType;
-import org.openflexo.connie.exception.NullReferenceException;
-import org.openflexo.connie.exception.TypeMismatchException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.fml.rt.action.FlexoBehaviourAction;
@@ -172,17 +174,8 @@ public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 			return ExcelCell.class;
 		}
 
-		public Object getValue(FlexoBehaviourAction<?, ?, ?> action) {
-			try {
-				return getValue().getBindingValue(action);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			}
-			return null;
+		public Object getValue(FlexoBehaviourAction<?, ?, ?> action) throws FMLExecutionException {
+			return FMLEvaluation.evaluate(getValue(), action, this);
 		}
 
 		@Override
@@ -227,17 +220,8 @@ public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 			this.subject = subject;
 		}
 
-		public ExcelStyleObject getSubject(RunTimeEvaluationContext evaluationContext) {
-			try {
-				return getSubject().getBindingValue(evaluationContext);
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
-			}
-			return null;
+		public ExcelStyleObject getSubject(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			return FMLEvaluation.evaluate(getSubject(), evaluationContext, this);
 		}
 
 		// MAIN CELL STYLES
@@ -502,32 +486,26 @@ public interface CellStyleAction extends ExcelAction<ExcelStyleObject> {
 		// ACTION
 
 		@Override
-		public ExcelStyleObject execute(RunTimeEvaluationContext evaluationContext) {
-			logger.info("Perform graphical action " + evaluationContext);
+		public ExcelStyleObject execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 			ExcelStyleObject excelCellStyleObject = getSubject(evaluationContext);
-			Object value = null;
-			try {
-				if (isAlignmentStyle) {
-					value = getCellAlignmentStyle();
-				}
-				else if (isBorderStyle) {
-					value = getCellBorderStyle();
-				}
-				else if (isColorStyle) {
-					value = getCellColorStyle();
-				}
-				else if (isPatternStyle) {
-					value = getCellPatternStyle();
-				}
-				else {
-					value = getValue().getBindingValue(evaluationContext);
-				}
-			} catch (TypeMismatchException e) {
-				e.printStackTrace();
-			} catch (NullReferenceException e) {
-				e.printStackTrace();
-			} catch (ReflectiveOperationException e) {
-				e.printStackTrace();
+			if (excelCellStyleObject == null) {
+				throw new FMLNullReferenceError("No cell to apply the style " + getCellStyle() + " to");
+			}
+			Object value;
+			if (isAlignmentStyle) {
+				value = getCellAlignmentStyle();
+			}
+			else if (isBorderStyle) {
+				value = getCellBorderStyle();
+			}
+			else if (isColorStyle) {
+				value = getCellColorStyle();
+			}
+			else if (isPatternStyle) {
+				value = getCellPatternStyle();
+			}
+			else {
+				value = FMLEvaluation.evaluate(getValue(), evaluationContext, this);
 			}
 			if (logger.isLoggable(Level.FINE)) {
 				logger.fine("Element is " + excelCellStyleObject);

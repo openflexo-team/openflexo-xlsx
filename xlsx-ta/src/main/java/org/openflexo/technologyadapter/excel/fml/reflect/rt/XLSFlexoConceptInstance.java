@@ -36,10 +36,13 @@
 package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.openflexo.foundation.fml.rt.error.FMLTypeError;
+import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.connie.type.PrimitiveType;
 import org.openflexo.connie.type.TypeUtils;
 import org.openflexo.foundation.fml.FlexoConcept;
@@ -124,42 +127,62 @@ public interface XLSFlexoConceptInstance extends ReflectedFlexoConceptInstance<R
 
 		@Override
 		public <T> T getFlexoActor(FlexoRole<T> flexoRole) {
-			Integer columnIndex = getColumnIndex(flexoRole);
+			if (isMappedToCell(flexoRole)) {
+				try {
+					return readCell(flexoRole);
+				} catch (FMLTypeError e) {
+					// Lenient reading (user interface): a cell of the wrong type gives null (CORE-F-11); FINE, a label is read again and again
+					if (logger.isLoggable(Level.FINE)) {
+						logger.fine(e.getMessage());
+					}
+					return null;
+				}
+			}
+			return super.getFlexoActor(flexoRole);
+		}
+
+		/**
+		 * Strict reading, used when FML runs: a cell whose content does not fit the type of its property is an {@link FMLTypeError}
+		 * (CORE-F-11)
+		 */
+		@Override
+		public <T> T getFlexoActorOrFail(FlexoRole<T> flexoRole) throws FMLExecutionException {
+			if (isMappedToCell(flexoRole)) {
+				return readCell(flexoRole);
+			}
+			return super.getFlexoActorOrFail(flexoRole);
+		}
+
+		private boolean isMappedToCell(FlexoRole<?> flexoRole) {
+			return getColumnIndex(flexoRole) != null && getPrimitiveType(flexoRole) != null && getSupportObject() != null;
+		}
+
+		private <T> T readCell(FlexoRole<T> flexoRole) throws FMLTypeError {
+			int columnIndex = getColumnIndex(flexoRole);
 			PrimitiveType primitiveType = getPrimitiveType(flexoRole);
-			if (columnIndex != null && primitiveType != null && getSupportObject() != null) {
-				Cell cell = getSupportObject().getCell(columnIndex);
-				// System.out.println("cell: " + cell);
+			Cell cell = getSupportObject().getCell(columnIndex);
+			try {
 				switch (primitiveType) {
 					case String:
-						if (cell != null) {
-							return (T) cell.getStringCellValue();
-						}
-						return null;
+						return cell != null ? (T) cell.getStringCellValue() : null;
 					case Long:
 					case Integer:
 					case Double:
 					case Float:
-						if (cell != null) {
-							return (T) TypeUtils.castTo(cell.getNumericCellValue(), primitiveType.getType());
-						}
-						else {
-							return (T) TypeUtils.castTo(0, primitiveType.getType());
-						}
+						return (T) TypeUtils.castTo(cell != null ? cell.getNumericCellValue() : 0, primitiveType.getType());
 					case Date:
-						if (cell != null) {
-							return (T) cell.getDateCellValue();
-						}
+						return cell != null ? (T) cell.getDateCellValue() : null;
 					case Boolean:
-						if (cell != null) {
-							return (T) (Boolean) cell.getBooleanCellValue();
-						}
-						return (T) Boolean.FALSE;
+						return cell != null ? (T) (Boolean) cell.getBooleanCellValue() : (T) Boolean.FALSE;
 					default:
 						logger.warning("Unexpected primitive type: " + primitiveType);
 						return null;
 				}
+			} catch (IllegalStateException | NumberFormatException e) {
+				// POI: the type of the cell does not match the one asked for (text in a numeric column...)
+				throw new FMLTypeError("Cell " + cell.getSheet().getSheetName() + "!" + cell.getAddress().formatAsString() + " of "
+						+ flexoRole.getName() + " is not a " + primitiveType + ": " + cell, e);
 			}
-			return super.getFlexoActor(flexoRole);
 		}
 
 		@Override

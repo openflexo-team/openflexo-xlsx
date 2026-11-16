@@ -38,6 +38,7 @@
 
 package org.openflexo.technologyadapter.excel.fml.editionaction;
 
+import org.openflexo.foundation.fml.rt.error.FMLNullReferenceError;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -70,15 +71,11 @@ public interface AbstractSelectExcelSheet<AT> extends AbstractFetchRequest<Basic
 		public List<ExcelSheet> performExecute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
 			ExcelWorkbook excelWorkbook = getReceiver(evaluationContext);
-
-			List<ExcelSheet> selectedExcelSheets = new ArrayList<>(0);
-
-			selectedExcelSheets.addAll(excelWorkbook.getExcelSheets());
-
-			List<ExcelSheet> returned = filterWithConditions(selectedExcelSheets, evaluationContext);
-
-			return returned;
-
+			if (excelWorkbook == null) {
+				throw new FMLNullReferenceError(getStringRepresentation() + ": no workbook to select from");
+			}
+			List<ExcelSheet> selectedExcelSheets = new ArrayList<>(excelWorkbook.getExcelSheets());
+			return filterWithConditions(selectedExcelSheets, evaluationContext);
 		}
 	}
 }

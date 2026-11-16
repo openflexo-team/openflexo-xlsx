@@ -1,0 +1,9 @@
+// CORE-F-11 phase 6 (XLSX-F-2): a reflected cell whose content does not fit its property (text in the int column age) is an
+// FMLTypeError, no longer an internal error of POI.
+virtualModel = load -r ["http://www.openflexo.org/excel-test/FML/ReflectErrorKinds.fml"];
+listing = load -r ["http://www.openflexo.org/excel-test/TestResourceCenter/Excel/PersonListing.xls"];
+service ResourceCenterService add_temp_rc;
+vmi = new ReflectErrorKinds(listing.resource) with (name="wrongType");
+assert vmi.ageOfFirst() == 45;
+listing.getExcelSheetAtPosition(0).getRowAt(1).getExcelCellAt(3).setCellValueAsString("old");
+mustFail = vmi.ageOfFirst();

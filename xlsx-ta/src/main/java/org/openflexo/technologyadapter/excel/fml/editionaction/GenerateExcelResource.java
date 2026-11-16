@@ -43,6 +43,9 @@ import java.util.logging.Logger;
 
 import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLCancellation;
+import org.openflexo.foundation.fml.rt.error.FMLInternalError;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -76,68 +79,40 @@ public interface GenerateExcelResource extends CreateExcelResource {
 		@Override
 		public ExcelWorkbook execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			if (getAssignedModelSlot() != null) {
-				ExcelWorkbookResource templateResource = getAssignedModelSlot().getTemplateResource();
-				if (templateResource == null) {
-					return super.execute(evaluationContext);
-				}
-
-				System.out.println("OK, on cree un fichier excel avec un template");
-
-				String resourceName = getResourceName(evaluationContext);
-				String resourceURI = getResourceURI(evaluationContext);
-				FlexoResourceCenter<?> rc = getResourceCenter(evaluationContext);
-
-				System.out.println("name=" + resourceName);
-				System.out.println("uri=" + resourceURI);
-				System.out.println("relative path=" + getRelativePath());
-				System.out.println("rc=" + rc);
-
-				ExcelTechnologyAdapter excelTA = getServiceManager().getTechnologyAdapterService()
-						.getTechnologyAdapter(ExcelTechnologyAdapter.class);
-
-				ExcelWorkbookResource newResource;
-				try {
-
-					ExcelWorkbook templateDocument = templateResource.getResourceData();
-
-					newResource = createResource(excelTA, ExcelWorkbookResourceFactory.class, evaluationContext, ".xlsx", false);
-					System.out.println("Return new excel workbook resource: " + newResource);
-
-					newResource.setResourceData(templateDocument);
-					newResource.save();
-					newResource.unloadResourceData(false);
-					templateResource.unloadResourceData(false);
-					newResource.loadResourceData();
-
-					System.out.println("Et hop on relit la RD");
-
-					ExcelWorkbook generatedDocument = newResource.getResourceData();
-
-					System.out.println("Et hop, en fin de generate, on retourne " + generatedDocument);
-					System.out.println("-------> generatedDocument.getResource()=" + generatedDocument.getResource());
-					System.out.println("-------> newResource=" + newResource);
-
-					// Very important: we must now set ModelSlotInstance !
-					/*if (getModelSlotInstance(evaluationContext) != null) {
-						getModelSlotInstance(evaluationContext).setAccessedResourceData(generatedDocument);
-					}*/
-
-					// System.out.println("Return " + generatedDocument);
-					return generatedDocument;
-				} catch (ModelDefinitionException e) {
-					new FMLExecutionException(e);
-				} catch (FileNotFoundException e) {
-					new FMLExecutionException(e);
-				} catch (ResourceLoadingCancelledException e) {
-					new FMLExecutionException(e);
-				} catch (FlexoException e) {
-					new FMLExecutionException(e);
-				}
+			if (getAssignedModelSlot() == null) {
+				throw new FMLTechnologyError("GenerateExcelResource needs the Excel model slot it is assigned to");
 			}
-			logger.warning("Could not create resource!");
-			return null;
+			ExcelWorkbookResource templateResource = getAssignedModelSlot().getTemplateResource();
+			if (templateResource == null) {
+				return super.execute(evaluationContext);
+			}
 
+			ExcelTechnologyAdapter excelTA = getServiceManager().getTechnologyAdapterService()
+					.getTechnologyAdapter(ExcelTechnologyAdapter.class);
+
+			try {
+				ExcelWorkbook templateDocument = templateResource.getResourceData();
+
+				ExcelWorkbookResource newResource = createResource(excelTA, ExcelWorkbookResourceFactory.class, evaluationContext, ".xlsx",
+						false);
+
+				newResource.setResourceData(templateDocument);
+				newResource.save();
+				newResource.unloadResourceData(false);
+				templateResource.unloadResourceData(false);
+				newResource.loadResourceData();
+
+				return newResource.getResourceData();
+			} catch (FMLExecutionException e) {
+				throw e;
+			} catch (ModelDefinitionException e) {
+				throw new FMLInternalError(e);
+			} catch (ResourceLoadingCancelledException e) {
+				throw new FMLCancellation("Loading of the generated workbook was cancelled", e);
+			} catch (FileNotFoundException | FlexoException e) {
+				throw new FMLTechnologyError(
+						"Cannot generate the Excel workbook from template " + templateResource.getName() + ": " + e.getMessage(), e);
+			}
 		}
 	}
 }

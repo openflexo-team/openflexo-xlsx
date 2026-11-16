@@ -71,8 +71,9 @@ public class XLSVirtualModelInstanceModelFactory
 	@Override
 	public XLSFlexoConceptInstance makeNewFlexoConceptInstance(FlexoConcept concept, Row supportObject, FlexoConceptInstance container,
 			VirtualModelInstance<?, ?> ownerVirtualModelInstance, AbstractCreationScheme creationScheme,
-			RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
+			RunTimeEvaluationContext evaluationContext) {
 
+		// Builds and registers the reflected instance of a row: no creation scheme runs here, and nothing can fail (CORE-F-11)
 		XLSFlexoConceptInstance returned = newInstance(XLSFlexoConceptInstance.class, concept, supportObject);
 		if (ownerVirtualModelInstance != null) {
 			ownerVirtualModelInstance.addToFlexoConceptInstances(returned);

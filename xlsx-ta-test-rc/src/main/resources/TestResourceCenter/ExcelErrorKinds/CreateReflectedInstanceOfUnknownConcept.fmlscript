@@ -1,0 +1,6 @@
+// CORE-F-11 phase 6 (XLSX-F-2): createReflectedInstance of an unknown concept is an error (FMLResolutionError), no longer null.
+virtualModel = load -r ["http://www.openflexo.org/excel-test/FML/ReflectErrorKinds.fml"];
+listing = load -r ["http://www.openflexo.org/excel-test/TestResourceCenter/Excel/PersonListing.xls"];
+service ResourceCenterService add_temp_rc;
+vmi = new ReflectErrorKinds(listing.resource) with (name="unknownConcept");
+mustFail = vmi.createUnknown();

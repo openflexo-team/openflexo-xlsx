@@ -48,5 +48,8 @@ not dropped by the refresh; see the hot reload of the reflected slot, `refresh()
 failure was seen once, in a run of the whole suite before the last changes of phase 3 (none of which touches this path knowingly). Possibly
 order- or timing-dependent; the stack above is the evidence.
 
+**Runs during `XLSX-F-2` (2026-11-16).** Green in the whole digital-twin-demo suite and in three runs of the test alone, after the
+changes of `XLSX-F-2`. Still not reproduced.
+
 **To reproduce (not reproduced since).** From `openflexo-dev`:
 `./gradlew :openflexo-integration-tests:digital-twin-demo:cleanTest :openflexo-integration-tests:digital-twin-demo:test --tests '*ExternalWorkbookEditTest'`.

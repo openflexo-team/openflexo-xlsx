@@ -50,7 +50,6 @@ import org.openflexo.foundation.fml.VirtualModel;
 import org.openflexo.foundation.fml.md.FMLMetaData;
 import org.openflexo.foundation.fml.md.MultiValuedMetaData;
 import org.openflexo.foundation.fml.md.SingleMetaData;
-import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.visitor.FlexoConceptVisitor;
 import org.openflexo.technologyadapter.excel.model.ExcelCell;
 import org.openflexo.technologyadapter.excel.model.ExcelRow;
@@ -253,13 +252,7 @@ public class XLSVirtualModelInstanceBuilder {
 
 			for (int rowIndex = startRowIndex; isSignificative(rowIndex, sheet); rowIndex++) {
 				ExcelRow excelRow = sheet.getRowAt(rowIndex);
-				try {
-					factory.makeNewFlexoConceptInstance(concept, excelRow.getRow(), vmi, vmi, null, null);
-					// System.out.println("Built " + concept + " for row " + rowIndex);
-				} catch (FMLExecutionException e) {
-					logger.warning("Could not instantiate " + concept + " for row " + rowIndex + " : " + e.getMessage());
-					e.printStackTrace();
-				}
+				factory.makeNewFlexoConceptInstance(concept, excelRow.getRow(), vmi, vmi, null, null);
 			}
 		}
 

@@ -1,0 +1,36 @@
+use org.openflexo.technologyadapter.excel.BasicExcelModelSlot as XLS;
+
+import org.openflexo.technologyadapter.excel.model.ExcelWorkbook;
+import org.openflexo.technologyadapter.excel.model.ExcelSheet;
+import org.openflexo.technologyadapter.excel.model.ExcelRow;
+import java.lang.String;
+
+/**
+ * Failures of the Excel edition actions (CORE-F-11 phase 6, XLSX-F-2): see the scripts of ErrorKinds/ and TestExcelErrorKinds.
+ * The line numbers of the behaviours are asserted there.
+ */
+@URI("http://www.openflexo.org/excel-test/FML/ExcelErrorKinds.fml")
+public model ExcelErrorKinds {
+
+	ExcelWorkbook listing with BasicExcelModelSlot();
+
+	create(required Resource<ExcelWorkbook> aListing) {
+		connect listing using parameters.aListing;
+	}
+
+	public ExcelSheet noSheet() {
+		return null;
+	}
+
+	public String noName() {
+		return null;
+	}
+
+	public addRowInNullSheet() {
+		ExcelRow r = XLS::AddExcelRow(rowIndex=10, excelSheet=this.noSheet()) in (listing);
+	}
+
+	public addSheetWithoutName() {
+		ExcelSheet s = XLS::AddExcelSheet(sheetName=this.noName()) in (listing);
+	}
+}

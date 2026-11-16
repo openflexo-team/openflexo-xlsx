@@ -1,0 +1,6 @@
+// CORE-F-11 phase 6 (XLSX-F-2): AddExcelRow in a null sheet is an error (FMLNullReferenceError), no longer null after a warning.
+virtualModel = load -r ["http://www.openflexo.org/excel-test/FML/ExcelErrorKinds.fml"];
+listing = load -r ["http://www.openflexo.org/excel-test/TestResourceCenter/Excel/PersonListing.xls"];
+service ResourceCenterService add_temp_rc;
+vmi = new ExcelErrorKinds(listing.resource) with (name="nullSheet");
+mustFail = vmi.addRowInNullSheet();

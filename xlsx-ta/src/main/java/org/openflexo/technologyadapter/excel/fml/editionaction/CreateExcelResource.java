@@ -46,6 +46,9 @@ import org.openflexo.foundation.FlexoException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.editionaction.AbstractCreateResource;
 import org.openflexo.foundation.fml.editionaction.EditionAction;
+import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
+import org.openflexo.foundation.fml.rt.error.FMLCancellation;
+import org.openflexo.foundation.fml.rt.error.FMLInternalError;
 import org.openflexo.foundation.fml.rt.error.FMLExecutionException;
 import org.openflexo.foundation.fml.rt.RunTimeEvaluationContext;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
@@ -84,39 +87,24 @@ public interface CreateExcelResource extends AbstractCreateResource<BasicExcelMo
 		@Override
 		public ExcelWorkbook execute(RunTimeEvaluationContext evaluationContext) throws FMLExecutionException {
 
-			System.out.println("OK, on cree un fichier excel ");
-
-			String resourceName = getResourceName(evaluationContext);
-			String resourceURI = getResourceURI(evaluationContext);
-			FlexoResourceCenter<?> rc = getResourceCenter(evaluationContext);
-
-			System.out.println("name=" + resourceName);
-			System.out.println("uri=" + resourceURI);
-			System.out.println("relative path=" + getRelativePath());
-			System.out.println("rc=" + rc);
-
 			ExcelTechnologyAdapter excelTA = getServiceManager().getTechnologyAdapterService()
 					.getTechnologyAdapter(ExcelTechnologyAdapter.class);
 
-			ExcelWorkbookResource newResource;
 			try {
-				newResource = createResource(excelTA, ExcelWorkbookResourceFactory.class, evaluationContext, ".xlsx", true);
-				System.out.println("Return new excel workbook resource: " + newResource);
-
+				ExcelWorkbookResource newResource = createResource(excelTA, ExcelWorkbookResourceFactory.class, evaluationContext, ".xlsx",
+						true);
 				newResource.setIsModified();
-
-				ExcelWorkbook workbook = newResource.getResourceData();
-
-				System.out.println("Return " + workbook);
-				return workbook;
-			} catch (ModelDefinitionException | FileNotFoundException | ResourceLoadingCancelledException e) {
-				throw new FMLExecutionException(e);
-			} catch (SaveResourceException e) {
-				throw new FMLExecutionException(e);
-			} catch (FlexoException e) {
-				throw new FMLExecutionException(e);
+				return newResource.getResourceData();
+			} catch (FMLExecutionException e) {
+				// Already typed (a null name or resource center...): rethrown unchanged (CORE-F-11)
+				throw e;
+			} catch (ModelDefinitionException e) {
+				throw new FMLInternalError(e);
+			} catch (ResourceLoadingCancelledException e) {
+				throw new FMLCancellation("Loading of the new workbook was cancelled", e);
+			} catch (FileNotFoundException | FlexoException e) {
+				throw new FMLTechnologyError("Cannot create the Excel workbook: " + e.getMessage(), e);
 			}
-
 		}
 	}
 }
