@@ -9,6 +9,6 @@ public model ReflectPersonListing {
    PersonListing personListing with FMLExcelModelSlot();
 
    create(required Resource<ExcelWorkbook> aListing) {
-      connect personListing using parameters.aListing ;
+      connect personListing using aListing ;
    }
 }

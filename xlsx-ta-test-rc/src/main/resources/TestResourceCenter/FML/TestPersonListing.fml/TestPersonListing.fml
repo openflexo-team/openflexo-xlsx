@@ -9,7 +9,7 @@ public model TestPersonListing {
    ExcelSheet sheet values listing.getExcelSheetAtPosition(0);
 
 	create(required Resource<ExcelWorkbook> aListing) {
-      connect listing using parameters.aListing;
+      connect listing using aListing;
       this.synchronize();
       this.displayAllPersons();
 	}
@@ -49,7 +49,7 @@ public model TestPersonListing {
       String city values row.getExcelCellAt(4).getCellValueAsString();
 
       create(required ExcelRow aRow) {
-         row = parameters.aRow;
+         row = aRow;
       }
    }
 }

@@ -15,7 +15,7 @@ public model ReflectErrorKinds {
 	PersonListing personListing with FMLExcelModelSlot();
 
 	create(required Resource<ExcelWorkbook> aListing) {
-		connect personListing using parameters.aListing;
+		connect personListing using aListing;
 	}
 
 	public createUnknown() {
