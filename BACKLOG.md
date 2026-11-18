@@ -13,6 +13,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 ### XLSX-F-1 — Finish exposing the Excel edition actions to textual FML  ·  `TODO`
 
+**GitHub:** [openflexo-team/openflexo-xlsx#3](https://github.com/openflexo-team/openflexo-xlsx/issues/3)
+
 **Problem.** An edition action is writable in textual FML only through the properties annotated `@FMLAttribute`; every other property
 is rejected with `Unknown property <name> for <Action>` and silently lost on a round trip. Only three actions are annotated today —
 `AddExcelRow`, `AddExcelCell` and `AddExcelSheet`, annotated while migrating formod (2026-09-17) because its goal model serialization
@@ -33,6 +35,8 @@ resolved to whichever of the two came first, and `AddExcelCell` calls were valid
 ## FML runtime errors
 
 ### XLSX-F-2 — The Excel adapter raises typed FML errors instead of returning null after a warning or a printed stack  ·  `DONE`
+
+**GitHub:** [openflexo-team/openflexo-xlsx#5](https://github.com/openflexo-team/openflexo-xlsx/issues/5)
 
 **Problem.** Part of `CORE-F-11` phase 6 (`openflexo-core/BACKLOG.md`): the edition actions of the Excel adapter caught the failures of
 their evaluations four at a time, printed the stack and went on; a missing sheet, row or name gave a warning and a null result; some

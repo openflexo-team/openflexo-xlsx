@@ -13,6 +13,8 @@ Status legend: `TODO` · `IN PROGRESS` · `BLOCKED` · `DONE` · `DEFERRED`.
 
 ### XLSX-D-1 — `TestFIBCellRangeSelector` fails with a `NullPointerException` when a display is available  ·  `TODO`
 
+**GitHub:** [openflexo-team/openflexo-xlsx#1](https://github.com/openflexo-team/openflexo-xlsx/issues/1)
+
 **Symptom.** In `xlsx-ta-ui`, the three tests of `TestFIBCellRangeSelector` (`testSelectorWithNoRange`, `testSelectorWithRangeOnSheet1`,
 `testSelectorWithRangeOnSheet2`) fail with a `NullPointerException` at their first instruction (lines 72, 90 and 113):
 `getWorkbook("PersonListing.xlsx")`. The workbook is not found in the UI test environment.
@@ -31,6 +33,8 @@ executed for the release (tracked as `JENKINS-D-6` in the Jenkins backlog).
 ## Reflected model slot
 
 ### XLSX-D-2 — After an external edit and a refresh, the reflected model slot is rebuilt over a stale sheet: `NullPointerException`  ·  `TODO`
+
+**GitHub:** [openflexo-team/openflexo-xlsx#2](https://github.com/openflexo-team/openflexo-xlsx/issues/2)
 
 **Symptom (verified 2026-11-15 by execution).** In `openflexo-integration-tests/digital-twin-demo`, `ExternalWorkbookEditTest.externalEditIsPickedUpByRefresh`
 fails: a `select` whose container is a property of the reflected Excel model slot rebuilds the reflected virtual model instance
