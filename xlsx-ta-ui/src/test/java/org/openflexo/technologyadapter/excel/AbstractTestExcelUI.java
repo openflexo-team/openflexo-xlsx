@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.FlexoResource;
 import org.openflexo.foundation.resource.FlexoResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
@@ -102,7 +102,7 @@ public abstract class AbstractTestExcelUI extends OpenflexoTestCaseWithGUI {
 			e.printStackTrace();
 		} catch (ResourceLoadingCancelledException e) {
 			e.printStackTrace();
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			e.printStackTrace();
 		}
 		assertNotNull(document);

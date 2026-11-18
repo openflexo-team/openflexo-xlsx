@@ -41,7 +41,7 @@ package org.openflexo.technologyadapter.excel.fml.editionaction;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.error.FMLTechnologyError;
 import org.openflexo.foundation.fml.rt.error.FMLCancellation;
@@ -109,7 +109,7 @@ public interface GenerateExcelResource extends CreateExcelResource {
 				throw new FMLInternalError(e);
 			} catch (ResourceLoadingCancelledException e) {
 				throw new FMLCancellation("Loading of the generated workbook was cancelled", e);
-			} catch (FileNotFoundException | FlexoException e) {
+			} catch (FileNotFoundException | OpenflexoRuntimeException e) {
 				throw new FMLTechnologyError(
 						"Cannot generate the Excel workbook from template " + templateResource.getName() + ": " + e.getMessage(), e);
 			}

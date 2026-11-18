@@ -51,7 +51,7 @@ import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.IOFlexoException;
 import org.openflexo.foundation.resource.FileIODelegate;
 import org.openflexo.foundation.resource.FileWritingLock;
@@ -244,7 +244,7 @@ public abstract class ExcelWorkbookResourceImpl extends PamelaResourceImpl<Excel
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return null;
-		} catch (FlexoException e) {
+		} catch (OpenflexoRuntimeException e) {
 			e.printStackTrace();
 		}
 		return null;

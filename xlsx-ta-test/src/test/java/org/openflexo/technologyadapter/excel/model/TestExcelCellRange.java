@@ -46,7 +46,7 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.technologyadapter.excel.AbstractTestExcel;
 import org.openflexo.technologyadapter.excel.ExcelTechnologyAdapter;
@@ -68,7 +68,7 @@ public class TestExcelCellRange extends AbstractTestExcel {
 
 	@Test
 	@TestOrder(2)
-	public void testLoadExcelDocument() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void testLoadExcelDocument() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		workbook1Resource = getExcelResource("Workbook1.xlsx");
 		ExcelWorkbook workbook1 = workbook1Resource.loadResourceData();

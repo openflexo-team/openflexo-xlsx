@@ -39,7 +39,7 @@
 
 package org.openflexo.technologyadapter.excel.fml.reflect.rt;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 
 /**
  * Exception thrown while trying to map {@link XLSFlexoConceptInstance} from excel workbook
@@ -48,7 +48,7 @@ import org.openflexo.foundation.FlexoException;
  *
  */
 @SuppressWarnings("serial")
-public class XLSMappingException extends FlexoException {
+public class XLSMappingException extends OpenflexoRuntimeException {
 
 	/**
 	 * Build new exception with supplied message

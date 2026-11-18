@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.resource.DirectoryResourceCenter;
 import org.openflexo.foundation.resource.ResourceLoadingCancelledException;
 import org.openflexo.technologyadapter.excel.AbstractTestExcel;
@@ -93,7 +93,7 @@ public class TestLoadEditSaveReloadExcelDocuments extends AbstractTestExcel {
 
 	@Test
 	@TestOrder(4)
-	public void testWorkbook1Loading() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void testWorkbook1Loading() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		workbook1Resource = getExcelResource("Workbook1.xlsx", directoryRC);
 		ExcelWorkbook workbook1 = workbook1Resource.loadResourceData();
@@ -141,7 +141,7 @@ public class TestLoadEditSaveReloadExcelDocuments extends AbstractTestExcel {
 
 	@Test
 	@TestOrder(5)
-	public void testWorkbook1Saving() throws FlexoException {
+	public void testWorkbook1Saving() throws OpenflexoRuntimeException {
 
 		ExcelWorkbook workbook1 = workbook1Resource.getExcelWorkbook();
 
@@ -159,7 +159,7 @@ public class TestLoadEditSaveReloadExcelDocuments extends AbstractTestExcel {
 
 	@Test
 	@TestOrder(6)
-	public void testWorkbook1Reloading() throws FileNotFoundException, ResourceLoadingCancelledException, FlexoException {
+	public void testWorkbook1Reloading() throws FileNotFoundException, ResourceLoadingCancelledException, OpenflexoRuntimeException {
 
 		if (!(workbook1Resource.getIODelegate().getSerializationArtefact() instanceof File)) {
 			return;

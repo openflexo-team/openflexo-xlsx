@@ -41,7 +41,7 @@ package org.openflexo.technologyadapter.excel.fml;
 import java.io.FileNotFoundException;
 import java.util.logging.Logger;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.fml.annotations.FML;
 import org.openflexo.foundation.fml.rt.ActorReference;
 import org.openflexo.foundation.fml.rt.FreeModelSlotInstance;
@@ -105,7 +105,7 @@ public interface ExcelActorReference<T extends ExcelObject> extends ActorReferen
 					e.printStackTrace();
 				} catch (ResourceLoadingCancelledException e) {
 					e.printStackTrace();
-				} catch (FlexoException e) {
+				} catch (OpenflexoRuntimeException e) {
 					e.printStackTrace();
 				}
 			}
@@ -134,7 +134,7 @@ public interface ExcelActorReference<T extends ExcelObject> extends ActorReferen
 						} catch (ResourceLoadingCancelledException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						} catch (FlexoException e) {
+						} catch (OpenflexoRuntimeException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}

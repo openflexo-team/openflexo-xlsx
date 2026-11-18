@@ -40,7 +40,7 @@ package org.openflexo.technologyadapter.excel.model;
 
 import java.io.FileNotFoundException;
 
-import org.openflexo.foundation.FlexoException;
+import org.openflexo.foundation.OpenflexoRuntimeException;
 import org.openflexo.foundation.FlexoServiceManager;
 import org.openflexo.foundation.fml.FMLModelFactory;
 import org.openflexo.foundation.resource.FlexoResource;
@@ -116,7 +116,7 @@ public class ExcelCellRangeConverter extends Converter<ExcelCellRange> {
 				} catch (ResourceLoadingCancelledException e) {
 					e.printStackTrace();
 					return null;
-				} catch (FlexoException e) {
+				} catch (OpenflexoRuntimeException e) {
 					e.printStackTrace();
 					return null;
 				}
